@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Back to Protocol</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; color: #1c1917; background-color: #fafaf9; line-height: 1.6; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        header { position: sticky; top: 0; z-index: 50; background: white; border-bottom: 1px solid #e7e5e4; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { font-size: 24px; font-weight: bold; color: #4a5ba4; text-decoration: none; }
+        nav { display: flex; gap: 32px; }
+        nav a { color: #44403c; text-decoration: none; font-weight: 500; }
+        nav a:hover { color: #4a5ba4; }
+        .auth-buttons { display: flex; gap: 16px; }
+        .btn { padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; font-size: 14px; }
+        .btn-primary { background-color: #4a5ba4; color: white; }
+        .btn-outline { border: 2px solid #4a5ba4; color: #4a5ba4; background: transparent; }
+        .page-content { max-width: 800px; padding: 64px 20px; }
+        h1 { font-size: 40px; font-weight: bold; color: #1c1917; margin-bottom: 32px; }
+        p { font-size: 18px; color: #44403c; margin-bottom: 24px; line-height: 1.8; }
+        footer { background-color: #1c1917; color: #e8e8e8; padding: 48px 20px 32px; margin-top: 64px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">Back to Protocol</a>
+                <div class="auth-buttons">
+                    <a href="signin.html" class="btn btn-outline">Sign In</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-content">
+        <div class="container">
+            <h1>About Back to Protocol</h1>
+            <p>Back to Protocol is a health and wellness media company dedicated to providing evidence-based, scientifically-sound information on topics that matter to your health.</p>
+            <p>Our mission is to bridge the gap between medical research and everyday wellness practices, making expert knowledge accessible to everyone.</p>
+            <p>All content is reviewed by qualified medical professionals to ensure accuracy and safety. We believe that health information should be clear, trustworthy, and actionable.</p>
+            <p>Whether you're interested in nutrition, fitness, sleep optimization, or managing chronic conditions, our articles are here to guide you on your wellness journey.</p>
+            <a href="/" class="btn btn-primary" style="display: inline-block; margin-top: 32px;">Back Home</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Back to Protocol. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

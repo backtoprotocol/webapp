@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back to Protocol | Health & Wellness Media</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-700: #4a5ba4;
+            --primary-600: #5e72b8;
+            --primary-50: #f5f7fc;
+            --accent-500: #f17d4f;
+            --accent-50: #fff8f3;
+            --neutral-900: #1c1917;
+            --neutral-800: #292824;
+            --neutral-700: #44403c;
+            --neutral-400: #a8a29e;
+            --neutral-200: #e7e5e4;
+            --neutral-100: #f5f5f4;
+            --neutral-50: #fafaf9;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--neutral-900);
+            background-color: var(--neutral-50);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: white;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-700);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-700), var(--accent-500));
+            border-radius: 8px;
+        }
+
+        nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--neutral-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-700);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-700);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3d4a89;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-700);
+            color: var(--primary-700);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-50);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to bottom, var(--primary-50), white);
+            padding: 96px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: bold;
+            color: var(--neutral-900);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero h1 .accent {
+            color: var(--primary-700);
+            display: block;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--neutral-700);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Featured Articles */
+        section {
+            padding: 64px 0;
+        }
+
+        section h2 {
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--neutral-900);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        section > .container > p {
+            text-align: center;
+            font-size: 18px;
+            color: var(--neutral-700);
+            margin-bottom: 48px;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .article-card {
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-700);
+        }
+
+        .article-image {
+            width: 100%;
+            height: 192px;
+            background: linear-gradient(135deg, var(--primary-100), var(--accent-50));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-400);
+            font-size: 14px;
+        }
+
+        .article-content {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-topic {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-700);
+            background: var(--primary-50);
+            padding: 6px 12px;
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 12px;
+        }
+
+        .article-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--neutral-900);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .article-excerpt {
+            font-size: 14px;
+            color: var(--neutral-700);
+            margin-bottom: 16px;
+            flex-grow: 1;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--neutral-600);
+            padding-top: 16px;
+            border-top: 1px solid var(--neutral-200);
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            background-color: var(--neutral-100);
+        }
+
+        .newsletter-content {
+            max-width: 400px;
+        }
+
+        .newsletter-content h3 {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--neutral-900);
+            margin-bottom: 8px;
+        }
+
+        .newsletter-content p {
+            color: var(--neutral-700);
+            margin-bottom: 24px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .newsletter-form button {
+            padding: 12px 24px;
+        }
+
+        /* Topics Grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            padding: 24px;
+            text-decoration: none;
+            color: var(--neutral-900);
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            text-align: center;
+        }
+
+        .topic-card:hover {
+            border-color: var(--primary-700);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
+        }
+
+        .topic-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .topic-card:hover h3 {
+            color: var(--primary-700);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--neutral-900);
+            color: #e8e8e8;
+            padding: 48px 0 32px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        footer h3 {
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        footer h4 {
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            margin-bottom: 8px;
+        }
+
+        footer a {
+            color: #a8a8a8;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #404040;
+            padding-top: 32px;
+            text-align: center;
+            color: #a8a8a8;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 16px 0;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            section {
+                padding: 48px 0;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">Back to Protocol</a>
+                <nav>
+                    <a href="#topics">Topics</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+                <div class="auth-buttons">
+                    <a href="signin.html" class="btn btn-outline">Sign In</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Evidence-Based Health<span class="accent">and Wellness</span></h1>
+            <p>Trusted medical expertise and scientific insights to help you live your healthiest life.</p>
+            <div class="hero-buttons">
+                <a href="#featured" class="btn btn-primary">Explore Articles</a>
+                <a href="#topics" class="btn btn-outline">Browse Topics</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Articles -->
+    <section id="featured">
+        <div class="container">
+            <h2>Featured Articles</h2>
+            <p>Latest insights from our expert contributors</p>
+            <div class="articles-grid">
+                <article class="article-card">
+                    <div class="article-image">Featured Image</div>
+                    <div class="article-content">
+                        <span class="article-topic">Sleep</span>
+                        <h3 class="article-title">The Science of Sleep: Why Your Recovery Depends on It</h3>
+                        <p class="article-excerpt">Discover how quality sleep is the foundation of health and wellness.</p>
+                        <div class="article-meta">
+                            <span>Dr. Sarah Mitchell</span>
+                            <time>Today</time>
+                        </div>
+                    </div>
+                </article>
+                <article class="article-card">
+                    <div class="article-image">Featured Image</div>
+                    <div class="article-content">
+                        <span class="article-topic">Nutrition</span>
+                        <h3 class="article-title">Nutrition Foundations: Building a Sustainable Eating Pattern</h3>
+                        <p class="article-excerpt">Learn the principles of evidence-based nutrition for long-term health.</p>
+                        <div class="article-meta">
+                            <span>Dr. Elena Rodriguez</span>
+                            <time>Today</time>
+                        </div>
+                    </div>
+                </article>
+                <article class="article-card">
+                    <div class="article-image">Featured Image</div>
+                    <div class="article-content">
+                        <span class="article-topic">Mental Health</span>
+                        <h3 class="article-title">Mental Health and Resilience: Building Emotional Strength</h3>
+                        <p class="article-excerpt">Explore evidence-based strategies for emotional wellbeing.</p>
+                        <div class="article-meta">
+                            <span>Dr. Patricia Lee</span>
+                            <time>Today</time>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <div class="newsletter-content">
+                <h3>Stay Informed</h3>
+                <p>Get evidence-based health insights delivered to your inbox.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="your@email.com" required>
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Topics -->
+    <section id="topics">
+        <div class="container">
+            <h2>Browse by Topic</h2>
+            <p>Explore health topics that matter to you</p>
+            <div class="topics-grid">
+                <a href="topic.html" class="topic-card"><h3>Nutrition</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Fitness</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Sleep</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Mental Health</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Weight Loss</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Hormones</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Aging</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Heart</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Digestion</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Immunity</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Chronic Disease</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Fertility</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Skincare</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Recovery</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Prevention</h3></a>
+                <a href="topic.html" class="topic-card"><h3>Longevity</h3></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3>Back to Protocol</h3>
+                    <p style="color: #a8a8a8; font-size: 14px;">Evidence-based health and wellness content from trusted medical experts.</p>
+                </div>
+                <div>
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Newsletter</h4>
+                    <p style="color: #a8a8a8; font-size: 14px;">Subscribe to get health insights in your inbox.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Back to Protocol. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
