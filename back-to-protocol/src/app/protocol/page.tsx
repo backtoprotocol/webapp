@@ -1,28 +1,24 @@
 import { PageShell } from "@/components/page-shell";
+import { contentPillars } from "@/lib/content-pillars";
 
 export default function ProtocolPage() {
   return (
     <PageShell
       eyebrow="Protocol"
-      title="A single, clear way to think about recovery."
-      description="A grounded framework for building calm, momentum, and sustainable performance without overwhelm."
+      title="Back to the fundamentals that move the body forward."
+      description="Back to Protocol cuts through wellness noise with practical, physiology-led guidance across eight connected pillars."
     >
       <section className="rounded-[2rem] border border-slate-200/80 bg-white/95 p-8 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.16)] sm:p-10">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-500">What it includes</p>
-            <ul className="mt-6 space-y-4 text-slate-600">
-              <li>• Practical routines for everyday steadiness</li>
-              <li>• A simple structure for calmer decision-making</li>
-              <li>• Recovery habits that support long-term performance</li>
-            </ul>
-          </div>
-          <div className="rounded-[1.75rem] border border-slate-200/80 bg-slate-950/5 p-6">
-            <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-500">Why it works</p>
-            <p className="mt-4 text-lg leading-8 text-slate-700">
-              The protocol is designed to feel useful, humane, and realistic rather than idealized or overly complicated.
-            </p>
-          </div>
+        <p className="max-w-3xl text-lg leading-8 text-slate-700">
+          Every article, episode, game, and update starts with one primary pillar and may connect to one secondary pillar. That keeps the advice specific, useful, and grounded in how the body actually works.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {contentPillars.map((pillar) => (
+            <article key={pillar.name} className="rounded-[1.5rem] border border-slate-200/80 bg-slate-950/5 p-5">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-950">{pillar.name}</p>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{pillar.definition}</p>
+            </article>
+          ))}
         </div>
       </section>
     </PageShell>

@@ -1,19 +1,20 @@
 import Link from "next/link";
+import { contentPillars } from "@/lib/content-pillars";
 
 const latestArticles = [
   {
-    title: "Recovery protocols that actually fit real life",
-    description: "A simple framework for creating calm, clarity, and better daily routines.",
+    title: "Sleep protocols that actually fit real life",
+    description: "A practical framework for building consistent, more restorative nights.",
     href: "/articles",
   },
   {
-    title: "The hidden cost of overthinking under pressure",
-    description: "Why modern performance depends on recovery as much as discipline.",
+    title: "The hidden cost of training through stress",
+    description: "Why sustainable performance depends on nervous-system regulation as much as discipline.",
     href: "/articles",
   },
   {
-    title: "How to rebuild momentum after burnout",
-    description: "Practical steps to regain energy without forcing yourself back into overload.",
+    title: "How to rebuild movement after burnout",
+    description: "Practical steps to regain capacity without forcing yourself back into overload.",
     href: "/articles",
   },
 ];
@@ -59,13 +60,13 @@ const featuredPosts = [
   },
   {
     title: "Why high performers need better recovery systems",
-    category: "Performance",
+    category: "Movement",
     description: "How structure can protect focus, energy, and long-term resilience.",
     href: "/podcast",
   },
   {
     title: "The daily reset that actually lasts",
-    category: "Habits",
+    category: "Mindset",
     description: "A simple framework for returning to calm after a difficult week.",
     href: "/research",
   },
@@ -106,9 +107,9 @@ export default function Home() {
           <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="border-b border-slate-200/80 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8 text-white lg:border-b-0 lg:border-r">
               <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-300">Featured story</p>
-              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">A calmer kind of media for people rebuilding their lives.</h2>
+              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Health guidance that returns to the fundamentals.</h2>
               <p className="mt-4 max-w-xl text-sm leading-8 text-slate-300">
-                We blend thoughtful essays, practical guidance, audio conversations, and playful experiences into one soft, intentional place to explore.
+                We turn real physiology into practical protocols across movement, nutrition, sleep, stress, hormones, recovery, longevity, and mindset.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link href={latestArticles[0].href} className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
@@ -129,6 +130,19 @@ export default function Home() {
                 </Link>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="rounded-[2rem] border border-slate-200/80 bg-white/90 p-8 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.12)] sm:p-10">
+          <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-500">The eight pillars</p>
+          <h2 className="mt-3 max-w-3xl text-2xl font-semibold text-slate-950 sm:text-3xl">One scientific spine across every format.</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {contentPillars.map((pillar) => (
+              <Link key={pillar.name} href="/protocol" className="rounded-[1.5rem] border border-slate-200/80 bg-slate-950/5 p-5 transition hover:-translate-y-1 hover:border-slate-300 hover:bg-white">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-950">{pillar.name}</p>
+                <p className="mt-3 text-sm leading-6 text-slate-600">{pillar.definition}</p>
+              </Link>
+            ))}
           </div>
         </section>
 

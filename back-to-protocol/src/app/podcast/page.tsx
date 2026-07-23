@@ -1,19 +1,20 @@
 import { PageShell } from "@/components/page-shell";
+import { pillarNames } from "@/lib/content-pillars";
 
 const episodes = [
   {
-    title: "Protocol Reset",
-    description: "A practical reset for burnout and overwhelm.",
+    title: "Sleep is the first recovery protocol",
+    description: "A practical conversation about light, consistency, and deeper rest.",
     duration: "32 min",
   },
   {
-    title: "Momentum Mapping",
-    description: "How to build small wins into sustainable performance.",
+    title: "Training stress without breaking the system",
+    description: "How to balance movement, recovery, and sustainable progress.",
     duration: "28 min",
   },
 ];
 
-const categories = ["Recovery", "Performance", "Research", "Leadership"];
+const categories = pillarNames;
 
 const guests = ["Dr. Maya Ellis", "Jordan Tate", "Amira Grant"];
 
@@ -21,8 +22,8 @@ export default function PodcastPage() {
   return (
     <PageShell
       eyebrow="Podcast"
-      title="Conversations for recovery, resilience, and return."
-      description="Modern audio episodes that explore high-performance psychology, healing frameworks, and evidence-based growth."
+      title="Conversations that return to what the body needs."
+      description="Science-led conversations across the eight pillars, with practical protocols you can test in real life."
     >
       <section className="grid gap-6 xl:grid-cols-[0.75fr_1.25fr]">
         <div className="space-y-6 rounded-[2rem] border border-slate-200/80 bg-slate-950/5 p-8 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.16)]">
