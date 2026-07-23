@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -24,19 +23,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-950"
-        >
-          <Image
-            src="/back-to-protocol-logo.png"
-            alt=""
-            width={48}
-            height={48}
-            priority
-            className="h-11 w-11 object-contain"
-          />
-          <span>Back to Protocol</span>
+        <Link href="/" className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-950">
+          Back to Protocol
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
