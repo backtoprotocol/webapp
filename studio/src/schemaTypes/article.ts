@@ -19,6 +19,7 @@ export const article = defineType({
   icon: DocumentTextIcon,
   groups: [
     { name: "editorial", title: "Editorial", default: true },
+    { name: "promotion", title: "Promotion" },
     { name: "publishing", title: "Publishing" },
     { name: "seo", title: "SEO" },
   ],
@@ -35,6 +36,7 @@ export const article = defineType({
       defineArrayMember({ type: "callout" }),
     ], validation: (rule) => rule.required().min(1), group: "editorial" }),
     defineField({ name: "author", type: "reference", to: [{ type: "author" }], validation: (rule) => rule.required(), group: "editorial" }),
+    defineField({ name: "newsroomPlacement", title: "Newsroom placement", description: "Choose Featured for the one article displayed in Featured coverage.", type: "string", options: { list: [{ title: "Standard article", value: "standard" }, { title: "Featured coverage", value: "featured" }], layout: "radio" }, initialValue: "standard", group: "promotion" }),
     defineField({ name: "publishedAt", title: "Publish date", type: "datetime", validation: (rule) => rule.required(), group: "publishing" }),
     defineField({ name: "readingMinutes", title: "Reading time (minutes)", type: "number", validation: (rule) => rule.required().integer().min(1).max(60), group: "publishing" }),
     defineField({ name: "slug", type: "slug", options: { source: "title", maxLength: 96 }, validation: (rule) => rule.required(), group: "publishing" }),

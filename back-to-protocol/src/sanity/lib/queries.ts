@@ -18,6 +18,7 @@ const articleCardFields = /* groq */ `
   pillar,
   publishedAt,
   readingMinutes,
+  author->{ _id, name },
   coverImage { ${imageFields} }
 `;
 
@@ -59,6 +60,17 @@ export const NEWSROOM_QUERY = defineQuery(/* groq */ `
   | order(publishedAt desc)[0...80] {
     ${articleCardFields}
   }
+`);
+
+export const FEATURED_ARTICLE_QUERY = defineQuery(/* groq */ `
+  *[_type == "article" && defined(slug.current) && newsroomPlacement == "featured"] | order(publishedAt desc)[0] { ${articleCardFields} }
+`);
+export const NEWSROOM_AUTHORS_QUERY = defineQuery(/* groq */ `*[_type == "author"] | order(name asc) { _id, name }`);
+export const FILTERED_ARTICLES_QUERY = defineQuery(/* groq */ `
+  *[_type == "article" && defined(slug.current) && (!defined($pillar) || pillar == $pillar) && (!defined($author) || author._ref == $author)] | order(publishedAt desc) [$start...$end] { ${articleCardFields} }
+`);
+export const FILTERED_ARTICLES_COUNT_QUERY = defineQuery(/* groq */ `
+  count(*[_type == "article" && defined(slug.current) && (!defined($pillar) || pillar == $pillar) && (!defined($author) || author._ref == $author)])
 `);
 
 export const ARTICLE_SLUGS_QUERY = defineQuery(/* groq */ `
