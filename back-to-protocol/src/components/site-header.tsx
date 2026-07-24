@@ -8,7 +8,6 @@ const navItems = [
   { href: "/protocol", label: "Protocol" },
   { href: "/podcast", label: "Podcast" },
   { href: "/games", label: "Games" },
-  { href: "/articles", label: "Articles" },
   { href: "/news", label: "News" },
 ];
 
