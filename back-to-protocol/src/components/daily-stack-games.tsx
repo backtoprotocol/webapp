@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getDailyKey, pickDaily, readStats, recordDailyResult, seededShuffle, type DailyStats, writeStats } from "@/lib/daily-games";
 
-const cardClass = "rounded-[2rem] border border-slate-200/80 bg-white/95 p-6 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.16)] sm:p-8";
-const buttonClass = "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50";
+const pageClass = "mx-auto max-w-5xl px-6 py-10 sm:px-8 lg:py-14";
+const cardClass = "rounded-[2rem] border border-slate-200/80 bg-white/95 p-6 shadow-[0_30px_80px_-34px_rgba(15,23,42,0.16)] sm:p-8";
+const buttonClass = "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50";
+
+const defaultStats: DailyStats = { played: 0, wins: 0, streak: 0, bestStreak: 0 };
 
 function GameHeader({ name, kicker, title, description }: { name: string; kicker: string; title: string; description: string }) {
   return (
@@ -29,68 +33,177 @@ function PostGameFact({ fact, pillar }: { fact: string; pillar: string }) {
   );
 }
 
-const spikeRounds = [
-  { left: "Burpees", leftValue: 120, right: "Mountain climbers", rightValue: 100 },
-  { left: "Brisk walking", leftValue: 50, right: "Easy cycling", rightValue: 60 },
-  { left: "Jump rope", leftValue: 130, right: "Bodyweight squats", rightValue: 80 },
-  { left: "Swimming laps", leftValue: 110, right: "Yoga flow", rightValue: 70 },
+function useDailyStats(gameId: string) {
+  const storageKey = `daily-stack:${gameId}:stats`;
+  const [stats, setStats] = useState<DailyStats>(defaultStats);
+
+  useEffect(() => {
+    setStats(readStats(storageKey));
+  }, [storageKey]);
+
+  function saveResult(dayKey: string, didWin: boolean) {
+    setStats((current) => {
+      const next = recordDailyResult(current, dayKey, didWin);
+      writeStats(storageKey, next);
+      return next;
+    });
+  }
+
+  return { stats, saveResult };
+}
+
+function StatsRow({ stats }: { stats: DailyStats }) {
+  const winRate = stats.played ? Math.round((stats.wins / stats.played) * 100) : 0;
+  return (
+    <div className="mb-6 grid gap-3 text-sm sm:grid-cols-4">
+      <p className="rounded-full bg-slate-100 px-4 py-2 font-semibold text-slate-700">Played: {stats.played}</p>
+      <p className="rounded-full bg-emerald-100 px-4 py-2 font-semibold text-emerald-800">Win rate: {winRate}%</p>
+      <p className="rounded-full bg-amber-100 px-4 py-2 font-semibold text-amber-900">Streak: {stats.streak}</p>
+      <p className="rounded-full bg-indigo-100 px-4 py-2 font-semibold text-indigo-900">Best: {stats.bestStreak}</p>
+    </div>
+  );
+}
+
+type SpikeRound = {
+  prompt: string;
+  choices: { label: string; impact: number; deck: "Data" | "Policy" | "Science" }[];
+};
+
+const spikeRounds: SpikeRound[] = [
+  {
+    prompt: "Lead story: which headline deserves top billing today?",
+    choices: [
+      { label: "National sleep guideline update", impact: 92, deck: "Policy" },
+      { label: "Celebrity wellness routine", impact: 35, deck: "Science" },
+      { label: "Local race recap", impact: 24, deck: "Data" },
+    ],
+  },
+  {
+    prompt: "Which follow-up has the highest newsroom value?",
+    choices: [
+      { label: "Long-term obesity trial results", impact: 89, deck: "Science" },
+      { label: "Protein bar taste test", impact: 33, deck: "Data" },
+      { label: "Gym playlist trends", impact: 21, deck: "Policy" },
+    ],
+  },
+  {
+    prompt: "Which story should move to page one?",
+    choices: [
+      { label: "City opens 24-hour urgent care network", impact: 86, deck: "Policy" },
+      { label: "Fitness app redesign", impact: 30, deck: "Data" },
+      { label: "New yoga mat colors", impact: 17, deck: "Science" },
+    ],
+  },
+  {
+    prompt: "What gets the morning push alert?",
+    choices: [
+      { label: "Heatwave hydration advisory", impact: 94, deck: "Policy" },
+      { label: "Studio class waitlist", impact: 27, deck: "Data" },
+      { label: "Protein powder sale", impact: 18, deck: "Science" },
+    ],
+  },
+  {
+    prompt: "Pick the strongest evidence-led angle.",
+    choices: [
+      { label: "Meta-analysis on blood pressure and sleep", impact: 90, deck: "Science" },
+      { label: "Viral morning routine", impact: 29, deck: "Data" },
+      { label: "Influencer supplement stack", impact: 16, deck: "Policy" },
+    ],
+  },
+  {
+    prompt: "Which piece has the broadest public impact?",
+    choices: [
+      { label: "School meal policy shift", impact: 88, deck: "Policy" },
+      { label: "Gym mirror selfie debate", impact: 25, deck: "Data" },
+      { label: "New foam roller launch", impact: 14, deck: "Science" },
+    ],
+  },
 ];
 
 export function SpikeGame() {
-  const [mode, setMode] = useState<"daily" | "endless">("daily");
+  const dayKey = getDailyKey();
+  const rounds = useMemo(() => seededShuffle(spikeRounds, `spike:${dayKey}`).slice(0, 5), [dayKey]);
+  const { stats, saveResult } = useDailyStats("spike");
   const [round, setRound] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const matchup = spikeRounds[round % spikeRounds.length];
+  const [score, setScore] = useState(0);
+  const [picked, setPicked] = useState<number | null>(null);
+  const [recorded, setRecorded] = useState(false);
 
-  function choose(value: number) {
-    if (finished) return;
-    if (value === Math.max(matchup.leftValue, matchup.rightValue)) {
-      const nextStreak = streak + 1;
-      setStreak(nextStreak);
-      if (mode === "daily" && round === spikeRounds.length - 1) setFinished(true);
-      else setRound((current) => current + 1);
-    } else {
-      setFinished(true);
+  const current = rounds[Math.min(round, rounds.length - 1)];
+  const bestImpact = Math.max(...current.choices.map((choice) => choice.impact));
+  const isComplete = round >= rounds.length;
+
+  useEffect(() => {
+    if (isComplete && !recorded) {
+      saveResult(dayKey, score >= 4);
+      setRecorded(true);
+    }
+  }, [dayKey, isComplete, recorded, saveResult, score]);
+
+  function choose(index: number) {
+    if (picked !== null) return;
+    setPicked(index);
+    if (current.choices[index].impact === bestImpact) {
+      setScore((value) => value + 1);
     }
   }
 
-  function reset(nextMode = mode) {
-    setMode(nextMode);
+  function advance() {
+    if (round === rounds.length - 1) {
+      setRound(rounds.length);
+    } else {
+      setRound((value) => value + 1);
+    }
+    setPicked(null);
+  }
+
+  function reset() {
     setRound(0);
-    setStreak(0);
-    setFinished(false);
+    setScore(0);
+    setPicked(null);
+    setRecorded(false);
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-6 py-10 sm:px-8 lg:py-14">
-      <GameHeader name="SPIKE" kicker={mode === "daily" ? "Daily challenge" : "Endless"} title="Trust your gut. Keep the streak alive." description="Which movement burns more energy in ten minutes? Pick a card—no calculations, just the better call." />
+    <main className={pageClass}>
+      <GameHeader name="SPIKE" kicker="Front page" title="Pick the lead story before deadline." description="Five rapid editorial calls. Choose the headline with the highest public impact each round." />
       <section className={cardClass}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex gap-2 rounded-full bg-slate-100 p-1">
-            {(["daily", "endless"] as const).map((item) => <button key={item} type="button" onClick={() => reset(item)} className={`rounded-full px-4 py-2 text-sm font-semibold capitalize transition ${mode === item ? "bg-slate-950 text-white" : "text-slate-600 hover:text-slate-950"}`}>{item}</button>)}
-          </div>
-          <p className="rounded-full bg-amber-100 px-4 py-2 text-sm font-semibold text-amber-900">Current streak: {streak}</p>
-        </div>
-        {finished ? (
+        <StatsRow stats={stats} />
+        {isComplete ? (
           <div className="py-12 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Run complete</p>
-            <h2 className="mt-3 text-4xl font-semibold text-slate-950">{streak} {streak === 1 ? "win" : "wins"}</h2>
-            <p className="mt-3 text-slate-600">{streak === spikeRounds.length ? "Perfect daily run. Nicely judged." : "A good instinct gets sharper with another run."}</p>
-            <button type="button" onClick={() => reset()} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Play again</button>
-            <PostGameFact pillar="Movement" fact="Energy expenditure varies by body size and intensity, so these matchups use typical relative effort—not a promise of exact calories." />
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Edition closed</p>
+            <h2 className="mt-3 text-4xl font-semibold text-slate-950">{score} / {rounds.length}</h2>
+            <p className="mt-3 text-slate-600">{score >= 4 ? "Sharp editorial instinct. Front page secured." : "Solid run. Tune your signal and run it back."}</p>
+            <button type="button" onClick={reset} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Replay today</button>
+            <PostGameFact pillar="Public Health" fact="Editorial priorities should favor broad impact, evidence quality, and actionability over novelty." />
           </div>
         ) : (
-          <div className="py-8 sm:py-12">
-            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Which burns more in 10 minutes?</p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <button type="button" onClick={() => choose(matchup.leftValue)} className="rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-orange-50 to-white p-8 text-left transition hover:-translate-y-1 hover:border-orange-300 hover:shadow-lg">
-                <span className="text-sm font-semibold uppercase tracking-[0.3em] text-orange-700">Pick one</span><span className="mt-8 block text-3xl font-semibold text-slate-950">{matchup.left}</span>
-              </button>
-              <button type="button" onClick={() => choose(matchup.rightValue)} className="rounded-[1.75rem] border border-slate-200 bg-gradient-to-br from-sky-50 to-white p-8 text-left transition hover:-translate-y-1 hover:border-sky-300 hover:shadow-lg">
-                <span className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-700">Pick one</span><span className="mt-8 block text-3xl font-semibold text-slate-950">{matchup.right}</span>
-              </button>
+          <div className="py-8 sm:py-10">
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Round {round + 1} / {rounds.length}</p>
+              <p className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">Score: {score}</p>
             </div>
+            <h2 className="mt-5 text-2xl font-semibold text-slate-950 sm:text-3xl">{current.prompt}</h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {current.choices.map((choice, index) => {
+                const isPicked = picked === index;
+                const isBest = choice.impact === bestImpact;
+                return (
+                  <button
+                    type="button"
+                    key={choice.label}
+                    onClick={() => choose(index)}
+                    disabled={picked !== null}
+                    className={`rounded-[1.25rem] border p-5 text-left transition ${isPicked ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-gradient-to-br from-white to-slate-50 hover:-translate-y-1 hover:border-slate-400"}`}
+                  >
+                    <span className={`text-xs font-semibold uppercase tracking-[0.24em] ${isPicked ? "text-slate-300" : "text-slate-500"}`}>{choice.deck}</span>
+                    <span className="mt-3 block text-lg font-semibold leading-6">{choice.label}</span>
+                    {picked !== null && isBest ? <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Top impact</span> : null}
+                  </button>
+                );
+              })}
+            </div>
+            {picked !== null ? <button type="button" onClick={advance} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Next round</button> : null}
           </div>
         )}
       </section>
@@ -98,21 +211,61 @@ export function SpikeGame() {
   );
 }
 
-const sortedTiles = [
-  ["Coffee", "Deadline", "Poor sleep", "Hard interval"],
-  ["Walk outside", "Long exhale", "Warm shower", "Journal"],
-  ["Deload week", "Protein meal", "Rest day", "Mobility work"],
-  ["Bedtime alarm", "Morning light", "Cool room", "Phone away"],
-].map((items, group) => items.map((label) => ({ label, group }))).flat();
+type SortedBoard = {
+  title: string;
+  groups: string[][];
+};
+
+const sortedBoards: SortedBoard[] = [
+  {
+    title: "Build a recovery system",
+    groups: [
+      ["Morning light", "Cool room", "Dark room", "No late caffeine"],
+      ["Walk break", "Long exhale", "Journal", "Short stretch"],
+      ["Protein meal", "Hydration", "Fiber plate", "Colorful produce"],
+      ["Deload week", "Rest day", "Mobility", "Easy spin"],
+    ],
+  },
+  {
+    title: "Find the health desk clusters",
+    groups: [
+      ["RCT", "Meta-analysis", "Cohort", "Systematic review"],
+      ["Policy brief", "Regulation", "Guideline", "Mandate"],
+      ["VO2 max", "Resting HR", "Grip strength", "Sleep efficiency"],
+      ["Stress load", "Burnout", "Recovery debt", "Circadian drift"],
+    ],
+  },
+  {
+    title: "Sort the newsroom workflow",
+    groups: [
+      ["Pitch", "Assign", "Report", "Publish"],
+      ["Interview", "Transcript", "Fact-check", "Edit"],
+      ["Headline", "Dek", "Pull quote", "Caption"],
+      ["Corrections", "Update", "Archive", "Follow-up"],
+    ],
+  },
+];
 
 export function SortedGame() {
-  const tiles = useMemo(() => [...sortedTiles].sort((a, b) => a.label.localeCompare(b.label)), []);
+  const dayKey = getDailyKey();
+  const board = useMemo(() => pickDaily(sortedBoards, "sorted", dayKey), [dayKey]);
+  const groups = board.groups.map((labels, group) => labels.map((label) => ({ label, group }))).flat();
+  const tiles = useMemo(() => seededShuffle(groups, `sorted:${dayKey}`), [dayKey, board.title]);
+  const { stats, saveResult } = useDailyStats("sorted");
   const [selected, setSelected] = useState<string[]>([]);
   const [solved, setSolved] = useState<number[]>([]);
   const [mistakes, setMistakes] = useState(0);
   const [message, setMessage] = useState("Find four things that belong together.");
+  const [recorded, setRecorded] = useState(false);
   const activeTiles = tiles.filter((tile) => !solved.includes(tile.group));
   const complete = solved.length === 4 || mistakes >= 4;
+
+  useEffect(() => {
+    if (complete && !recorded) {
+      saveResult(dayKey, solved.length === 4);
+      setRecorded(true);
+    }
+  }, [complete, dayKey, recorded, saveResult, solved.length]);
 
   function toggle(label: string) { setSelected((current) => current.includes(label) ? current.filter((item) => item !== label) : current.length < 4 ? [...current, label] : current); }
   function submit() {
@@ -120,37 +273,210 @@ export function SortedGame() {
     if (selected.length !== 4 || group === undefined) return;
     if (selected.every((label) => activeTiles.find((tile) => tile.label === label)?.group === group)) {
       setSolved((current) => [...current, group]); setSelected([]); setMessage("Connected. Find the next four.");
-    } else { setMistakes((current) => current + 1); setSelected([]); setMessage("Not quite—try another connection."); }
+    } else {
+      const byGroup = new Map<number, number>();
+      selected.forEach((label) => {
+        const selectedGroup = activeTiles.find((tile) => tile.label === label)?.group;
+        if (selectedGroup !== undefined) {
+          byGroup.set(selectedGroup, (byGroup.get(selectedGroup) ?? 0) + 1);
+        }
+      });
+      const oneAway = Array.from(byGroup.values()).some((count) => count === 3);
+      setMistakes((current) => current + 1);
+      setSelected([]);
+      setMessage(oneAway ? "One away. Swap one tile." : "Not quite. Try another pattern.");
+    }
   }
-  function reset() { setSelected([]); setSolved([]); setMistakes(0); setMessage("Find four things that belong together."); }
+  function reset() {
+    setSelected([]);
+    setSolved([]);
+    setMistakes(0);
+    setMessage("Find four things that belong together.");
+    setRecorded(false);
+  }
 
-  return <main className="mx-auto max-w-4xl px-6 py-10 sm:px-8 lg:py-14"><GameHeader name="SORTED" kicker="Daily puzzle" title="See the connections hiding in plain sight." description="Select four tiles that form a group. Four mistakes ends the run—no answers spoiled until you play." /><section className={cardClass}>
+  const solvedSets = solved.map((groupId) => board.groups[groupId]);
+
+  return <main className={pageClass}><GameHeader name="SORTED" kicker="Connections desk" title={board.title} description="Four groups are hidden in sixteen cards. Spot patterns, not trivia." /><section className={cardClass}>
+    <StatsRow stats={stats} />
     <div className="flex items-center justify-between gap-3 text-sm font-semibold"><p className="text-slate-600">{message}</p><p className="rounded-full bg-slate-100 px-3 py-2 text-slate-700">Mistakes: {mistakes}/4</p></div>
-    {complete ? <div className="py-10 text-center"><h2 className="text-3xl font-semibold">{solved.length === 4 ? "Board cleared." : "Good run."}</h2><p className="mt-3 text-slate-600">You found {solved.length} of 4 hidden groups.</p><button type="button" onClick={reset} className="mt-6 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Play again</button><PostGameFact pillar="Stress & Recovery" fact="Stress management is not one tool: physical load, sleep, recovery, and daily routines all affect how you feel and perform." /></div> : <><div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">{activeTiles.map((tile) => <button type="button" key={tile.label} onClick={() => toggle(tile.label)} className={`${buttonClass} min-h-20 ${selected.includes(tile.label) ? "border-slate-950 bg-slate-950 text-white" : ""}`}>{tile.label}</button>)}</div><button type="button" disabled={selected.length !== 4} onClick={submit} className="mt-6 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-40">Submit group</button></>}
+    {complete ? <div className="py-10 text-center"><h2 className="text-3xl font-semibold">{solved.length === 4 ? "Board cleared." : "Edition paused."}</h2><p className="mt-3 text-slate-600">You found {solved.length} of 4 hidden groups.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{solvedSets.map((set) => <div key={set.join("-")} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-700">{set.join(" · ")}</div>)}</div><button type="button" onClick={reset} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Replay today</button><PostGameFact pillar="Stress & Recovery" fact="Pattern switching under mild pressure trains attention control, a core part of emotional recovery." /></div> : <><div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">{activeTiles.map((tile) => <button type="button" key={tile.label} onClick={() => toggle(tile.label)} className={`${buttonClass} min-h-20 ${selected.includes(tile.label) ? "border-slate-950 bg-slate-950 text-white" : ""}`}>{tile.label}</button>)}</div><button type="button" disabled={selected.length !== 4} onClick={submit} className="mt-6 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-40">Submit set</button></>}
   </section></main>;
 }
 
-const blurRounds = [
-  { emoji: "🥑", answers: ["Avocado", "Kettlebell", "Sleep mask", "Foam roller"], correct: "Avocado", fact: "Avocados provide unsaturated fats and fiber—useful ingredients in a balanced meal, not a standalone health fix." },
-  { emoji: "🏋️", answers: ["Cold plunge", "Strength training", "Meditation", "Protein shake"], correct: "Strength training", fact: "Strength training supports muscle, bone health, and everyday function across the lifespan." },
-  { emoji: "🧊", answers: ["Cold exposure", "Hydration", "Sleep tracking", "Mobility"], correct: "Cold exposure", fact: "Cold exposure can feel invigorating, but it is optional—not a replacement for sleep, food, or training basics." },
+type RedactRound = {
+  headline: string;
+  choices: string[];
+  correct: string;
+  fact: string;
+};
+
+const redactRounds: RedactRound[] = [
+  {
+    headline: "New trial shows ___ and morning light improve deep sleep quality",
+    choices: ["late snacking", "consistent bedtime", "social media", "cold shower"],
+    correct: "consistent bedtime",
+    fact: "Consistent sleep timing is one of the strongest behavioral predictors of better sleep quality.",
+  },
+  {
+    headline: "City hospitals report lower readmissions after adding ___ care teams",
+    choices: ["integrated nutrition", "influencer coaching", "detox programs", "aroma therapy"],
+    correct: "integrated nutrition",
+    fact: "Nutrition support in clinical pathways can improve outcomes for recovery and adherence.",
+  },
+  {
+    headline: "Longitudinal study links weekly ___ training to healthier aging markers",
+    choices: ["strength", "sauna", "sprint-only", "VR gaming"],
+    correct: "strength",
+    fact: "Strength training supports long-term function, metabolic health, and resilience with age.",
+  },
+  {
+    headline: "National update: daily ___ exposure recommended to support circadian rhythm",
+    choices: ["morning daylight", "blue light", "supplement ads", "iced baths"],
+    correct: "morning daylight",
+    fact: "Morning daylight is a practical cue that helps anchor circadian timing.",
+  },
+  {
+    headline: "Meta-analysis finds moderate ___ intake linked to lower blood pressure trends",
+    choices: ["fiber", "sugar", "energy drinks", "fried snacks"],
+    correct: "fiber",
+    fact: "Dietary fiber intake is associated with better cardiometabolic profiles in many populations.",
+  },
 ];
 
 export function BlurGame() {
-  const [round, setRound] = useState(0); const [guesses, setGuesses] = useState(0); const [done, setDone] = useState(false); const current = blurRounds[round];
-  function choose(answer: string) { if (done) return; if (answer === current.correct || guesses === 2) setDone(true); else setGuesses((value) => value + 1); }
-  function next() { setRound((value) => (value + 1) % blurRounds.length); setGuesses(0); setDone(false); }
-  return <main className="mx-auto max-w-3xl px-6 py-10 sm:px-8 lg:py-14"><GameHeader name="BLUR" kicker="Daily reveal" title="What are you looking at?" description="Choose an answer. Every miss brings the image into focus—curiosity first, science second." /><section className={`${cardClass} text-center`}>
-    <div className="mx-auto flex h-52 w-full max-w-md items-center justify-center rounded-[2rem] bg-gradient-to-br from-emerald-100 via-amber-50 to-sky-100 text-8xl transition duration-500" style={{ filter: done ? "blur(0px)" : `blur(${Math.max(0, 14 - guesses * 5)}px)` }}>{current.emoji}</div>
-    <p className="mt-5 text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Reveal {guesses + 1} of 3</p>
-    {done ? <div><h2 className="mt-4 text-3xl font-semibold text-slate-950">It&apos;s {current.correct}.</h2><button type="button" onClick={next} className="mt-6 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Next reveal</button><PostGameFact pillar="Nutrition & Recovery" fact={current.fact} /></div> : <div className="mt-6 grid gap-3 sm:grid-cols-2">{current.answers.map((answer) => <button type="button" key={answer} onClick={() => choose(answer)} className={buttonClass}>{answer}</button>)}</div>}
+  const dayKey = getDailyKey();
+  const rounds = useMemo(() => seededShuffle(redactRounds, `blur:${dayKey}`).slice(0, 4), [dayKey]);
+  const { stats, saveResult } = useDailyStats("blur");
+  const [round, setRound] = useState(0);
+  const [attempts, setAttempts] = useState(0);
+  const [picked, setPicked] = useState<string | null>(null);
+  const [score, setScore] = useState(0);
+  const [recorded, setRecorded] = useState(false);
+
+  const isComplete = round >= rounds.length;
+  const current = rounds[Math.min(round, rounds.length - 1)];
+  const revealLevel = Math.min(3, attempts + (picked ? 3 : 0));
+
+  useEffect(() => {
+    if (isComplete && !recorded) {
+      saveResult(dayKey, score >= 3);
+      setRecorded(true);
+    }
+  }, [dayKey, isComplete, recorded, saveResult, score]);
+
+  function choose(answer: string) {
+    if (picked) return;
+    if (answer === current.correct) {
+      setPicked(answer);
+      setScore((value) => value + (attempts === 0 ? 2 : 1));
+      return;
+    }
+
+    if (attempts >= 2) {
+      setPicked(current.correct);
+    } else {
+      setAttempts((value) => value + 1);
+    }
+  }
+
+  function next() {
+    setRound((value) => value + 1);
+    setAttempts(0);
+    setPicked(null);
+  }
+
+  function reset() {
+    setRound(0);
+    setAttempts(0);
+    setPicked(null);
+    setScore(0);
+    setRecorded(false);
+  }
+
+  const words = current.headline.split(" ");
+
+  return <main className={pageClass}><GameHeader name="BLUR" kicker="Redaction desk" title="Decode the missing word in each headline." description="Every miss reveals more context. Score points by solving early." /><section className={`${cardClass} text-center`}>
+    <StatsRow stats={stats} />
+    {isComplete ? <div className="py-10"><p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Issue complete</p><h2 className="mt-3 text-4xl font-semibold text-slate-950">{score} points</h2><p className="mt-3 text-slate-600">{score >= 6 ? "Excellent read on the cues." : "Good instincts. Tomorrow&apos;s issue drops at midnight."}</p><button type="button" onClick={reset} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Replay today</button><PostGameFact pillar="Attention" fact="Progressive reveal mechanics reward pattern recognition and confidence calibration under uncertainty." /></div> : <><div className="flex items-center justify-between gap-3"><p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Round {round + 1} / {rounds.length}</p><p className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">Points: {score}</p></div><div className="mt-6 rounded-[1.5rem] border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 text-left leading-8 sm:p-8">{words.map((word, index) => {
+      const shouldReveal = word !== "___" || revealLevel >= 3;
+      if (shouldReveal) {
+        return <span key={`${word}-${index}`} className="mr-2 inline-block text-2xl font-semibold text-slate-900">{word}</span>;
+      }
+      const revealHint = revealLevel === 0 ? "" : current.correct.slice(0, revealLevel * 4);
+      return <span key={`${word}-${index}`} className="mr-2 inline-flex min-w-24 items-center justify-center rounded-lg bg-slate-900 px-3 py-1 text-xl font-semibold text-white">{revealHint || "..."}</span>;
+    })}</div><p className="mt-4 text-sm text-slate-500">Attempts used: {attempts} / 3</p>{picked ? <div><h2 className="mt-5 text-2xl font-semibold text-slate-950">Answer: {current.correct}</h2><button type="button" onClick={next} className="mt-6 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Next round</button><PostGameFact pillar="Evidence literacy" fact={current.fact} /></div> : <div className="mt-6 grid gap-3 sm:grid-cols-2">{current.choices.map((answer) => <button type="button" key={answer} onClick={() => choose(answer)} className={buttonClass}>{answer}</button>)}</div>}</>}
   </section></main>;
 }
 
 export function GutGame() {
-  const target = 72; const [guess, setGuess] = useState(50); const [submitted, setSubmitted] = useState(false); const score = Math.max(0, 100 - Math.abs(target - guess) * 2);
-  function reset() { setGuess(50); setSubmitted(false); }
-  return <main className="mx-auto max-w-3xl px-6 py-10 sm:px-8 lg:py-14"><GameHeader name="GUT" kicker="Daily spectrum" title="Put the answer where your instinct lands." description="Drag the marker between two extremes. Your score is based on how close you get—not whether you memorized a statistic." /><section className={cardClass}>
-    {submitted ? <div className="py-8 text-center"><p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Your result</p><h2 className="mt-3 text-5xl font-semibold text-slate-950">{score}%</h2><p className="mt-4 text-slate-600">You landed {Math.abs(target - guess)}% from the target zone.</p><button type="button" onClick={reset} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Try again</button><PostGameFact pillar="Sleep" fact="Even modest sleep restriction can impair attention and reaction time. The most reliable performance tool is still enough consistent sleep." /></div> : <div className="py-6"><p className="mx-auto max-w-xl text-center text-xl font-semibold leading-8 text-slate-950">After a short night, where does your reaction time land between fully rested and severely impaired?</p><div className="mt-10"><div className="flex justify-between text-sm font-semibold text-slate-600"><span>Fully rested</span><span>Severely impaired</span></div><input aria-label="Reaction-time estimate" type="range" min="0" max="100" value={guess} onChange={(event) => setGuess(Number(event.target.value))} className="mt-5 w-full accent-slate-950" /><p className="mt-4 text-center text-sm text-slate-500">Place your marker, then reveal the answer.</p></div><div className="mt-8 text-center"><button type="button" onClick={() => setSubmitted(true)} className="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Reveal score</button></div></div>}
+  const dayKey = getDailyKey();
+  const { stats, saveResult } = useDailyStats("gut");
+  const [recorded, setRecorded] = useState(false);
+  const timelinePool = [
+    {
+      title: "Order the evidence timeline",
+      events: [
+        { label: "Observational signal appears", rank: 1 },
+        { label: "Controlled trial starts", rank: 2 },
+        { label: "Peer review publishes", rank: 3 },
+        { label: "Guideline committee updates advice", rank: 4 },
+      ],
+    },
+    {
+      title: "Build the policy rollout order",
+      events: [
+        { label: "Draft recommendation", rank: 1 },
+        { label: "Public comment window", rank: 2 },
+        { label: "Final vote and release", rank: 3 },
+        { label: "Hospital implementation", rank: 4 },
+      ],
+    },
+    {
+      title: "Arrange a reporting cycle",
+      events: [
+        { label: "Editor pitch review", rank: 1 },
+        { label: "Source interviews", rank: 2 },
+        { label: "Fact-check pass", rank: 3 },
+        { label: "Morning publication", rank: 4 },
+      ],
+    },
+  ] as const;
+
+  const timeline = useMemo(() => pickDaily(timelinePool, "gut", dayKey), [dayKey]);
+  const [ordered, setOrdered] = useState(() => seededShuffle(timeline.events, `gut:${dayKey}`));
+  const [submitted, setSubmitted] = useState(false);
+
+  const score = useMemo(() => {
+    const distance = ordered.reduce((sum, event, index) => sum + Math.abs(event.rank - (index + 1)), 0);
+    return Math.max(0, 100 - distance * 15);
+  }, [ordered]);
+
+  useEffect(() => {
+    if (submitted && !recorded) {
+      saveResult(dayKey, score >= 75);
+      setRecorded(true);
+    }
+  }, [dayKey, recorded, saveResult, score, submitted]);
+
+  function move(index: number, direction: -1 | 1) {
+    const next = index + direction;
+    if (next < 0 || next >= ordered.length || submitted) return;
+    setOrdered((current) => {
+      const cloned = [...current];
+      [cloned[index], cloned[next]] = [cloned[next], cloned[index]];
+      return cloned;
+    });
+  }
+
+  function reset() {
+    setOrdered(seededShuffle(timeline.events, `gut:${dayKey}:${Date.now()}`));
+    setSubmitted(false);
+    setRecorded(false);
+  }
+
+  return <main className={pageClass}><GameHeader name="GUT" kicker="Timeline desk" title={timeline.title} description="Reorder four cards into the most plausible real-world sequence." /><section className={cardClass}>
+    <StatsRow stats={stats} />
+    {submitted ? <div className="py-8 text-center"><p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Final board</p><h2 className="mt-3 text-5xl font-semibold text-slate-950">{score}%</h2><p className="mt-4 text-slate-600">Lower total position error means a stronger score.</p><div className="mt-6 grid gap-3 text-left">{ordered.map((event, index) => <div key={event.label} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"><span className="font-semibold text-slate-500">{index + 1}.</span> <span className="font-semibold text-slate-900">{event.label}</span> <span className="ml-2 text-slate-500">(ideal: {event.rank})</span></div>)}</div><button type="button" onClick={reset} className="mt-7 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Replay today</button><PostGameFact pillar="Reasoning" fact="Timeline ordering strengthens causal reasoning and helps separate anecdote from system-level evidence." /></div> : <div><div className="space-y-3">{ordered.map((event, index) => <div key={event.label} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3"><p className="min-w-6 text-sm font-semibold text-slate-500">{index + 1}</p><p className="flex-1 text-sm font-semibold text-slate-900">{event.label}</p><div className="flex gap-2"><button type="button" onClick={() => move(index, -1)} className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-slate-400">Up</button><button type="button" onClick={() => move(index, 1)} className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 hover:border-slate-400">Down</button></div></div>)}</div><div className="mt-8 text-center"><button type="button" onClick={() => setSubmitted(true)} className="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white">Score my order</button></div></div>}
   </section></main>;
 }
