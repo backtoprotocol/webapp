@@ -413,7 +413,10 @@ export function GutGame() {
   const dayKey = getDailyKey();
   const { stats, saveResult } = useDailyStats("gut");
   const [recorded, setRecorded] = useState(false);
-  const timelinePool = [
+  type TimelineEvent = { label: string; rank: number };
+  type TimelineScenario = { title: string; events: TimelineEvent[] };
+
+  const timelinePool: TimelineScenario[] = [
     {
       title: "Order the evidence timeline",
       events: [
@@ -441,7 +444,7 @@ export function GutGame() {
         { label: "Morning publication", rank: 4 },
       ],
     },
-  ] as const;
+  ];
 
   const timeline = useMemo(() => pickDaily(timelinePool, "gut", dayKey), [dayKey]);
   const [ordered, setOrdered] = useState(() => seededShuffle(timeline.events, `gut:${dayKey}`));
