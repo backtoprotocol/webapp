@@ -44,3 +44,22 @@ select {
 html {
   scroll-behavior: smooth;
 }
+
+@keyframes movement-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
+.movement-marquee-track {
+  animation: movement-marquee 32s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .movement-marquee-track {
+    animation: none;
+  }
+}

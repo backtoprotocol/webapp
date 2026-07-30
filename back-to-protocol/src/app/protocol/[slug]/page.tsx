@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { FadeInSection } from "@/components/fade-in-section";
 import { protocolPillars, protocolPillarsBySlug } from "@/lib/protocol-pillars";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -137,243 +138,328 @@ function GenericProtocolPage({ pillar }: { pillar: (typeof protocolPillars)[numb
 }
 
 function MovementProtocolPage() {
-  const disciplines = [
-    "Strength",
-    "HIIT",
-    "Zone 2",
-    "Mobility",
-    "Power",
-    "Pilates",
-    "Core",
-    "Running",
-    "Cycling",
-    "Athletic Skills",
-    "Low Impact",
-    "Recovery Flow",
+  const primaryCtaClass =
+    "inline-flex min-h-10 min-w-[9.5rem] items-center justify-center rounded-full bg-sky-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-400";
+  const secondaryCtaClass =
+    "inline-flex min-h-10 min-w-[9.5rem] items-center justify-center rounded-full border border-slate-400 px-6 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-slate-800";
+  const heroCtaClass =
+    "inline-flex min-h-11 min-w-[10rem] items-center justify-center rounded-full bg-sky-400 px-8 py-3 text-base font-semibold text-slate-950 shadow-[0_12px_24px_-12px_rgba(0,0,0,0.35)] transition hover:bg-sky-300";
+  const coaches = ["Mila", "Greg", "Tyrell", "Bakari", "Sam", "Jules"];
+  const socialTiles = [
+    "from-sky-200 to-blue-300",
+    "from-orange-200 to-amber-300",
+    "from-indigo-200 to-sky-300",
+    "from-emerald-200 to-cyan-300",
+    "from-rose-200 to-fuchsia-300",
+    "from-teal-200 to-blue-300",
+    "from-violet-200 to-indigo-300",
+    "from-cyan-200 to-sky-300",
   ];
-
-  const coaches = ["Rae", "Mason", "Nia", "Joel", "Sora", "Dante", "Ava", "Theo"];
-
-  const plans = [
-    {
-      label: "Get Started",
-      title: "Movement baseline",
-      copy: "4 sessions per week, mixed intensity, technique-first progression.",
-    },
-    {
-      label: "Stay Consistent",
-      title: "Capacity builder",
-      copy: "6-week arc of strength + engine work with scheduled recovery days.",
-    },
-    {
-      label: "Push Further",
-      title: "Performance block",
-      copy: "Advanced split with progression targets and weekly benchmark tests.",
-    },
+  const faqItems = [
+    "Where can I find the Movement program?",
+    "Do I need a wearable to use Movement?",
+    "Do I need equipment for Movement workouts?",
+    "Can I use Movement on my TV?",
+    "Can I combine multiple workouts in one session?",
+    "Where is Movement available?",
+    "How do I redeem the three-month offer?",
   ];
 
   return (
-    <main className="bg-slate-50 text-slate-950">
-      <section className="px-6 pt-8 sm:px-8 lg:px-10 lg:pt-12">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.4rem] border border-slate-200 bg-white shadow-[0_55px_140px_-68px_rgba(15,23,42,0.34)]">
-          <div className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-800 px-7 py-10 text-white sm:px-12 sm:py-14 lg:px-16 lg:py-18">
-            <div className="absolute -right-24 -top-20 h-80 w-80 rounded-full bg-orange-300/25 blur-3xl" />
-            <div className="absolute -left-16 bottom-0 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl" />
-            <div className="relative grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.34em] text-white/70">Movement Protocol</p>
-                <h1 className="mt-5 max-w-3xl text-4xl font-semibold tracking-[-0.045em] sm:text-6xl">Train every system that keeps you capable.</h1>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80">A dedicated movement platform: progressive strength, aerobic base, and daily mobility with plans tailored to your schedule.</p>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/subscribe" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200">Start movement plan</Link>
-                  <Link href="/games/spike" className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:border-white">Daily movement game</Link>
-                </div>
-              </div>
+    <main className="bg-[#f5f5f7] text-slate-950">
+      <section className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-b from-[#dbeafe] via-[#c7dcf8] to-[#8db5e3]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.45),transparent_38%),radial-gradient(circle_at_85%_10%,rgba(186,230,253,0.45),transparent_34%)]" />
+        <div className="relative mx-auto flex min-h-[78vh] max-w-7xl flex-col items-center justify-end px-6 pb-16 pt-14 text-center sm:px-8 lg:pb-20 lg:pt-20">
+          <p className="text-xl font-semibold tracking-tight text-white/95 sm:text-2xl">Movement+</p>
+          <h1 className="mt-2 text-5xl font-semibold leading-[0.95] tracking-[-0.04em] text-white sm:text-7xl">
+            Stronger every session.
+            <br />
+            Sharper every day.
+          </h1>
+          <button className={`mt-10 ${heroCtaClass}`}>Start now</button>
+          <div className="mt-14 w-full max-w-5xl">
+            <PhoneStage />
+          </div>
+        </div>
+      </section>
 
-              <div className="grid gap-3 rounded-[1.6rem] border border-white/20 bg-white/5 p-5 backdrop-blur">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/70">Live session metrics</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <article className="rounded-xl bg-white/10 p-3">
-                    <p className="text-xs uppercase tracking-[0.16em] text-white/70">Heart rate</p>
-                    <p className="mt-2 text-2xl font-semibold">148</p>
-                  </article>
-                  <article className="rounded-xl bg-white/10 p-3">
-                    <p className="text-xs uppercase tracking-[0.16em] text-white/70">Zone</p>
-                    <p className="mt-2 text-2xl font-semibold">3 / 5</p>
-                  </article>
-                  <article className="rounded-xl bg-white/10 p-3">
-                    <p className="text-xs uppercase tracking-[0.16em] text-white/70">Session</p>
-                    <p className="mt-2 text-2xl font-semibold">38 min</p>
-                  </article>
-                  <article className="rounded-xl bg-white/10 p-3">
-                    <p className="text-xs uppercase tracking-[0.16em] text-white/70">Workload</p>
-                    <p className="mt-2 text-2xl font-semibold">+12%</p>
-                  </article>
-                </div>
-              </div>
+      <div className="mx-auto max-w-6xl px-6 py-24 sm:px-8 lg:px-10 lg:py-32">
+        <FadeInSection className="text-center" delayMs={30}>
+          <div className="mx-auto max-w-4xl space-y-12">
+            <p className="text-3xl font-semibold tracking-tight text-slate-800 sm:text-4xl">
+              12 workout types, from Strength to HIIT to Yoga.
+              <br className="hidden sm:block" />
+              New sessions added every week, from 5 to 45 minutes.
+            </p>
+            <p className="text-3xl font-semibold tracking-tight text-slate-700 sm:text-4xl">
+              Personalized recommendations and ready-made
+              <br className="hidden sm:block" />
+              Custom Plans based on your favorite activities.
+            </p>
+            <p className="text-3xl font-semibold tracking-tight text-slate-600 sm:text-4xl">
+              Real-time metrics from wearables and
+              <br className="hidden sm:block" />
+              any Bluetooth heart rate monitor.
+            </p>
+          </div>
+
+          <div className="mt-24 grid gap-10 border-t border-slate-300 pt-16 md:grid-cols-3 md:gap-12">
+              <OfferCard
+                title="Always free"
+                copy="Movement+ is completely free for everyone. No trial window and no payment required."
+                primary="Start now"
+              />
+              <OfferCard
+                title="No subscription required"
+                copy="No monthly plan, no annual plan, and no hidden upgrade wall."
+                primary="Get access"
+              />
+              <OfferCard
+                title="Everything included"
+                copy="All core movement tools and protocol content are included at zero cost."
+                primary="See everything"
+                secondary="Learn more"
+              />
+          </div>
+        </FadeInSection>
+
+        <FadeInSection className="mt-40" delayMs={60}>
+          <h2 className="text-center text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
+            Find a routine that works for you.
+            <br />
+            And with you.
+          </h2>
+
+          <div className="mt-16 space-y-10">
+            <FeaturePanel
+              title="Custom Plans that just get you."
+              copy="Jump right in with a workout and recovery schedule based on your favorite activities. Use Get Started for a tailored routine, then keep momentum with Stay Consistent or Push Further."
+              align="left"
+            />
+            <FeaturePanel
+              title="Get personalized recommendations in For You."
+              copy="From day one, Movement learns your style and adapts recommendations based on activity type, coach preference, duration, and effort trend."
+              align="right"
+            />
+          </div>
+        </FadeInSection>
+
+        <FadeInSection className="mt-24 rounded-[2rem] bg-[#ececf1] p-10 sm:p-12" delayMs={90}>
+          <h3 className="text-center text-3xl font-semibold tracking-tight text-slate-900">Meet the Movement trainer team:</h3>
+          <div className="mt-10 overflow-hidden pb-2">
+            <div className="movement-marquee-track flex w-max gap-5">
+              {[...coaches, ...coaches].map((coach, index) => (
+                <article key={`${coach}-${index}`} className="min-w-[8.75rem] rounded-2xl bg-white p-3 text-center shadow-[0_10px_30px_-25px_rgba(15,23,42,0.5)] sm:min-w-[9.5rem]">
+                  <div className={`aspect-[4/3] rounded-xl bg-gradient-to-br ${index % 2 === 0 ? "from-fuchsia-100 to-amber-100" : "from-cyan-100 to-lime-100"}`} />
+                  <p className="mt-2 text-xs font-semibold text-slate-700">{coach}</p>
+                </article>
+              ))}
             </div>
           </div>
+        </FadeInSection>
 
-          <div className="grid gap-4 border-t border-slate-200 p-6 sm:grid-cols-3 sm:p-8 lg:p-10">
-            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">12 movement types</p>
-              <p className="mt-3 text-xl font-semibold">Strength to mobility</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">Daily sessions for energy systems, skill, and durability.</p>
-            </article>
-            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">5 to 45 minutes</p>
-              <p className="mt-3 text-xl font-semibold">Flexible duration</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">Build consistency with short or full-format sessions.</p>
-            </article>
-            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Weekly progression</p>
-              <p className="mt-3 text-xl font-semibold">Auto-adjusted plans</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">Recommendations evolve from your completion and effort.</p>
-            </article>
-          </div>
-        </div>
-      </section>
+        <FadeInSection className="mt-20 grid gap-10 sm:grid-cols-2" delayMs={120}>
+          <article className="rounded-[2rem] bg-[#ececf1] p-10">
+            <div className="mx-auto w-full max-w-[14rem]">
+              <PhoneMini />
+            </div>
+            <p className="mx-auto mt-8 max-w-md text-lg font-medium leading-8 text-slate-600">
+              Track your fitness journey, learn tips from coaches, and get personalized recommendations in the Summary tab.
+            </p>
+          </article>
 
-      <section className="px-6 py-10 sm:px-8 lg:px-10 lg:py-14">
-        <div className="mx-auto max-w-7xl rounded-[2.1rem] border border-slate-200 bg-white p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.35)] sm:p-10 lg:p-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-500">Find your routine</p>
-          <h2 className="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.03em]">A plan that works for you and with you.</h2>
-          <div className="mt-8 grid gap-6 lg:grid-cols-2">
-            <article className="rounded-[1.7rem] border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Custom plans</p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight">Built from your favorite training modes</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">Choose your priorities, available days, and equipment. The movement track builds a schedule automatically.</p>
-              <div className="mt-5 space-y-3">
-                {plans.map((plan) => (
-                  <div key={plan.title} className="rounded-xl border border-slate-200 bg-white p-4">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">{plan.label}</p>
-                    <p className="mt-1 text-base font-semibold text-slate-900">{plan.title}</p>
-                    <p className="mt-1 text-sm text-slate-600">{plan.copy}</p>
-                  </div>
-                ))}
-              </div>
-            </article>
+          <article className="rounded-[2rem] bg-[#ececf1] p-10">
+            <div className="mx-auto flex h-60 w-60 items-center justify-center rounded-[2.6rem] bg-gradient-to-br from-slate-300 via-slate-200 to-lime-300 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.55)]">
+              <span className="text-7xl font-black text-white/90">1</span>
+            </div>
+            <p className="mx-auto mt-8 max-w-md text-lg font-medium leading-8 text-slate-600">
+              Earn Movement awards for milestones, track your progress, and see which activities move you toward your next achievement.
+            </p>
+          </article>
+        </FadeInSection>
 
-            <article className="rounded-[1.7rem] border border-slate-200 bg-gradient-to-br from-orange-50 via-white to-cyan-50 p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">For you</p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight">Personalized picks after every completed session</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600">Daily recommendations adapt by duration, coach style, and intensity history so the next workout always feels relevant.</p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                {["Upper Strength 30", "Zone 2 Ride 20", "Mobility Reset 10", "Power Intervals 25"].map((item) => (
-                  <p key={item} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700">{item}</p>
-                ))}
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 pb-10 sm:px-8 lg:px-10 lg:pb-14">
-        <div className="mx-auto max-w-7xl rounded-[2.1rem] border border-slate-200 bg-white p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.35)] sm:p-10 lg:p-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-500">Metrics that keep you on track</p>
-          <h2 className="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.03em]">Real-time feedback while you move.</h2>
-          <div className="mt-8 grid gap-6 xl:grid-cols-[1.15fr_.85fr]">
-            <article className="rounded-[1.7rem] border border-slate-200 bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Session dashboard</p>
-              <h3 className="mt-3 text-2xl font-semibold">Track load and readiness in one glance.</h3>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                {["Heart rate trend", "Effort consistency", "Pace drift", "Weekly output"].map((item, index) => (
-                  <div key={item} className="rounded-xl border border-white/20 bg-white/10 p-4">
-                    <p className="text-sm text-white/70">{item}</p>
-                    <p className="mt-2 text-xl font-semibold">{["Stable", "High", "Low", "+8%"][index]}</p>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            <article className="rounded-[1.7rem] border border-slate-200 bg-slate-50 p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Coach bench</p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight">Meet your movement team</h3>
-              <div className="mt-5 grid grid-cols-4 gap-3">
-                {coaches.map((coach) => (
-                  <div key={coach} className="flex aspect-square items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-700">{coach}</div>
-                ))}
-              </div>
-              <p className="mt-5 text-sm leading-7 text-slate-600">Switch coaches any day without breaking your progression track.</p>
-            </article>
-          </div>
-
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            <article className="rounded-[1.4rem] border border-slate-200 bg-white p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Summary</p>
-              <h3 className="mt-3 text-xl font-semibold">Your movement journal</h3>
-              <p className="mt-2 text-sm leading-7 text-slate-600">Review completed sessions, pace notes, and training signals in one weekly snapshot.</p>
-            </article>
-            <article className="rounded-[1.4rem] border border-slate-200 bg-white p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Awards</p>
-              <h3 className="mt-3 text-xl font-semibold">Consistency milestones</h3>
-              <p className="mt-2 text-sm leading-7 text-slate-600">Earn badges for streaks, progressive overload, and recovery compliance.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 pb-10 sm:px-8 lg:px-10 lg:pb-14">
-        <div className="mx-auto max-w-7xl rounded-[2.1rem] border border-slate-200 bg-white p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.35)] sm:p-10 lg:p-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-500">More ways to move</p>
-          <h2 className="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.03em]">Pick your discipline. Tune your preferences.</h2>
-          <div className="mt-7 flex flex-wrap gap-2">
-            {disciplines.map((item) => (
-              <span key={item} className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700">{item}</span>
-            ))}
-          </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Duration</p>
-              <p className="mt-3 text-lg font-semibold">5, 10, 20, 30, 45 min</p>
-            </article>
-            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Equipment</p>
-              <p className="mt-3 text-lg font-semibold">Bodyweight or full gym</p>
-            </article>
-            <article className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Filters</p>
-              <p className="mt-3 text-lg font-semibold">Coach, intensity, goal</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 pb-14 sm:px-8 lg:px-10 lg:pb-20">
-        <div className="mx-auto max-w-7xl rounded-[2.1rem] border border-slate-200 bg-white p-8 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.35)] sm:p-10 lg:p-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-500">Questions and answers</p>
-          <h2 className="mt-4 text-4xl font-semibold tracking-[-0.03em]">Movement, answered.</h2>
-          <div className="mt-8 divide-y divide-slate-200 border-t border-slate-200">
-            {[
-              {
-                q: "Do I need equipment for this movement protocol?",
-                a: "No. You can train with bodyweight-only tracks, then add dumbbells or gym tools when available.",
-              },
-              {
-                q: "Can beginners use the same platform as advanced athletes?",
-                a: "Yes. Plans adapt by session selection, workload history, and intensity preferences.",
-              },
-              {
-                q: "How often should I train each week?",
-                a: "Most users start with four days: two strength, one aerobic, and one mobility-focused session.",
-              },
-              {
-                q: "How is progress measured?",
-                a: "The platform tracks consistency, workload trend, completion rate, and benchmark session improvements.",
-              },
-              {
-                q: "Can I combine movement with other pillars?",
-                a: "Yes. Movement tracks are designed to pair with Nutrition, Sleep, and Recovery protocols.",
-              },
-            ].map((item) => (
-              <details key={item.q} className="group py-5">
-                <summary className="cursor-pointer list-none text-base font-semibold text-slate-900 marker:content-none">{item.q}</summary>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">{item.a}</p>
+        <FadeInSection className="mt-36 rounded-[2.1rem] bg-white px-8 py-14 shadow-[0_20px_50px_-40px_rgba(15,23,42,0.45)] sm:px-12 sm:py-16" delayMs={150}>
+          <p className="text-center text-sm font-semibold uppercase tracking-[0.32em] text-slate-500">Questions? Answers.</p>
+          <div className="mt-10 divide-y divide-slate-200 border-t border-slate-200">
+            {faqItems.map((item) => (
+              <details key={item} className="group py-8">
+                <summary className="list-none cursor-pointer text-xl font-semibold tracking-tight text-slate-900 marker:content-none sm:text-2xl">
+                  {item}
+                </summary>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+                  Movement keeps this simple: choose your plan, pick your available time, and get recommendations that adapt as you train.
+                </p>
               </details>
             ))}
           </div>
-        </div>
-      </section>
+        </FadeInSection>
+
+        <FadeInSection className="mt-24 grid gap-10 pb-20 sm:grid-cols-2" delayMs={180}>
+          <article className="flex h-full flex-col rounded-[1.6rem] bg-[#ececf1] p-9">
+            <p className="text-4xl font-semibold tracking-tight text-slate-900">Protocol+</p>
+            <p className="mt-3 max-w-md text-4xl font-semibold tracking-tight text-slate-900">Access every core protocol in one system.</p>
+            <div className="mt-8 space-y-2 text-3xl font-semibold tracking-tight">
+              <p className="text-blue-900">Movement</p>
+              <p className="text-blue-800">Nutrition</p>
+              <p className="text-sky-800">Sleep</p>
+              <p className="text-sky-700">Stress</p>
+              <p className="text-sky-600">Hormones</p>
+              <p className="text-sky-500">Recovery</p>
+              <p className="text-slate-600">Longevity</p>
+              <p className="text-slate-500">Mindset</p>
+            </div>
+            <div className="mt-auto flex flex-wrap gap-3 pt-10">
+              <button className={primaryCtaClass}>Explore protocols</button>
+              <button className={secondaryCtaClass}>Learn more</button>
+            </div>
+          </article>
+
+          <article className="flex h-full flex-col rounded-[1.6rem] bg-[#ececf1] p-9">
+            <p className="text-4xl font-semibold tracking-tight text-slate-900">Focus Audio</p>
+            <p className="mt-3 max-w-md text-4xl font-semibold tracking-tight text-slate-900">Use curated training playlists and recovery audio to guide each session.</p>
+            <div className="mt-auto flex flex-wrap gap-3 pt-10">
+              <button className={primaryCtaClass}>Open audio</button>
+              <button className={secondaryCtaClass}>Learn more</button>
+            </div>
+            <div className="mx-auto mt-10 w-full max-w-[12rem]">
+              <PhoneMini />
+            </div>
+          </article>
+        </FadeInSection>
+
+        <FadeInSection className="mt-28 pb-12" delayMs={210}>
+          <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_24px_70px_-45px_rgba(15,23,42,0.35)]">
+            <div className="px-8 py-20 text-center sm:px-12 sm:py-24">
+              <h3 className="mx-auto max-w-3xl text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
+                Join Movement+ for even more inspiration.
+              </h3>
+              <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+                Stay up to date with the latest workouts, coaching insights, celebrations, and community moments from the studio.
+              </p>
+              <button className={`mt-9 ${primaryCtaClass}`}>
+                Follow @movementplus
+              </button>
+
+              <div className="mt-14 overflow-hidden pb-3">
+                <div className="movement-marquee-track flex w-max gap-4">
+                  {[...socialTiles, ...socialTiles].map((gradient, index) => (
+                    <div key={`${gradient}-${index}`} className={`h-32 min-w-40 rounded-2xl bg-gradient-to-br ${gradient} shadow-[0_15px_30px_-25px_rgba(15,23,42,0.4)] sm:h-36 sm:min-w-48`}>
+                      <div className="flex h-full w-full items-end rounded-2xl bg-gradient-to-t from-black/20 to-transparent p-3">
+                        <p className="text-xs font-semibold text-white/90">Session {(index % socialTiles.length) + 1}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-200 bg-[#f5f5f7] px-8 py-16 sm:px-12 sm:py-18">
+              <div className="grid gap-10 md:grid-cols-3">
+                <article className="flex h-full flex-col items-center text-center">
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900">Always free</p>
+                  <div className="mx-auto mt-4 h-px w-full max-w-[16rem] bg-slate-300" />
+                  <p className="mx-auto mt-4 min-h-28 max-w-[18rem] text-base leading-7 text-slate-600">
+                    Movement+ is free for everyone, with full access available immediately.
+                  </p>
+                </article>
+
+                <article className="flex h-full flex-col items-center text-center">
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900">No billing</p>
+                  <div className="mx-auto mt-4 h-px w-full max-w-[16rem] bg-slate-300" />
+                  <p className="mx-auto mt-4 min-h-28 max-w-[18rem] text-base leading-7 text-slate-600">
+                    No monthly plan, no annual plan, and no credit card needed.
+                  </p>
+                </article>
+
+                <article className="flex h-full flex-col items-center text-center">
+                  <p className="text-3xl font-semibold tracking-tight text-slate-900">All protocols included</p>
+                  <div className="mx-auto mt-4 h-px w-full max-w-[16rem] bg-slate-300" />
+                  <p className="mx-auto mt-4 min-h-28 max-w-[18rem] text-base leading-7 text-slate-600">
+                    Movement, Nutrition, Sleep, Stress, and the rest are available in one free experience.
+                  </p>
+                </article>
+              </div>
+            </div>
+          </section>
+        </FadeInSection>
+      </div>
     </main>
+  );
+}
+
+function PhoneStage() {
+  return (
+    <div className="relative rounded-[2.8rem] border border-slate-400/70 bg-gradient-to-b from-slate-900 to-slate-700 p-2 shadow-[0_35px_80px_-40px_rgba(15,23,42,0.7)]">
+      <div className="relative overflow-hidden rounded-[2.3rem] bg-[linear-gradient(135deg,#7b5a43,#a07750)] px-5 py-5">
+        <div className="absolute left-4 top-4 h-16 w-20 rounded-xl bg-black/45 p-2 text-left text-xs font-semibold text-sky-300">
+          <p>00:41</p>
+          <p className="mt-1 text-white">All Out!</p>
+        </div>
+        <div className="mx-auto mt-5 grid h-48 max-w-lg grid-cols-3 items-end gap-4">
+          <div className="h-24 rounded-xl bg-teal-300/80" />
+          <div className="h-36 rounded-xl bg-cyan-300/80" />
+          <div className="h-28 rounded-xl bg-fuchsia-300/80" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhoneMini() {
+  return (
+    <div className="rounded-[2.1rem] border border-slate-300 bg-slate-900 p-2 shadow-[0_20px_50px_-30px_rgba(15,23,42,0.75)]">
+      <div className="overflow-hidden rounded-[1.7rem] bg-black p-3">
+        <div className="h-7 w-24 rounded-full bg-slate-700" />
+        <div className="mt-4 grid gap-2">
+          <div className="h-20 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-400" />
+          <div className="h-16 rounded-xl bg-slate-700" />
+          <div className="h-14 rounded-xl bg-slate-600" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OfferCard({
+  title,
+  copy,
+  primary,
+  secondary,
+}: {
+  title: string;
+  copy: string;
+  primary: string;
+  secondary?: string;
+}) {
+  return (
+    <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white px-5 py-7 text-center shadow-[0_15px_30px_-25px_rgba(15,23,42,0.4)]">
+      <p className="text-2xl font-semibold tracking-tight text-slate-900">{title}</p>
+      <p className="mt-4 min-h-24 text-base leading-7 text-slate-600">{copy}</p>
+      <div className="mt-auto pt-5 flex flex-wrap items-center justify-center gap-2">
+        <button className="rounded-full bg-sky-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-sky-400">{primary}</button>
+        {secondary ? <button className="rounded-full border border-slate-400 px-5 py-2 text-sm font-semibold text-slate-800 transition hover:border-slate-800">{secondary}</button> : null}
+      </div>
+    </article>
+  );
+}
+
+function FeaturePanel({
+  title,
+  copy,
+  align,
+}: {
+  title: string;
+  copy: string;
+  align: "left" | "right";
+}) {
+  return (
+    <article className="grid gap-6 rounded-[2rem] bg-[#ececf1] p-6 sm:p-10 lg:grid-cols-2 lg:items-center">
+      {align === "left" ? <div className="mx-auto w-full max-w-[16rem]"><PhoneMini /></div> : null}
+      <div>
+        <h3 className="text-3xl font-semibold tracking-tight text-slate-900">{title}</h3>
+        <p className="mt-4 text-lg leading-8 text-slate-600">{copy}</p>
+      </div>
+      {align === "right" ? <div className="mx-auto w-full max-w-[16rem]"><PhoneMini /></div> : null}
+    </article>
   );
 }

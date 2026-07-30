@@ -14,19 +14,65 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const isMovementPage = pathname === "/protocol/movement";
+  const isMovementScrolled = isMovementPage && scrollProgress > 0.08;
+  const ctaLabel = isMovementPage && scrollProgress > 0.35 ? "Join Movement+ for free" : "Subscribe";
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      const next = Math.min(1, Math.max(0, window.scrollY / 260));
+      setScrollProgress(next);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  const motion = isMovementPage ? scrollProgress : 0;
+  const navOpacity = 1 - motion;
+  const navTranslate = -8 * motion;
+  const headerBgOpacity = 0.8 + 0.15 * motion;
+  const headerBorderOpacity = 0.6 + 0.2 * motion;
+  const headerShadowOpacity = 0.35 * motion;
+  const verticalPadding = 16 - 4 * motion;
+
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
+    <header
+      className="sticky top-0 z-50 border-b backdrop-blur-xl transition-all duration-500 ease-out"
+      style={{
+        borderColor: `rgba(148, 163, 184, ${headerBorderOpacity})`,
+        backgroundColor: `rgba(255, 255, 255, ${headerBgOpacity})`,
+        boxShadow: `0 10px 30px -20px rgba(15, 23, 42, ${headerShadowOpacity})`,
+      }}
+    >
+      <div
+        className="mx-auto flex max-w-7xl items-center justify-between px-4 transition-all duration-500 ease-out sm:px-6"
+        style={{ paddingTop: `${verticalPadding}px`, paddingBottom: `${verticalPadding}px` }}
+      >
         <Link href="/" className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-950">
           Back to Protocol
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav
+          className="hidden items-center gap-8 transition-all duration-500 ease-out md:flex"
+          style={{
+            opacity: navOpacity,
+            transform: `translateY(${navTranslate}px)`,
+            width: isMovementPage && navOpacity < 0.02 ? "0px" : "auto",
+            overflow: isMovementPage ? "hidden" : "visible",
+            pointerEvents: isMovementPage && navOpacity < 0.2 ? "none" : "auto",
+          }}
+        >
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -46,7 +92,7 @@ export function SiteHeader() {
             href="/subscribe"
             className="hidden rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-950 transition hover:border-slate-300 hover:bg-slate-100 sm:inline-flex"
           >
-            Subscribe
+            {ctaLabel}
           </Link>
 
           <button
@@ -83,7 +129,7 @@ export function SiteHeader() {
               );
             })}
             <Link href="/subscribe" className="block rounded-2xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-white hover:text-slate-950">
-              Subscribe
+              {ctaLabel}
             </Link>
           </div>
         </div>
