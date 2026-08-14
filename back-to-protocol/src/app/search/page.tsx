@@ -1,170 +1,342 @@
+"use client";
+
 import Link from "next/link";
-import { fetchProductCatalog } from "@/lib/product-catalog";
+import { useEffect, useMemo, useState } from "react";
+import {
+  fetchProductCatalog,
+  getUniqueCategories,
+  getUniqueSubcategories,
+  getUniqueBrands,
+  getPriceBounds,
+  filterProducts,
+} from "@/lib/product-catalog";
+import type { Product } from "@/lib/product-catalog";
 
 type SearchPageProps = {
   searchParams?: Promise<{ q?: string }> | { q?: string };
 };
 
-const filterOptions = [
-  "Pickup ready in 1 hour",
-  "Pickup ready in 2 hours",
-  "Shipping: Get it tomorrow",
-  "Get it by Saturday",
-];
+const PAGE_SIZE = 24;
 
-const categories = ["Gift Cards", "Best Buy Gift Cards", "Music", "Show all (35)"];
-const priceBands = ["Less than $25", "$25 - $49.99", "$50 - $74.99", "$75 - $99.99", "$100 - $149.99", "$150 - $199.99", "$200 - $249.99", "$250 - $499.99"];
+export default function SearchPage({ searchParams }: SearchPageProps) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [bounds, setBounds] = useState({ min: 0, max: 0 });
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>();
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
+  const [sortBy, setSortBy] = useState("best-match");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const params = searchParams ? await searchParams : {};
-  const query = typeof params.q === "string" ? params.q : "";
-  const products = await fetchProductCatalog(query);
-  const visibleProducts = products.slice(0, 12);
+  useEffect(() => {
+    const loadProducts = async () => {
+      const params = searchParams ? await searchParams : {};
+      const query = typeof params.q === "string" ? params.q : "";
+      const fetchedProducts = await fetchProductCatalog(query);
+      const priceBounds = getPriceBounds(fetchedProducts);
+
+      setProducts(fetchedProducts);
+      setCategories(getUniqueCategories(fetchedProducts));
+      setBounds(priceBounds);
+      setPriceRange(priceBounds);
+      setLoading(false);
+    };
+    loadProducts();
+  }, [searchParams]);
+
+  // Subcategories and brands narrow to whatever the current category selection allows.
+  const subcategories = useMemo(
+    () => getUniqueSubcategories(products, selectedCategory),
+    [products, selectedCategory],
+  );
+  const brands = useMemo(() => getUniqueBrands(products), [products]);
+
+  const filteredProducts = useMemo(() => {
+    const filtered = filterProducts(products, {
+      category: selectedCategory,
+      subcategory: selectedSubcategory,
+      brands: selectedBrands,
+      priceRange,
+    });
+    const sorted = [...filtered];
+    if (sortBy === "price-low") sorted.sort((a, b) => a.price - b.price);
+    else if (sortBy === "price-high") sorted.sort((a, b) => b.price - a.price);
+    return sorted;
+  }, [products, selectedCategory, selectedSubcategory, selectedBrands, priceRange, sortBy]);
+
+  const visibleProducts = filteredProducts.slice(0, page * PAGE_SIZE);
+  const hasMore = visibleProducts.length < filteredProducts.length;
+
+  // Reset pagination whenever the active filters change.
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory, selectedSubcategory, selectedBrands, priceRange, sortBy]);
+
+  const toggleBrand = (brand: string) => {
+    setSelectedBrands((prev) => (prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]));
+  };
+
+  const resetFilters = () => {
+    setSelectedCategory(undefined);
+    setSelectedSubcategory(undefined);
+    setSelectedBrands([]);
+    setPriceRange(bounds);
+  };
+
+  const hasActiveFilters =
+    Boolean(selectedCategory) ||
+    Boolean(selectedSubcategory) ||
+    selectedBrands.length > 0 ||
+    priceRange.min !== bounds.min ||
+    priceRange.max !== bounds.max;
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-slate-50 text-slate-900">
+        <div className="mx-auto max-w-[1400px] px-4 py-16 text-center text-sm text-slate-500">Loading products…</div>
+      </main>
+    );
+  }
 
   return (
-    <main className="min-h-screen bg-[#f3f4f6] text-slate-900">
-      <div className="mx-auto max-w-[1500px] px-4 py-4">
-        <div className="flex gap-4">
-          <aside className="w-[310px] shrink-0 border-r border-slate-200 bg-white px-4 py-4">
-            <div className="space-y-5 border-b border-slate-200 pb-5">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] border border-slate-300 bg-white text-[10px] text-slate-600">✓</span>
-                <span className="text-base font-semibold text-slate-900">Get it fast</span>
+    <main className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="mx-auto max-w-[1400px] px-4 py-8">
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <aside className="w-full shrink-0 lg:w-64">
+            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Filters</h2>
+                {hasActiveFilters && (
+                  <button type="button" onClick={resetFilters} className="text-xs font-medium text-sky-600 hover:text-sky-700">
+                    Clear all
+                  </button>
+                )}
               </div>
-              {filterOptions.map((option, index) => (
-                <label key={option} className="flex cursor-pointer items-center gap-3 text-sm text-slate-700">
-                  <input type="checkbox" checked={index === 0} readOnly className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                  <span>{option}</span>
-                </label>
-              ))}
-            </div>
 
-            <div className="space-y-4 border-b border-slate-200 py-5">
-              <div className="text-base font-semibold text-slate-900">Availability</div>
-              <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-700">
-                <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                <span>Exclude Out of Stock Items</span>
-              </label>
-            </div>
+              <div className="border-b border-slate-100 pb-5">
+                <h3 className="mb-3 text-sm font-semibold text-slate-900">Category</h3>
+                <div className="space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory(undefined);
+                      setSelectedSubcategory(undefined);
+                    }}
+                    className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition ${
+                      !selectedCategory ? "bg-sky-50 font-medium text-sky-700" : "text-slate-600 hover:bg-slate-50"
+                    }`}
+                  >
+                    All Categories
+                  </button>
+                  {categories.map((category) => (
+                    <button
+                      type="button"
+                      key={category}
+                      onClick={() => {
+                        setSelectedCategory(selectedCategory === category ? undefined : category);
+                        setSelectedSubcategory(undefined);
+                      }}
+                      className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition ${
+                        selectedCategory === category ? "bg-sky-50 font-medium text-sky-700" : "text-slate-600 hover:bg-slate-50"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            <div className="space-y-4 border-b border-slate-200 py-5">
-              <div className="text-base font-semibold text-slate-900">Sold &amp; shipped by</div>
-              <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-700">
-                <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                <span>Best Buy</span>
-              </label>
-            </div>
-
-            <div className="space-y-4 border-b border-slate-200 py-5">
-              <div className="text-base font-semibold text-slate-900">Category</div>
-              <div className="space-y-2 text-sm text-slate-700">
-                {categories.map((category, index) => (
-                  <div key={category} className={`flex items-center gap-2 ${index === 0 ? "font-medium text-slate-900" : ""}`}>
-                    <span className="h-2 w-2 rounded-full bg-slate-300" />
-                    <span>{category}</span>
+              {subcategories.length > 0 && (
+                <div className="border-b border-slate-100 py-5">
+                  <h3 className="mb-3 text-sm font-semibold text-slate-900">Subcategory</h3>
+                  <div className="space-y-1">
+                    {subcategories.map((subcategory) => (
+                      <button
+                        type="button"
+                        key={subcategory}
+                        onClick={() =>
+                          setSelectedSubcategory(selectedSubcategory === subcategory ? undefined : subcategory)
+                        }
+                        className={`w-full rounded-md px-2.5 py-1.5 text-left text-sm transition ${
+                          selectedSubcategory === subcategory
+                            ? "bg-sky-50 font-medium text-sky-700"
+                            : "text-slate-600 hover:bg-slate-50"
+                        }`}
+                      >
+                        {subcategory}
+                      </button>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              )}
 
-            <div className="space-y-5 py-5">
-              <div className="text-base font-semibold text-slate-900">Price</div>
-              <div className="flex items-center gap-2">
-                <input type="text" value="Min" readOnly className="w-1/2 rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-500" />
-                <input type="text" value="Max" readOnly className="w-1/2 rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-500" />
-                <button type="button" className="rounded-md border border-slate-300 bg-white px-2 py-2 text-sm text-slate-600">Set</button>
-              </div>
-              <div className="space-y-2 text-sm text-slate-700">
-                {priceBands.map((price) => (
-                  <label key={price} className="flex cursor-pointer items-center gap-3">
-                    <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
-                    <span>{price}</span>
-                  </label>
-                ))}
+              {brands.length > 0 && (
+                <div className="border-b border-slate-100 py-5">
+                  <h3 className="mb-3 text-sm font-semibold text-slate-900">Brand</h3>
+                  <div className="max-h-56 space-y-2 overflow-y-auto pr-1 text-sm text-slate-700">
+                    {brands.map((brand) => (
+                      <label key={brand} className="flex cursor-pointer items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedBrands.includes(brand)}
+                          onChange={() => toggleBrand(brand)}
+                          className="h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
+                        />
+                        <span>{brand}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-5">
+                <h3 className="mb-3 text-sm font-semibold text-slate-900">Price Range</h3>
+                {bounds.max > bounds.min ? (
+                  <div className="space-y-4">
+                    <div className="price-range-slider">
+                      <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-200" />
+                      <div
+                        className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-slate-900"
+                        style={{
+                          left: `${((priceRange.min - bounds.min) / (bounds.max - bounds.min)) * 100}%`,
+                          right: `${100 - ((priceRange.max - bounds.min) / (bounds.max - bounds.min)) * 100}%`,
+                        }}
+                      />
+                      <input
+                        type="range"
+                        min={bounds.min}
+                        max={bounds.max}
+                        value={priceRange.min}
+                        onChange={(e) =>
+                          setPriceRange((prev) => ({ ...prev, min: Math.min(Number(e.target.value), prev.max) }))
+                        }
+                      />
+                      <input
+                        type="range"
+                        min={bounds.min}
+                        max={bounds.max}
+                        value={priceRange.max}
+                        onChange={(e) =>
+                          setPriceRange((prev) => ({ ...prev, max: Math.max(Number(e.target.value), prev.min) }))
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="flex flex-1 items-center rounded-md border border-slate-300 px-2">
+                        <span className="text-sm text-slate-400">$</span>
+                        <input
+                          type="number"
+                          min={bounds.min}
+                          max={priceRange.max}
+                          value={priceRange.min}
+                          onChange={(e) =>
+                            setPriceRange((prev) => ({ ...prev, min: Math.min(Number(e.target.value) || 0, prev.max) }))
+                          }
+                          className="w-full rounded-md py-1.5 pl-1 text-sm text-slate-700 outline-none"
+                        />
+                      </div>
+                      <span className="text-slate-400">–</span>
+                      <div className="flex flex-1 items-center rounded-md border border-slate-300 px-2">
+                        <span className="text-sm text-slate-400">$</span>
+                        <input
+                          type="number"
+                          min={priceRange.min}
+                          max={bounds.max}
+                          value={priceRange.max}
+                          onChange={(e) =>
+                            setPriceRange((prev) => ({ ...prev, max: Math.max(Number(e.target.value) || 0, prev.min) }))
+                          }
+                          className="w-full rounded-md py-1.5 pl-1 text-sm text-slate-700 outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400">No pricing data available</p>
+                )}
               </div>
             </div>
           </aside>
 
-          <section className="flex-1 bg-[#f3f4f6]">
-            <div className="mb-4 flex items-center justify-end gap-3">
-              <label className="text-sm text-slate-600">Sort by</label>
-              <select defaultValue="best-match" className="h-10 min-w-[160px] rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 shadow-sm outline-none">
-                <option value="best-match">Best Match</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
+          <section className="flex-1">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm text-slate-500">{filteredProducts.length} results</p>
+              <div className="flex items-center gap-2">
+                <label className="text-sm text-slate-600">Sort by</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 shadow-sm outline-none"
+                >
+                  <option value="best-match">Best Match</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                </select>
+              </div>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {visibleProducts.length === 0 ? (
-                <div className="col-span-full rounded-[18px] border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-600">
+                <div className="col-span-full rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center text-sm text-slate-500">
                   No matching items
                 </div>
               ) : (
-                visibleProducts.map((product, index) => (
-                  <article key={product.id} className="overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-sm">
-                    <div className="relative h-52 bg-[linear-gradient(135deg,#0d3f8d_0%,#0a6ec6_35%,#47d0b4_100%)] p-4">
-                      <div className="absolute left-4 top-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#f4d200]">
-                        <span className="rounded bg-[#f4d200] px-1.5 py-1 text-[8px] text-[#0f172a]">Best</span>
-                        <span className="text-[#f4d200]">Buy</span>
-                      </div>
-                      <button type="button" aria-label="Save item" className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/40 bg-white/10 text-white">
-                        ♡
-                      </button>
-                      <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/10 to-transparent" />
-                    </div>
+                visibleProducts.map((product) => (
+                  <article key={product.id} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
+                    <Link href={`/product/${product.slug}`} className="relative flex h-56 items-center justify-center bg-slate-50">
+                      {product.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          className="h-full w-full object-contain p-6 transition group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="text-sm text-slate-400">No image available</div>
+                      )}
+                    </Link>
 
                     <div className="p-4">
-                      <div className="min-h-[54px] text-base font-medium leading-5 text-slate-800">
+                      {product.brand && <div className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-400">{product.brand}</div>}
+
+                      <Link href={`/product/${product.slug}`} className="line-clamp-2 min-h-[40px] text-sm font-medium leading-5 text-slate-800 hover:text-sky-700">
                         {product.name}
+                      </Link>
+
+                      <div className="mt-2 flex items-center gap-1 text-xs text-amber-500">
+                        <span>{"★".repeat(Math.round(product.rating))}{"☆".repeat(5 - Math.round(product.rating))}</span>
+                        <span className="text-slate-400">({product.reviewCount})</span>
                       </div>
 
-                      <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-slate-700">
-                        {["$75", "$15", "$25"].map((amount, amountIndex) => (
-                          <span
-                            key={`${product.id}-${amount}-${amountIndex}`}
-                            className={`inline-flex min-w-[52px] items-center justify-center rounded-md border px-2 py-1 ${amountIndex === 0 ? "border-sky-400 bg-sky-50 text-sky-700" : "border-slate-200 bg-slate-50"}`}
-                          >
-                            {amount}
-                          </span>
-                        ))}
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-500">›</span>
-                      </div>
-
-                      <div className="mt-4 flex items-center gap-1 text-xs text-amber-500">
-                        <span>★★★★★</span>
-                        <span className="text-slate-500">5.0 (4 reviews)</span>
-                      </div>
-
-                      <div className="mt-3 flex items-center justify-between gap-3">
-                        <div className="text-3xl font-bold tracking-tight text-slate-900">
-                          ${product.price}
-                        </div>
-                        <button type="button" className="rounded-md bg-[#f4d200] px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-[#f2c900]">
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className="text-xl font-bold text-slate-900">${product.price.toFixed(2)}</span>
+                        <button
+                          type="button"
+                          className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700"
+                        >
                           Add to cart
                         </button>
-                      </div>
-
-                      <div className="mt-3 flex items-center justify-between text-sm text-slate-600">
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                          Pick up unavailable
-                        </span>
-                        <Link href={`/product/${product.slug}`} className="text-sky-700 underline underline-offset-2">Compare</Link>
-                      </div>
-
-                      <div className="mt-3 flex items-center justify-between text-sm text-slate-600">
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className="h-2.5 w-2.5 rounded-full bg-slate-400" />
-                          Get it by Wed, Aug 19
-                        </span>
-                        <span>FREE</span>
                       </div>
                     </div>
                   </article>
                 ))
               )}
             </div>
+
+            {hasMore && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => p + 1)}
+                  className="rounded-md border border-slate-300 bg-white px-6 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                >
+                  Load more
+                </button>
+              </div>
+            )}
           </section>
         </div>
       </div>

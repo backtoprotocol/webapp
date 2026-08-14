@@ -50,6 +50,96 @@ export type Product = {
   variantGroups: ProductVariantGroup[];
 };
 
+// Known-good category names; anything else (ratings, seller/store names, "Learn more", etc.
+// picked up by scraping) falls back to a title-derived category.
+const ALLOWED_CATEGORIES = new Set(
+  [
+    "Laptops",
+    "Desktops",
+    "Tablets",
+    "Monitors",
+    "Computers & Tablets",
+    "Keyboards",
+    "Mice",
+    "Audio",
+    "Webcams",
+    "Chargers & Power",
+    "Cables",
+    "Stylus Pens",
+    "Cases",
+    "Screen Protectors",
+    "Gaming Accessories",
+    "Accessories",
+    "Software",
+  ].map((c) => c.toLowerCase()),
+);
+
+// Strips HTML tags/comments left over from scraped source fields.
+function stripHtml(value: string): string {
+  return value
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function deriveCategoryFromTitle(title: string): string | null {
+  const text = title.toLowerCase();
+  if (/(laptop|notebook|macbook|chromebook|ultrabook)/.test(text)) return "Laptops";
+  if (/(desktop|tower pc|all-in-one|mini pc)/.test(text)) return "Desktops";
+  if (/tablet/.test(text)) return "Tablets";
+  if (/(monitor|display)/.test(text)) return "Monitors";
+  if (/keyboard/.test(text)) return "Keyboards";
+  if (/mouse/.test(text)) return "Mice";
+  if (/(headset|earbud|headphone)/.test(text)) return "Audio";
+  if (/webcam/.test(text)) return "Webcams";
+  if (/(charger|adapter|power bank)/.test(text)) return "Chargers & Power";
+  if (/cable/.test(text)) return "Cables";
+  if (/(pen|stylus)/.test(text)) return "Stylus Pens";
+  if (/(case|folio)/.test(text)) return "Cases";
+  if (/protector/.test(text)) return "Screen Protectors";
+  if (/(controller|joystick|gaming)/.test(text)) return "Gaming Accessories";
+  return null;
+}
+
+function sanitizeCategory(raw: string, title: string): string {
+  const cleaned = stripHtml(raw);
+  const isNumeric = /^\d+(\.\d+)?$/.test(cleaned);
+  const isAllowed = cleaned && !isNumeric && ALLOWED_CATEGORIES.has(cleaned.toLowerCase());
+  if (isAllowed) return cleaned;
+  return deriveCategoryFromTitle(title) ?? "Accessories";
+}
+
+// Top-level category buckets shown in the search filters, in display order.
+export const CATEGORY_GROUPS = ["Laptops", "Desktops", "Peripherals", "Software", "Services"] as const;
+export type CategoryGroup = (typeof CATEGORY_GROUPS)[number];
+
+// Buckets a product's specific category/title into one of the 5 fixed top-level groups.
+function deriveCategoryGroup(title: string, specificCategory: string): CategoryGroup {
+  const text = `${title} ${specificCategory}`.toLowerCase();
+  if (/(laptop|notebook|macbook|chromebook|ultrabook)/.test(text)) return "Laptops";
+  if (/(desktop|tower pc|all-in-one|mini pc|workstation)/.test(text)) return "Desktops";
+  if (/(software|license key|antivirus|subscription plan|os upgrade)/.test(text)) return "Software";
+  if (/(warranty|protection plan|tech support|installation service|setup service|geek squad|service plan)/.test(text)) return "Services";
+  return "Peripherals";
+}
+
+// Placeholder values scraped sources sometimes use in place of a real brand name.
+const INVALID_BRAND_VALUES = new Set(["unknown", "n/a", "na", "none", "generic", "various", "other", "assorted", "colors"]);
+
+function sanitizeBrand(raw: string): string {
+  let cleaned = stripHtml(raw).replace(/^brand:\s*/i, "").trim();
+  const visitMatch = cleaned.match(/^visit the\s+(.+?)(\s+store)?$/i);
+  if (visitMatch) cleaned = visitMatch[1].trim();
+
+  // Don't guess a brand from the title — an unbranded/missing value should stay unbranded
+  // rather than surface a random first word (e.g. "Rechargeable", "Digital") as a fake brand.
+  if (!cleaned || cleaned.length > 40 || INVALID_BRAND_VALUES.has(cleaned.toLowerCase())) {
+    return "";
+  }
+  return cleaned;
+}
+
 // Attribute columns that can differentiate sibling rows sharing a variant_group_id.
 const VARIANT_ATTRIBUTES: Array<{ column: string; attribute: string; label: string }> = [
   { column: "color", attribute: "color", label: "Color" },
@@ -103,9 +193,10 @@ function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = []
   if (!name) return null;
 
   const slug = cleanSlug(name);
-  const brand = str(record.brand);
-  const category = str(record.category);
-  const subcategory = optStr(record.subcategory);
+  const brand = sanitizeBrand(str(record.brand));
+  const specificCategory = sanitizeCategory(str(record.category), name);
+  const category = deriveCategoryGroup(name, specificCategory);
+  const subcategory = optStr(record.subcategory) || (specificCategory !== category ? specificCategory : undefined);
   const description = str(record.description) || name;
   const price = num(record.price) ?? 0;
   const imageUrl = str(record.image_url);
@@ -209,6 +300,9 @@ function buildVariantGroups(rows: any[], currentRow: any): ProductVariantGroup[]
   return groups;
 }
 
+// High enough to cover the full catalog (a few hundred rows) without server-side pagination.
+const CATALOG_FETCH_LIMIT = 1000;
+
 export async function fetchProductCatalog(searchTerm?: string): Promise<Product[]> {
   const query = searchTerm?.trim();
 
@@ -217,7 +311,7 @@ export async function fetchProductCatalog(searchTerm?: string): Promise<Product[
   }
 
   try {
-    let request = supabase.from("amazon_products").select("*").limit(100);
+    let request = supabase.from("amazon_products").select("*").limit(CATALOG_FETCH_LIMIT);
 
     if (query) {
       const escapedQuery = query.replace(/'/g, "''");
@@ -245,7 +339,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (!trimmed || !supabase) return null;
 
   try {
-    const { data, error } = await supabase.from("amazon_products").select("*").limit(100);
+    const { data, error } = await supabase.from("amazon_products").select("*").limit(CATALOG_FETCH_LIMIT);
 
     if (error) {
       return null;
@@ -289,3 +383,48 @@ export const productSearchSuggestions = [
   "dock",
   "recovery tech",
 ];
+
+// Unique top-level categories present in the catalog, in fixed display order.
+export function getUniqueCategories(products: Product[]): string[] {
+  const present = new Set(products.map((p) => p.category).filter(Boolean));
+  return CATEGORY_GROUPS.filter((c) => present.has(c));
+}
+
+// Unique subcategories, optionally scoped to a selected top-level category.
+export function getUniqueSubcategories(products: Product[], category?: string): string[] {
+  const scoped = category ? products.filter((p) => p.category === category) : products;
+  const subcategories = new Set(scoped.map((p) => p.subcategory).filter((s): s is string => Boolean(s && s.trim())));
+  return Array.from(subcategories).sort();
+}
+
+// Unique brands present in the catalog (optionally scoped to already-filtered products).
+export function getUniqueBrands(products: Product[]): string[] {
+  const brands = new Set(products.map((p) => p.brand).filter((b): b is string => Boolean(b && b.trim())));
+  return Array.from(brands).sort();
+}
+
+// Overall min/max bounds for a plain price range slider/inputs
+export function getPriceBounds(products: Product[]): { min: number; max: number } {
+  const prices = products.map((p) => p.price).filter((p) => typeof p === "number" && p > 0);
+  if (prices.length === 0) return { min: 0, max: 0 };
+  return { min: Math.floor(Math.min(...prices)), max: Math.ceil(Math.max(...prices)) };
+}
+
+export type ProductFilters = {
+  category?: string;
+  subcategory?: string;
+  brands?: string[];
+  priceRange?: { min: number; max: number };
+};
+
+// Filter products by category, subcategory, brand, and price range.
+export function filterProducts(products: Product[], filters: ProductFilters): Product[] {
+  const { category, subcategory, brands, priceRange } = filters;
+  return products.filter((product) => {
+    if (category && product.category !== category) return false;
+    if (subcategory && product.subcategory !== subcategory) return false;
+    if (brands && brands.length > 0 && !brands.includes(product.brand)) return false;
+    if (priceRange && (product.price < priceRange.min || product.price > priceRange.max)) return false;
+    return true;
+  });
+}

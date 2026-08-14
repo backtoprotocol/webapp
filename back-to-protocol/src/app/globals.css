@@ -42,6 +42,56 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Dual-handle price range slider: two overlaid range inputs with transparent tracks
+   so only the thumbs are interactive. */
+.price-range-slider {
+  position: relative;
+  height: 16px;
+}
+
+.price-range-slider input[type="range"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.price-range-slider input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+.price-range-slider input[type="range"]::-moz-range-track {
+  background: transparent;
+}
+
+.price-range-slider input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #0f172a;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+  cursor: pointer;
+}
+
+.price-range-slider input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: #0f172a;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+  cursor: pointer;
+}
+
 @keyframes movement-marquee {
   from {
     transform: translateX(0);
