@@ -1,0 +1,38 @@
+{
+    "_id":  "drafts.research-study-card-1",
+    "_type":  "article",
+    "title":  "Movement quality improves when recovery is planned in advance",
+    "subtitle":  "How a short pre-session routine can support steadier output and lower fatigue later in the week.",
+    "pillar":  "Movement",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "blockMo",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "How a short pre-session routine can support steadier output and lower fatigue later in the week.",
+                                          "_key":  "span-1"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "drafts.back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-03T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "movement-quality-recovery-planning"
+             }
+}

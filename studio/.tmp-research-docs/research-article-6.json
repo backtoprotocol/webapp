@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "research-article-6",
+    "_type":  "article",
+    "title":  "Research article six: simple weekly structures outperform reactive recovery",
+    "subtitle":  "A lightweight weekly rhythm makes it easier to recover without overthinking every choice.",
+    "pillar":  "Recovery",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "research-article-6-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "A lightweight weekly rhythm makes it easier to recover without overthinking every choice.",
+                                          "_key":  "research-article-6-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-07-30T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "research-article-six"
+             }
+}

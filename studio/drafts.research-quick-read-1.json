@@ -1,0 +1,38 @@
+{
+    "_id":  "drafts.research-quick-read-1",
+    "_type":  "article",
+    "title":  "Stress resets help athletes recover faster between sessions",
+    "subtitle":  "A concise overview of the daily habits that support mood, focus, and physical readiness.",
+    "pillar":  "Stress",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "blockSt",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "A concise overview of the daily habits that support mood, focus, and physical readiness.",
+                                          "_key":  "span-1"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "drafts.back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-01T12:00:00.000Z",
+    "readingMinutes":  3,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "stress-resets-athletes"
+             }
+}

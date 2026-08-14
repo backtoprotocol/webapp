@@ -1,0 +1,38 @@
+{
+    "_id":  "drafts.research-study-card-2",
+    "_type":  "article",
+    "title":  "Sleep regularity predicts better energy than intensity alone",
+    "subtitle":  "A research-backed update on why consistency matters more than isolated spikes in effort.",
+    "pillar":  "Sleep",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "blockSl",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "A research-backed update on why consistency matters more than isolated spikes in effort.",
+                                          "_key":  "span-1"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "drafts.back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-02T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "sleep-regularity-energy"
+             }
+}

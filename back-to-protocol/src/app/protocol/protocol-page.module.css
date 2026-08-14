@@ -1,0 +1,131 @@
+.pageShell {
+  background: #f7f7f9;
+}
+
+.heroWrap {
+  background: linear-gradient(180deg, #f7f7f9 0%, #ffffff 72%);
+}
+
+.badge {
+  opacity: 0;
+  transform: translateY(-18px) scale(0.96);
+  animation: rise-in 760ms cubic-bezier(0.19, 0.82, 0.22, 1) 120ms forwards;
+}
+
+.title {
+  opacity: 0;
+  transform: translateY(26px);
+  animation: rise-in 860ms cubic-bezier(0.19, 0.82, 0.22, 1) 220ms forwards;
+}
+
+.subcopy {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: rise-in 860ms cubic-bezier(0.19, 0.82, 0.22, 1) 320ms forwards;
+}
+
+.ctaRow {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: rise-in 860ms cubic-bezier(0.19, 0.82, 0.22, 1) 420ms forwards;
+}
+
+.carouselViewport {
+  overflow: hidden;
+}
+
+.carouselTrack {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  padding-inline: 1rem;
+  animation: carousel-pan 42s linear infinite;
+  will-change: transform;
+}
+
+.protocolCard {
+  width: 18rem;
+  flex: 0 0 auto;
+  border-radius: 1.8rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 28px 80px -52px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(90px) scale(0.96);
+  animation: card-in 900ms cubic-bezier(0.18, 0.7, 0.2, 1) forwards;
+}
+
+.protocolOne { animation-delay: 420ms; }
+.protocolTwo { animation-delay: 520ms; }
+.protocolThree { animation-delay: 620ms; }
+.protocolFour { animation-delay: 720ms; }
+.protocolFive { animation-delay: 820ms; }
+.protocolSix { animation-delay: 920ms; }
+.protocolSeven { animation-delay: 1020ms; }
+.protocolEight { animation-delay: 1120ms; }
+
+.sectionCard {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 26px 80px -54px rgba(15, 23, 42, 0.26);
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(90px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes carousel-pan {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
+@media (max-width: 1024px) {
+  .protocolCard {
+    width: 15.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .carouselTrack {
+    padding-inline: 0.75rem;
+    animation-duration: 30s;
+  }
+
+  .protocolCard {
+    width: 14rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .title,
+  .subcopy,
+  .ctaRow,
+  .protocolCard,
+  .carouselTrack {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

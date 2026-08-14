@@ -6,7 +6,7 @@ const pillarOptions = [
   "Nutrition",
   "Sleep",
   "Stress",
-  "Hormones",
+  "Relationships",
   "Recovery",
   "Longevity",
   "Mindset",

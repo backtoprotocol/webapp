@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "loop-article-4",
+    "_type":  "article",
+    "title":  "Loop article four: morning check-ins improve follow-through",
+    "subtitle":  "Small check-in rituals make it easier to keep recovery plans alive during hectic weeks.",
+    "pillar":  "Mindset",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "loop-article-4-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Small check-in rituals make it easier to keep recovery plans alive during hectic weeks.",
+                                          "_key":  "loop-article-4-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-01T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "loop-article-four"
+             }
+}

@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "research-article-1",
+    "_type":  "article",
+    "title":  "Research article one: recovery routines shape daily consistency",
+    "subtitle":  "A look at how structured recovery habits influence consistency across demanding weeks.",
+    "pillar":  "Recovery",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "research-article-1-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "A look at how structured recovery habits influence consistency across demanding weeks.",
+                                          "_key":  "research-article-1-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-04T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "research-article-one"
+             }
+}

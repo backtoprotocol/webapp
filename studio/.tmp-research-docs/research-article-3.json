@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "research-article-3",
+    "_type":  "article",
+    "title":  "Research article three: sleep rhythms matter more than isolated intensity",
+    "subtitle":  "Consistency in sleep patterns is a measurable lever for readiness and resilience.",
+    "pillar":  "Sleep",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "research-article-3-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Consistency in sleep patterns is a measurable lever for readiness and resilience.",
+                                          "_key":  "research-article-3-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-02T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "research-article-three"
+             }
+}

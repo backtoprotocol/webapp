@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "research-article-2",
+    "_type":  "article",
+    "title":  "Research article two: movement quality improves with better recovery timing",
+    "subtitle":  "Why better recovery timing can improve movement quality without more training volume.",
+    "pillar":  "Movement",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "research-article-2-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Why better recovery timing can improve movement quality without more training volume.",
+                                          "_key":  "research-article-2-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-03T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "research-article-two"
+             }
+}

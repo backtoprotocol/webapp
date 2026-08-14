@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "research-article-5",
+    "_type":  "article",
+    "title":  "Research article five: planning recovery ahead of time changes outcomes",
+    "subtitle":  "Pre-planning recovery routines makes them easier to stick with when life gets busy.",
+    "pillar":  "Nutrition",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "research-article-5-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Pre-planning recovery routines makes them easier to stick with when life gets busy.",
+                                          "_key":  "research-article-5-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-07-31T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "research-article-five"
+             }
+}

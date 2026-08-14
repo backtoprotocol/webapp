@@ -20,9 +20,9 @@ export const contentPillars = [
     focus: "Understand and regulate the load your nervous system carries.",
   },
   {
-    name: "Hormones",
-    definition: "Testosterone, estrogen, thyroid, insulin, and body composition across life.",
-    focus: "Explain the physiology that shapes energy, mood, and adaptation.",
+    name: "Relationships",
+    definition: "Heartbreak, loneliness, attachment, boundaries, and social connection.",
+    focus: "Build supportive connections and communication habits that protect emotional health.",
   },
   {
     name: "Recovery",

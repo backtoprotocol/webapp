@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "loop-article-5",
+    "_type":  "article",
+    "title":  "Loop article five: weekly planning reduces stress and improves recovery",
+    "subtitle":  "Planning the week in advance helps recovery feel easier to protect and maintain.",
+    "pillar":  "Sleep",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "loop-article-5-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Planning the week in advance helps recovery feel easier to protect and maintain.",
+                                          "_key":  "loop-article-5-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-07-31T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "loop-article-five"
+             }
+}

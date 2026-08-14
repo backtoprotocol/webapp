@@ -1,0 +1,122 @@
+[
+  {
+    "_type": "article",
+    "title": "Recovery intelligence is reshaping daily routines",
+    "subtitle": "New research shows that simple daily cues improve consistency across recovery plans.",
+    "pillar": "Recovery",
+    "newsroomPlacement": "featured",
+    "publishedAt": "2026-08-04T12:00:00.000Z",
+    "readingMinutes": 5,
+    "slug": { "current": "recovery-intelligence-daily-routines" },
+    "body": [
+      {
+        "_key": "intro",
+        "_type": "block",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+          {
+            "_key": "intro-span",
+            "_type": "span",
+            "marks": [],
+            "text": "Our latest research shows that people respond better when recovery habits are scaffolded into the rhythm of the day instead of treated as separate tasks."
+          }
+        ]
+      }
+    ],
+    "author": {
+      "_type": "reference",
+      "_ref": "3f08e799-53bc-4a86-a5ba-8ca4f6fb7a5a"
+    }
+  },
+  {
+    "_type": "article",
+    "title": "Morning mobility habits improve energy by the end of the week",
+    "subtitle": "A short movement routine performed early in the day carries benefits well into the weekend.",
+    "pillar": "Movement",
+    "newsroomPlacement": "standard",
+    "publishedAt": "2026-08-02T12:00:00.000Z",
+    "readingMinutes": 4,
+    "slug": { "current": "morning-mobility-habits-energy" },
+    "body": [
+      {
+        "_key": "intro",
+        "_type": "block",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+          {
+            "_key": "intro-span",
+            "_type": "span",
+            "marks": [],
+            "text": "Participants who completed a brief mobility sequence in the morning reported steadier energy and fewer afternoon dips."
+          }
+        ]
+      }
+    ],
+    "author": {
+      "_type": "reference",
+      "_ref": "3f08e799-53bc-4a86-a5ba-8ca4f6fb7a5a"
+    }
+  },
+  {
+    "_type": "article",
+    "title": "Sleep consistency predicts better recovery outcomes than intensity alone",
+    "subtitle": "Consistency proved more useful than perfect sleep duration for the people in the study.",
+    "pillar": "Sleep",
+    "newsroomPlacement": "standard",
+    "publishedAt": "2026-07-30T12:00:00.000Z",
+    "readingMinutes": 6,
+    "slug": { "current": "sleep-consistency-recovery-outcomes" },
+    "body": [
+      {
+        "_key": "intro",
+        "_type": "block",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+          {
+            "_key": "intro-span",
+            "_type": "span",
+            "marks": [],
+            "text": "The strongest signal in the data was not maximum sleep duration, but how consistently people kept their sleep window."
+          }
+        ]
+      }
+    ],
+    "author": {
+      "_type": "reference",
+      "_ref": "3f08e799-53bc-4a86-a5ba-8ca4f6fb7a5a"
+    }
+  },
+  {
+    "_type": "article",
+    "title": "Stress management practices help athletes stay resilient during busy weeks",
+    "subtitle": "Even short resets improved focus and emotional steadiness across training blocks.",
+    "pillar": "Stress",
+    "newsroomPlacement": "standard",
+    "publishedAt": "2026-07-28T12:00:00.000Z",
+    "readingMinutes": 4,
+    "slug": { "current": "stress-management-athletes-resilient" },
+    "body": [
+      {
+        "_key": "intro",
+        "_type": "block",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+          {
+            "_key": "intro-span",
+            "_type": "span",
+            "marks": [],
+            "text": "Short breathwork and pause practices were linked to steadier mood and better recovery between sessions."
+          }
+        ]
+      }
+    ],
+    "author": {
+      "_type": "reference",
+      "_ref": "3f08e799-53bc-4a86-a5ba-8ca4f6fb7a5a"
+    }
+  }
+]

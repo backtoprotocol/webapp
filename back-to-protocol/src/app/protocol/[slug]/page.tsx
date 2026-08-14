@@ -49,6 +49,11 @@ function GenericProtocolPage({ pillar }: { pillar: (typeof protocolPillars)[numb
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/articles" className="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Explore articles</Link>
               <Link href="/protocol" className="rounded-full border border-slate-300 bg-white/80 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-white">All pillars</Link>
+              {pillar.slug === "sleep" ? (
+                <Link href="/protocol/sleep/start" className="rounded-full border border-indigo-300 bg-indigo-50 px-6 py-3 text-sm font-semibold text-indigo-800 transition hover:bg-indigo-100">
+                  Start or continue 30-day Sleep Protocol
+                </Link>
+              ) : null}
             </div>
           </div>
 
@@ -303,7 +308,7 @@ function MovementProtocolPage() {
               <p className="text-blue-800">Nutrition</p>
               <p className="text-sky-800">Sleep</p>
               <p className="text-sky-700">Stress</p>
-              <p className="text-sky-600">Hormones</p>
+              <p className="text-sky-600">Relationships</p>
               <p className="text-sky-500">Recovery</p>
               <p className="text-slate-600">Longevity</p>
               <p className="text-slate-500">Mindset</p>

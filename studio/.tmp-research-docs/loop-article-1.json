@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "loop-article-1",
+    "_type":  "article",
+    "title":  "Loop article one: recovery cues build consistency",
+    "subtitle":  "A practical look at how small recovery prompts improve adherence across busy weeks.",
+    "pillar":  "Recovery",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "loop-article-1-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "A practical look at how small recovery prompts improve adherence across busy weeks.",
+                                          "_key":  "loop-article-1-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-04T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "loop-article-one"
+             }
+}

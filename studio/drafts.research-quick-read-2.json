@@ -1,0 +1,38 @@
+{
+    "_id":  "drafts.research-quick-read-2",
+    "_type":  "article",
+    "title":  "Nutrition timing can improve training consistency during busy weeks",
+    "subtitle":  "Simple timing changes make it easier to keep energy and appetite aligned with effort.",
+    "pillar":  "Nutrition",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "blockNu",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Simple timing changes make it easier to keep energy and appetite aligned with effort.",
+                                          "_key":  "span-1"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "drafts.back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-07-31T12:00:00.000Z",
+    "readingMinutes":  3,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "nutrition-timing-training-consistency"
+             }
+}

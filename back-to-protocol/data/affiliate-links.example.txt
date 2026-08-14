@@ -1,0 +1,7 @@
+# One Amazon URL per line. Affiliate links are okay.
+# Example formats supported:
+# https://www.amazon.com/dp/B0ABCDE123?tag=yourtag-20
+# https://www.amazon.com/gp/product/B0ABCDE123?tag=yourtag-20
+
+https://www.amazon.com/dp/B0ABCDE123?tag=yourtag-20
+https://www.amazon.com/gp/product/B0FGHIJ456?tag=yourtag-20

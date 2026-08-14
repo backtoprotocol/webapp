@@ -1,0 +1,38 @@
+{
+    "_id":  "drafts.research-stories-1",
+    "_type":  "article",
+    "title":  "How coaches are using small recovery prompts to build better habits",
+    "subtitle":  "Practical stories from training environments where brief cues change adherence.",
+    "pillar":  "Mindset",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "blockHo",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Practical stories from training environments where brief cues change adherence.",
+                                          "_key":  "span-1"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "drafts.back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-07-29T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "coaches-recovery-prompts-habits"
+             }
+}

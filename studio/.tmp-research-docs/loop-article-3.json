@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "loop-article-3",
+    "_type":  "article",
+    "title":  "Loop article three: simple routines beat dramatic resets",
+    "subtitle":  "Why lighter, repeatable habits can outperform occasional intensity.",
+    "pillar":  "Recovery",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "loop-article-3-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Why lighter, repeatable habits can outperform occasional intensity.",
+                                          "_key":  "loop-article-3-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-02T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "loop-article-three"
+             }
+}

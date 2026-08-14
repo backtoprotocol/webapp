@@ -56,8 +56,15 @@ export const ARTICLES_QUERY = defineQuery(/* groq */ `
 `);
 
 export const NEWSROOM_QUERY = defineQuery(/* groq */ `
-  *[_type == "article" && defined(slug.current)]
+  *[_type == "article" && defined(slug.current) && defined(publishedAt)]
   | order(publishedAt desc)[0...80] {
+    ${articleCardFields}
+  }
+`);
+
+export const RESEARCH_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_type == "article" && defined(slug.current) && defined(publishedAt)]
+  | order(publishedAt desc)[0...20] {
     ${articleCardFields}
   }
 `);

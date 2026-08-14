@@ -1,0 +1,38 @@
+{
+    "_id":  "drafts.research-loop-1",
+    "_type":  "article",
+    "title":  "A steady weekly rhythm helps recovery feel less reactive",
+    "subtitle":  "This research note explores why planned routines outperform ad hoc recovery habits.",
+    "pillar":  "Recovery",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "blockA ",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "This research note explores why planned routines outperform ad hoc recovery habits.",
+                                          "_key":  "span-1"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "drafts.back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-07-30T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "steady-weekly-rhythm-recovery"
+             }
+}

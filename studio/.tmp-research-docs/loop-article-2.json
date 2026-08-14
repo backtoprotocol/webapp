@@ -1,0 +1,38 @@
+﻿{
+    "_id":  "loop-article-2",
+    "_type":  "article",
+    "title":  "Loop article two: movement habits support energy",
+    "subtitle":  "Research-backed habits that make movement feel sustainable instead of forced.",
+    "pillar":  "Movement",
+    "body":  [
+                 {
+                     "_type":  "block",
+                     "style":  "normal",
+                     "_key":  "loop-article-2-body",
+                     "children":  [
+                                      {
+                                          "_type":  "span",
+                                          "marks":  [
+
+                                                    ],
+                                          "text":  "Research-backed habits that make movement feel sustainable instead of forced.",
+                                          "_key":  "loop-article-2-span"
+                                      }
+                                  ],
+                     "markDefs":  [
+
+                                  ]
+                 }
+             ],
+    "author":  {
+                   "_type":  "reference",
+                   "_ref":  "back-to-protocol-author"
+               },
+    "newsroomPlacement":  "standard",
+    "publishedAt":  "2026-08-03T12:00:00.000Z",
+    "readingMinutes":  4,
+    "slug":  {
+                 "_type":  "slug",
+                 "current":  "loop-article-two"
+             }
+}

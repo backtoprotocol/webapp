@@ -1,97 +1,111 @@
-import { PageShell } from "@/components/page-shell";
-import { pillarNames } from "@/lib/content-pillars";
+import Link from "next/link";
+import { LogoMark } from "@/components/logo-mark";
+import styles from "./podcast-hero.module.css";
 
-const episodes = [
+const lineup = [
   {
-    title: "Sleep is the first recovery protocol",
-    description: "A practical conversation about light, consistency, and deeper rest.",
-    duration: "32 min",
+    title: "Recovery Stories",
+    description: "Science-backed recovery stories from practical voices.",
+    accent: "from-cyan-200 via-sky-100 to-emerald-200",
+    className: styles.characterOne,
   },
   {
-    title: "Training stress without breaking the system",
-    description: "How to balance movement, recovery, and sustainable progress.",
-    duration: "28 min",
+    title: "Protocol Deep Dives",
+    description: "Investigative conversations that go beyond surface wellness.",
+    accent: "from-emerald-200 via-cyan-100 to-sky-200",
+    className: styles.characterTwo,
+  },
+  {
+    title: "Mindset + Momentum",
+    description: "Build consistency with conversations on mental endurance.",
+    accent: "from-sky-200 via-cyan-100 to-emerald-200",
+    className: styles.characterThree,
+  },
+  {
+    title: "Sleep + Reset",
+    description: "Guided audio for better evenings and stronger mornings.",
+    accent: "from-cyan-100 via-sky-100 to-emerald-100",
+    className: styles.characterFour,
+  },
+  {
+    title: "Performance Radio",
+    description: "Training, recovery, and performance strategy in one feed.",
+    accent: "from-emerald-100 via-cyan-100 to-sky-100",
+    className: styles.characterFive,
+  },
+  {
+    title: "Founder Conversations",
+    description: "Talks with builders and operators on resilience and growth.",
+    accent: "from-cyan-200 via-emerald-100 to-sky-200",
+    className: styles.characterSix,
   },
 ];
 
-const categories = pillarNames;
-
-const guests = ["Dr. Maya Ellis", "Jordan Tate", "Amira Grant"];
-
 export default function PodcastPage() {
   return (
-    <PageShell
-      eyebrow="Podcast"
-      title="Conversations that return to what the body needs."
-      description="Science-led conversations across the eight pillars, with practical protocols you can test in real life."
-    >
-      <section className="grid gap-6 xl:grid-cols-[0.75fr_1.25fr]">
-        <div className="space-y-6 rounded-[2rem] border border-slate-200/80 bg-slate-950/5 p-8 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.16)]">
-          <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-500">Episode categories</p>
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
-              <span key={category} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700">
-                {category}
-              </span>
-            ))}
+    <main className={styles.heroShell}>
+      <section className={styles.promoBar}>
+        <div className="mx-auto flex max-w-6xl items-center justify-center px-6 py-3 text-center text-sm font-medium sm:px-8 lg:px-10">
+          New episodes every week for Protocol+ members. Start listening and build your daily reset routine.
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden px-6 pb-10 pt-14 text-slate-950 sm:px-8 sm:pt-16 lg:px-10 lg:pt-20">
+        <div className="pointer-events-none absolute left-1/2 top-14 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-200/35 blur-3xl" />
+
+        <div className="relative mx-auto max-w-5xl text-center">
+          <div className={`${styles.brandBadge} inline-flex flex-col items-center`}>
+            <div className="flex h-18 w-18 items-center justify-center rounded-3xl border border-slate-200 bg-white shadow-[0_18px_45px_-30px_rgba(15,23,42,0.35)]">
+              <LogoMark className="h-10 w-10" />
+            </div>
+            <p className="mt-3 text-xl font-semibold tracking-tight">Protocol+ Podcast</p>
+          </div>
+
+          <h1 className={`${styles.headline} mx-auto mt-8 max-w-4xl text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl`}>
+            A world of healing stories.
+            <br />
+            One trusted podcast.
+          </h1>
+
+          <p className={`${styles.subline} mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-600`}>
+            Conversations on recovery, performance, sleep, and mindset with guests who turn science into practical daily steps.
+          </p>
+
+          <div className={`${styles.ctaButton} mt-8 flex items-center justify-center gap-3`}>
+            <Link
+              href="/protocol-plus"
+              className="rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 px-8 py-3 text-lg font-semibold text-white transition hover:brightness-105"
+            >
+              Listen now
+            </Link>
+            <Link
+              href="/news?q=podcast"
+              className="rounded-full border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-700 transition hover:border-slate-900 hover:text-slate-900"
+            >
+              Explore episodes
+            </Link>
           </div>
         </div>
 
-        <div id="featured-player" className="rounded-[2rem] border border-slate-200/80 bg-white/95 p-8 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.16)]">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium uppercase tracking-[0.35em] text-slate-500">Featured guest</p>
-              <h2 className="mt-3 text-2xl font-semibold text-slate-950">Professional recovery with elite minds.</h2>
-            </div>
-            <div className="rounded-full bg-slate-950/95 px-4 py-2 text-sm font-semibold text-white">Now playing</div>
-          </div>
-          <div className="mt-8 rounded-[1.75rem] bg-slate-950 px-6 py-6 text-white shadow-[0_24px_70px_-30px_rgba(15,23,42,0.35)]">
-            <p className="text-sm font-medium uppercase tracking-[0.32em] text-slate-400">Audio player</p>
-            <div className="mt-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xl font-semibold">Protocol Reset</p>
-                <p className="mt-2 text-sm text-slate-400">32 min · Recovery rituals</p>
-              </div>
-              <a href="#episodes" className="rounded-full bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20">Play</a>
-            </div>
-            <div className="mt-8 h-2 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full w-2/5 rounded-full bg-gradient-to-r from-cyan-400 to-violet-400" />
+        <div className="mt-14">
+          <div className={styles.carouselViewport}>
+            <div className={styles.carouselTrack}>
+              {[...lineup, ...lineup].map((item, index) => (
+                <article key={`${item.title}-${index}`} className={`${styles.characterCard} ${index < lineup.length ? item.className : ""}`}>
+                  <div className={`h-full bg-gradient-to-br ${item.accent}`}>
+                    <div className="flex h-full flex-col justify-end p-5">
+                      <div className="rounded-2xl border border-white/65 bg-white/82 p-4 backdrop-blur-sm">
+                        <p className="text-xl font-semibold text-slate-900">{item.title}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </div>
       </section>
-
-      <section id="episodes" className="space-y-6 rounded-[2rem] border border-slate-200/80 bg-white/95 p-8 shadow-[0_40px_120px_-40px_rgba(15,23,42,0.18)] sm:p-10">
-        <h2 className="text-2xl font-semibold text-slate-950">Latest episodes</h2>
-        <div className="grid gap-6 lg:grid-cols-2">
-          {episodes.map((episode) => (
-            <div key={episode.title} className="rounded-[1.75rem] border border-slate-200/80 bg-slate-950/5 p-6 transition hover:-translate-y-1 hover:border-slate-300 hover:bg-white">
-              <p className="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">Episode</p>
-              <h3 className="mt-3 text-2xl font-semibold text-slate-950">{episode.title}</h3>
-              <p className="mt-2 text-sm leading-7 text-slate-600">{episode.description}</p>
-              <div className="mt-6 flex items-center justify-between text-sm text-slate-500">
-                <span>{episode.duration}</span>
-                <a href="#featured-player" className="rounded-full border border-slate-200 px-4 py-2 text-slate-700 transition hover:border-slate-300 hover:bg-slate-100">Listen</a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-[2rem] border border-slate-200/80 bg-gradient-to-br from-slate-950/5 via-white to-slate-100 p-8 shadow-[0_40px_120px_-40px_rgba(79,70,229,0.14)] sm:p-10">
-        <h2 className="text-2xl font-semibold text-slate-950">Featured guests</h2>
-        <p className="mt-4 max-w-2xl text-slate-600 leading-7">
-          High-achievers, clinicians, and thinkers share modern recovery frameworks and psychological insight.
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          {guests.map((guest) => (
-            <div key={guest} className="rounded-[1.75rem] border border-slate-200/80 bg-white px-5 py-6 text-slate-950 shadow-sm shadow-slate-200/50">
-              <p className="text-lg font-semibold">{guest}</p>
-              <p className="mt-2 text-sm text-slate-600">Featured conversation leader</p>
-            </div>
-          ))}
-        </div>
-      </section>
-    </PageShell>
+    </main>
   );
 }
