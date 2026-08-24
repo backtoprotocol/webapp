@@ -186,13 +186,24 @@ function cleanSlug(value: string): string {
   return cleaned || slugify("product");
 }
 
-function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = []): Product | null {
+// Product titles are not unique and cannot be queried efficiently. Include the stable
+// database identifier in generated URLs so a detail page can request one row instead
+// of downloading the entire catalogue and hoping the title slug still matches.
+function productSlug(title: string, identifier: unknown): string {
+  const id = String(identifier ?? "").trim();
+  return id && /^[A-Za-z0-9_-]+$/.test(id) ? `${cleanSlug(title)}--${id}` : cleanSlug(title);
+}
+
+function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = [], fallbackName?: string): Product | null {
   if (!record) return null;
 
-  const name = str(record.title);
+  const name = str(record.title) || str(fallbackName);
   if (!name) return null;
 
-  const slug = cleanSlug(name);
+  const id = String(record.id ?? record.asin ?? cleanSlug(name));
+  // ASIN is the table's unique import key and is safer to expose in a URL than
+  // an implementation-specific database id.
+  const slug = productSlug(name, record.asin ?? record.id);
   const brand = sanitizeBrand(str(record.brand));
   const specificCategory = sanitizeCategory(str(record.category), name);
   const category = deriveCategoryGroup(name, specificCategory);
@@ -234,7 +245,7 @@ function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = []
     : [];
 
   return {
-    id: String(record.id ?? record.asin ?? slug),
+    id,
     slug,
     name,
     brand,
@@ -271,6 +282,45 @@ function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = []
   };
 }
 
+function titleFromProductSlug(slug: string): string {
+  const titleSlug = slug.slice(0, Math.max(0, slug.lastIndexOf("--")));
+  const lowerCaseWords = new Set(["a", "an", "and", "for", "in", "of", "on", "or", "the", "to", "with"]);
+  return titleSlug
+    .split("-")
+    .filter(Boolean)
+    .map((word, index) =>
+      index > 0 && lowerCaseWords.has(word.toLowerCase()) ? word.toLowerCase() : `${word[0].toUpperCase()}${word.slice(1)}`,
+    )
+    .join(" ");
+}
+
+function unavailableAffiliateProduct(slug: string, asin: string): Product {
+  const name = titleFromProductSlug(slug) || `Amazon product ${asin}`;
+  const specificCategory = deriveCategoryFromTitle(name) ?? "Accessories";
+
+  return {
+    id: asin,
+    slug,
+    name,
+    brand: sanitizeBrand(name.split(" ")[0]),
+    category: deriveCategoryGroup(name, specificCategory),
+    subcategory: specificCategory,
+    description: "Product information is still being collected. Please check back soon for availability, pricing, and specifications.",
+    price: 0,
+    currency: "USD",
+    imageUrl: "",
+    images: [],
+    rating: 0,
+    reviewCount: 0,
+    inventory: 0,
+    tags: [],
+    features: [],
+    specs: [{ label: "ASIN", value: asin }],
+    highlights: [],
+    variantGroups: [],
+  };
+}
+
 // Derives variant picker groups from sibling rows sharing a variant_group_id, for whichever
 // attributes actually have 2+ distinct values across the group.
 function buildVariantGroups(rows: any[], currentRow: any): ProductVariantGroup[] {
@@ -289,7 +339,7 @@ function buildVariantGroups(rows: any[], currentRow: any): ProductVariantGroup[]
     const currentValue = str(currentRow[config.column]);
     const options: ProductVariantOption[] = Array.from(rowsByValue.entries()).map(([value, row]) => ({
       value,
-      slug: cleanSlug(str(row.title) || value),
+      slug: productSlug(str(row.title) || value, row.asin ?? row.id),
       imageUrl: optStr(row.image_url),
       selected: value === currentValue,
     }));
@@ -339,16 +389,29 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   if (!trimmed || !supabase) return null;
 
   try {
-    const { data, error } = await supabase.from("amazon_products").select("*").limit(CATALOG_FETCH_LIMIT);
+    const separator = trimmed.lastIndexOf("--");
+    const identifier = separator >= 0 ? decodeURIComponent(trimmed.slice(separator + 2)) : "";
+    let matchRow: any | undefined;
+    let rows: any[] = [];
 
-    if (error) {
-      return null;
+    // New product URLs contain the ASIN. This is the normal,
+    // fast path and prevents a detail page from timing out while loading 1,000 rows.
+    if (identifier && /^[A-Za-z0-9_-]+$/.test(identifier)) {
+      const { data, error } = await supabase
+        .from("amazon_products")
+        .select("*")
+        .eq("asin", identifier)
+        .limit(1);
+      if (!error && Array.isArray(data) && data[0]) matchRow = data[0];
     }
 
-    const rows = Array.isArray(data) ? data : [];
-    const canonical = cleanSlug(trimmed);
-
-    const matchRow = rows.find((row) => {
+    // Preserve support for previously shared title-only links.
+    if (!matchRow) {
+      const { data, error } = await supabase.from("amazon_products").select("*").limit(CATALOG_FETCH_LIMIT);
+      if (error) return null;
+      rows = Array.isArray(data) ? data : [];
+      const canonical = cleanSlug(trimmed);
+      matchRow = rows.find((row) => {
       const name = str(row.title);
       if (!name) return false;
 
@@ -358,16 +421,29 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
         String(row.id ?? row.asin ?? ""),
       ].filter(Boolean);
 
-      return aliases.some((alias) => alias === canonical || alias === trimmed.toLowerCase() || alias === trimmed.replace(/\s+/g, "-").toLowerCase());
-    });
+        return aliases.some((alias) => alias === canonical || alias === trimmed.toLowerCase() || alias === trimmed.replace(/\s+/g, "-").toLowerCase());
+      });
+    }
 
-    if (!matchRow) return null;
+    if (!matchRow) {
+      // Some affiliate links have not reached the database yet (for example,
+      // when source-site enrichment is blocked). A valid ASIN URL should still
+      // be a usable product page instead of a dead link.
+      return identifier && /^[A-Z0-9]{10}$/i.test(identifier) ? unavailableAffiliateProduct(trimmed, identifier.toUpperCase()) : null;
+    }
 
     const groupId = str(matchRow.variant_group_id);
-    const siblingRows = groupId ? rows.filter((row) => str(row.variant_group_id) === groupId) : [matchRow];
+    let siblingRows = [matchRow];
+    if (groupId) {
+      const { data, error } = await supabase.from("amazon_products").select("*").eq("variant_group_id", groupId);
+      if (!error && Array.isArray(data)) siblingRows = data;
+    }
     const variantGroups = buildVariantGroups(siblingRows, matchRow);
 
-    return normaliseProduct(matchRow, variantGroups);
+    // Affiliate-link imports can create a row before Amazon enrichment succeeds.
+    // It is still a real product record, so render it with the title in its URL
+    // rather than sending shoppers to a 404 page.
+    return normaliseProduct(matchRow, variantGroups, titleFromProductSlug(trimmed));
   } catch {
     return null;
   }

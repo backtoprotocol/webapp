@@ -192,10 +192,16 @@ export function ProductDetail({ product }: { product: Product }) {
           <div>
             <div className="rounded-2xl border border-slate-200 bg-white p-5">
               <div className="flex items-end gap-2">
-                <p className="text-3xl font-bold tracking-tight text-slate-950">{formatCurrency(product.price, currency)}</p>
-                {hasSavings ? (
-                  <p className="pb-1 text-sm text-slate-400 line-through">{formatCurrency(product.compareAtPrice as number, currency)}</p>
-                ) : null}
+                {product.price > 0 ? (
+                  <>
+                    <p className="text-3xl font-bold tracking-tight text-slate-950">{formatCurrency(product.price, currency)}</p>
+                    {hasSavings ? (
+                      <p className="pb-1 text-sm text-slate-400 line-through">{formatCurrency(product.compareAtPrice as number, currency)}</p>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className="text-sm font-medium text-slate-500">Price currently unavailable</p>
+                )}
               </div>
               {hasSavings ? <p className="mt-1 text-sm font-semibold text-red-600">Save {formatCurrency(savings, currency)}</p> : null}
 
