@@ -3,23 +3,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { ArrowRight, Menu, Search, X } from "lucide-react";
 import { LogoMark } from "@/components/logo-mark";
 
 const mainNavItems = [
+  { href: "/services", label: "Services" },
+  { href: "/protocol-plus", label: "Protocol+" },
+  { href: "/search", label: "Recommended Tech" },
   { href: "/about", label: "About" },
-  { href: "/protocol", label: "Protocol" },
-  { href: "/research", label: "Research" },
-  { href: "/podcast", label: "Podcast" },
-  { href: "/news", label: "News" },
-];
-
-const categoryNavItems = [
-  { label: "Laptops", href: "/search?q=laptop" },
-  { label: "Desktops", href: "/search?q=desktop" },
-  { label: "Peripherals", href: "/search?q=accessories" },
-  { label: "Software", href: "/search?q=software" },
-  { label: "Shop", href: "/search" },
-  { label: "Deals", href: "/search" },
 ];
 
 export function SiteHeader() {
@@ -85,20 +76,22 @@ export function SiteHeader() {
           <LogoMark
             className={`origin-left transition-all duration-500 ${ease} ${isScrolled ? "h-7 w-7 sm:h-8 sm:w-8" : "h-9 w-9 sm:h-10 sm:w-10"}`}
           />
-          <span
-            className={`hidden origin-left font-semibold tracking-tight text-white transition-all duration-500 ${ease} sm:inline ${
-              isScrolled ? "text-lg" : "text-xl"
-            }`}
-          >
-            Protocol+
-          </span>
+          <span className="hidden font-semibold text-white sm:inline">Back to Protocol</span>
         </Link>
 
-        <div className="flex flex-1 justify-center">
+        <nav className="hidden flex-1 items-center justify-center gap-7 lg:flex">
+          {mainNavItems.map((item) => (
+            <Link key={item.href} href={item.href} className={`text-sm font-medium transition hover:text-[#9dd9b7] ${pathname === item.href ? "text-[#9dd9b7]" : "text-white/80"}`}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden flex-1 justify-center xl:flex xl:max-w-sm">
           <form onSubmit={handleSearch} className="relative w-full max-w-[960px]">
             <input
-              aria-label="Search technology and protocols"
-              placeholder="Search Protocol tech"
+              aria-label="Search recommended technology"
+              placeholder="Search recommended tech"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               className={`w-full rounded-xl border border-white/15 bg-white px-5 pr-14 text-base text-slate-900 placeholder:text-slate-500 shadow-inner outline-none ring-0 transition-all duration-500 ${ease} ${
@@ -110,29 +103,15 @@ export function SiteHeader() {
               aria-label="Search"
               className="absolute right-3.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-slate-500 transition hover:text-slate-900"
             >
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="6" />
-                <path strokeLinecap="round" d="M16 16l4 4" />
-              </svg>
+              <Search className="h-5 w-5" />
             </button>
           </form>
         </div>
 
-        <div className="hidden items-center gap-5 text-sm text-white lg:flex">
-          <Link href="/account" className="flex items-center gap-2 whitespace-nowrap font-medium hover:text-cyan-100">
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.25a7.5 7.5 0 0 1 15 0" />
-            </svg>
-            <span>Account</span>
-          </Link>
-
-          <Link href="/sign-in" className="flex items-center gap-2 whitespace-nowrap font-medium hover:text-cyan-100">
-            <span>Sign in</span>
-          </Link>
-
-          <Link href="/protocol-plus" className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 font-medium text-white transition hover:bg-white/15">
-            Get the app
+        <div className="hidden items-center gap-3 text-sm text-white lg:flex">
+          <Link href="/sign-in" className="whitespace-nowrap font-medium text-white/75 hover:text-white">Client login</Link>
+          <Link href="/support" className="inline-flex min-h-10 items-center gap-2 bg-[#9dd9b7] px-4 font-semibold text-[#17211b] transition hover:bg-[#b7e8ca]">
+            Get help <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
@@ -143,72 +122,21 @@ export function SiteHeader() {
           onClick={() => setIsMenuOpen((open) => !open)}
           className="inline-flex rounded-lg border border-white/20 p-2 text-white lg:hidden"
         >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
-            {isMenuOpen ? (
-              <path strokeLinecap="round" d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
-            )}
-          </svg>
+          {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      <div
-        className={`grid border-white/10 bg-black/25 transition-[grid-template-rows,opacity] duration-500 ${ease} ${
-          isScrolled ? "grid-rows-[0fr] border-t-0 opacity-0" : "grid-rows-[1fr] border-t opacity-100"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <nav className="mx-auto flex max-w-[1480px] items-center justify-between gap-3 overflow-x-auto px-4 py-3 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-white">
-              {categoryNavItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="inline-flex items-center whitespace-nowrap rounded-full border border-white/15 px-3 py-2 transition hover:border-white/30 hover:bg-white/5 hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="hidden items-center gap-4 whitespace-nowrap text-sm text-white/90 xl:flex">
-              {mainNavItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`whitespace-nowrap transition hover:text-white ${isActive ? "text-white" : ""}`}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
-        </div>
-      </div>
-
       {isMenuOpen ? (
-        <div className="border-t border-white/10 bg-black/30 px-4 py-3 text-sm text-white lg:hidden">
-          <div className="space-y-2">
-            {categoryNavItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="block rounded-lg border border-white/10 bg-white/5 px-3 py-2"
-              >
+        <div className="border-t border-white/10 bg-[#0b1220] px-4 py-4 text-sm text-white lg:hidden">
+          <div className="space-y-1">
+            {mainNavItems.map((item) => (
+              <Link key={item.href} href={item.href} onClick={() => setIsMenuOpen(false)} className="block border-b border-white/10 px-2 py-3 font-medium">
                 {item.label}
               </Link>
             ))}
-            <div className="pt-2 text-white/85">
-              {mainNavItems.map((item) => (
-                <Link key={item.href} href={item.href} className="block rounded-lg px-3 py-2 hover:bg-white/5">
-                  {item.label}
-                </Link>
-              ))}
-            </div>
+            <Link href="/support" onClick={() => setIsMenuOpen(false)} className="mt-3 flex min-h-11 items-center justify-between bg-[#9dd9b7] px-4 font-semibold text-[#17211b]">
+              Get help <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       ) : null}

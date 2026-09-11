@@ -47,21 +47,21 @@ function PinterestIcon() {
 
 const footerLinks = [
   {
-    title: "COMPANY",
+    title: "SERVICES",
     links: [
-      { label: "About Protocol+", href: "/about" },
-      { label: "Podcast", href: "/podcast" },
-      { label: "News", href: "/news" },
-      { label: "Get the app", href: "/protocol-plus" },
+      { label: "Websites", href: "/services#websites" },
+      { label: "Tech support", href: "/support" },
+      { label: "Business IT", href: "/services#business-it" },
+      { label: "Recommended tech", href: "/search" },
     ],
   },
   {
-    title: "EXPLORE PROTOCOL+",
+    title: "BACK TO PROTOCOL",
     links: [
-      { label: "What is Protocol+", href: "/about" },
-      { label: "Protocol library", href: "/protocol" },
-      { label: "Podcast", href: "/podcast" },
-      { label: "Research", href: "/research" },
+      { label: "Protocol+ membership", href: "/protocol-plus" },
+      { label: "About", href: "/about" },
+      { label: "Client login", href: "/sign-in" },
+      { label: "Request help", href: "/support" },
     ],
   },
 ];
@@ -92,7 +92,7 @@ export function LayoutShell({ children }: Readonly<{ children: React.ReactNode }
             <div>
               <LogoMark className="h-10 w-10" />
               <h2 className="mt-10 max-w-xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-                Helping people build healthier routines with Protocol+ every day.
+                Your technology person, without the full-time IT department.
               </h2>
             </div>
 
@@ -115,7 +115,7 @@ export function LayoutShell({ children }: Readonly<{ children: React.ReactNode }
           <div className="mt-16 border-t border-slate-200 pt-6">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-900">
-                <span>©2026 Protocol+</span>
+                <span>©2026 Back to Protocol</span>
                 <Link href="/privacy" className="transition hover:text-slate-600">
                   Privacy Policy
                 </Link>

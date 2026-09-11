@@ -13,10 +13,22 @@ import {
 import type { Product } from "@/lib/product-catalog";
 
 type SearchPageProps = {
-  searchParams?: Promise<{ q?: string }> | { q?: string };
+  searchParams?: Promise<{ q?: string; category?: string }> | { q?: string; category?: string };
 };
 
 const PAGE_SIZE = 24;
+const CATEGORY_SEARCH_TERMS: Record<string, string> = {
+  laptop: "Laptops",
+  laptops: "Laptops",
+  desktop: "Desktops",
+  desktops: "Desktops",
+  peripheral: "Peripherals",
+  peripherals: "Peripherals",
+  accessories: "Peripherals",
+  software: "Software",
+  service: "Services",
+  services: "Services",
+};
 
 export default function SearchPage({ searchParams }: SearchPageProps) {
   const [products, setProducts] = useState<Product[]>([]);
@@ -34,11 +46,21 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     const loadProducts = async () => {
       const params = searchParams ? await searchParams : {};
       const query = typeof params.q === "string" ? params.q : "";
-      const fetchedProducts = await fetchProductCatalog(query);
+      const queryCategory = CATEGORY_SEARCH_TERMS[query.trim().toLowerCase()];
+      const fetchedProducts = await fetchProductCatalog(queryCategory ? undefined : query);
+      const availableCategories = getUniqueCategories(fetchedProducts);
+      const requestedCategory =
+        (typeof params.category === "string" ? params.category : undefined) ?? queryCategory;
       const priceBounds = getPriceBounds(fetchedProducts);
 
       setProducts(fetchedProducts);
-      setCategories(getUniqueCategories(fetchedProducts));
+      setCategories(availableCategories);
+      setSelectedCategory(
+        requestedCategory && availableCategories.includes(requestedCategory)
+          ? requestedCategory
+          : undefined,
+      );
+      setSelectedSubcategory(undefined);
       setBounds(priceBounds);
       setPriceRange(priceBounds);
       setLoading(false);
@@ -313,12 +335,24 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
 
                       <div className="mt-3 flex items-center justify-between">
                         <span className="text-xl font-bold text-slate-900">${product.price.toFixed(2)}</span>
-                        <button
-                          type="button"
-                          className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700"
-                        >
-                          Add to cart
-                        </button>
+                        {product.affiliateLink ? (
+                          <a
+                            href={product.affiliateLink}
+                            target="_blank"
+                            rel="sponsored nofollow noopener noreferrer"
+                            className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700"
+                          >
+                            Buy now
+                          </a>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled
+                            className="cursor-not-allowed rounded-md bg-slate-300 px-3 py-1.5 text-xs font-semibold text-white"
+                          >
+                            Buy now
+                          </button>
+                        )}
                       </div>
                     </div>
                   </article>

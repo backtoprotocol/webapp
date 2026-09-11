@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Back to Protocol",
   description:
-    "Premium psychology and human performance for recovery, resilience, and rebuild.",
+    "Websites, technology support, and practical IT for people and small businesses.",
 };
 
 export default function RootLayout({

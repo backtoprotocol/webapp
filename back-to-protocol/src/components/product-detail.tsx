@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Product } from "@/lib/product-catalog";
 
@@ -28,7 +28,10 @@ export function ProductDetail({ product }: { product: Product }) {
   const [showAllThumbnails, setShowAllThumbnails] = useState(false);
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
-  const [addedToCart, setAddedToCart] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [product.id]);
 
   const currency = product.currency ?? "USD";
   const hasSavings = typeof product.compareAtPrice === "number" && product.compareAtPrice > product.price;
@@ -36,8 +39,10 @@ export function ProductDetail({ product }: { product: Product }) {
 
   const breadcrumbTrail = [
     { label: "Home", href: "/" },
-    product.category ? { label: product.category, href: `/search?q=${encodeURIComponent(product.category)}` } : null,
-    product.subcategory ? { label: product.subcategory, href: `/search?q=${encodeURIComponent(product.subcategory)}` } : null,
+    ...product.categoryPath.map((category) => ({
+      label: category,
+      href: `/search?q=${encodeURIComponent(category)}`,
+    })),
   ].filter(Boolean) as Array<{ label: string; href: string }>;
 
   const THUMB_LIMIT = 6;
@@ -136,6 +141,7 @@ export function ProductDetail({ product }: { product: Product }) {
             ) : null}
 
             {product.brand ? <p className="mt-3 text-sm text-slate-600">by {product.brand}</p> : null}
+            {product.store ? <p className="mt-1 text-xs text-slate-500">Store: {product.store}</p> : null}
 
             {product.description ? (
               <div className="mt-5">
@@ -212,6 +218,10 @@ export function ProductDetail({ product }: { product: Product }) {
                 </p>
               ) : null}
 
+              {product.availability ? (
+                <p className="mt-3 text-sm font-medium text-emerald-700">{product.availability}</p>
+              ) : null}
+
               {product.pickupAvailable !== undefined || product.shippingEstimate ? (
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   {product.pickupAvailable !== undefined ? (
@@ -240,16 +250,24 @@ export function ProductDetail({ product }: { product: Product }) {
               ) : null}
 
               <div className="mt-5 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAddedToCart(true);
-                    setTimeout(() => setAddedToCart(false), 1500);
-                  }}
-                  className="flex-1 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
-                >
-                  {addedToCart ? "Added to cart ✓" : "Add to cart"}
-                </button>
+                  {product.affiliateLink ? (
+                    <a
+                      href={product.affiliateLink}
+                      target="_blank"
+                      rel="sponsored nofollow noopener noreferrer"
+                      className="flex-1 rounded-full bg-slate-900 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-slate-700"
+                    >
+                      Buy now
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="flex-1 cursor-not-allowed rounded-full bg-slate-300 px-5 py-3 text-sm font-semibold text-white"
+                    >
+                      Buy now
+                    </button>
+                  )}
                 <button
                   type="button"
                   onClick={() => setWishlisted((v) => !v)}
@@ -295,6 +313,19 @@ export function ProductDetail({ product }: { product: Product }) {
                 </div>
               ))}
             </div>
+          </section>
+        ) : null}
+
+        {product.variations.length > 0 ? (
+          <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6">
+            <h2 className="text-xl font-bold tracking-tight text-slate-950">Variations</h2>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {product.variations.map((variation) => (
+                <li key={variation} className="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700">
+                  {variation}
+                </li>
+              ))}
+            </ul>
           </section>
         ) : null}
 

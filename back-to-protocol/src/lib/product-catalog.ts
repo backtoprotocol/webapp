@@ -20,6 +20,13 @@ export type Product = {
   brand: string;
   category: string;
   subcategory?: string;
+  categoryPath: string[];
+  store?: string;
+  availability?: string;
+  affiliateLink?: string;
+  variations: string[];
+  priceHistory: Array<{ recordedAt: string; price?: number }>;
+  scrapeLog: Array<{ loggedAt: string; field: string; status: string; message: string }>;
   description: string;
   price: number;
   compareAtPrice?: number;
@@ -76,7 +83,7 @@ const ALLOWED_CATEGORIES = new Set(
 
 // Strips HTML tags/comments left over from scraped source fields.
 function stripHtml(value: string): string {
-  return value
+  return String(value ?? "")
     .replace(/<!--[\s\S]*?-->/g, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
@@ -85,6 +92,7 @@ function stripHtml(value: string): string {
 
 function deriveCategoryFromTitle(title: string): string | null {
   const text = title.toLowerCase();
+  if (/(printer|printing|inkjet|laserjet|supertank)/.test(text)) return "Printers";
   if (/(laptop|notebook|macbook|chromebook|ultrabook)/.test(text)) return "Laptops";
   if (/(desktop|tower pc|all-in-one|mini pc)/.test(text)) return "Desktops";
   if (/tablet/.test(text)) return "Tablets";
@@ -117,9 +125,10 @@ export type CategoryGroup = (typeof CATEGORY_GROUPS)[number];
 // Buckets a product's specific category/title into one of the 5 fixed top-level groups.
 function deriveCategoryGroup(title: string, specificCategory: string): CategoryGroup {
   const text = `${title} ${specificCategory}`.toLowerCase();
+  if (/(software|license key|antivirus|subscription plan|os upgrade|microsoft (?:office|365)|office (?:home|365|suite|apps?))/.test(text)) return "Software";
+  if (/(printer|printing|inkjet|laserjet|supertank|scanner|copier|ink tank)/.test(text)) return "Peripherals";
   if (/(laptop|notebook|macbook|chromebook|ultrabook)/.test(text)) return "Laptops";
   if (/(desktop|tower pc|all-in-one|mini pc|workstation)/.test(text)) return "Desktops";
-  if (/(software|license key|antivirus|subscription plan|os upgrade)/.test(text)) return "Software";
   if (/(warranty|protection plan|tech support|installation service|setup service|geek squad|service plan)/.test(text)) return "Services";
   return "Peripherals";
 }
@@ -194,6 +203,17 @@ function productSlug(title: string, identifier: unknown): string {
   return id && /^[A-Za-z0-9_-]+$/.test(id) ? `${cleanSlug(title)}--${id}` : cleanSlug(title);
 }
 
+const PRODUCT_SELECT = `
+  *,
+  amazon_product_categories(category_level, category),
+  amazon_product_bullets(bullet_number, bullet_point),
+  amazon_product_attributes(attribute, value),
+  amazon_product_images(image_number, image_url),
+  amazon_product_variations(variation_number, variation),
+  amazon_product_price_history(recorded_at, price),
+  amazon_product_scrape_log(logged_at, field, status, message)
+`;
+
 function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = [], fallbackName?: string): Product | null {
   if (!record) return null;
 
@@ -205,43 +225,55 @@ function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = []
   // an implementation-specific database id.
   const slug = productSlug(name, record.asin ?? record.id);
   const brand = sanitizeBrand(str(record.brand));
-  const specificCategory = sanitizeCategory(str(record.category), name);
+  const categoryRows = Array.isArray(record.amazon_product_categories)
+    ? [...record.amazon_product_categories].sort((a: any, b: any) => Number(a.category_level) - Number(b.category_level))
+    : [];
+  const categoryPath = categoryRows.map((row: any) => str(row.category)).filter(Boolean);
+  const specificCategory = sanitizeCategory(categoryPath[0], name);
   const category = deriveCategoryGroup(name, specificCategory);
-  const subcategory = optStr(record.subcategory) || (specificCategory !== category ? specificCategory : undefined);
+  const subcategory = categoryPath.length > 1 ? categoryPath[categoryPath.length - 1] : undefined;
   const description = str(record.description) || name;
   const price = num(record.price) ?? 0;
-  const imageUrl = str(record.image_url);
-  const images = Array.isArray(record.images)
-    ? record.images.filter((url: unknown): url is string => typeof url === "string" && url.trim().length > 0)
+  const imageRows = Array.isArray(record.amazon_product_images)
+    ? [...record.amazon_product_images].sort((a: any, b: any) => Number(a.image_number) - Number(b.image_number))
     : [];
-  if (images.length === 0 && imageUrl) images.push(imageUrl);
+  const images = imageRows.map((row: any) => str(row.image_url)).filter(Boolean);
+  const imageUrl = images[0] ?? "";
 
   const rating = num(record.ratings) ?? 0;
   const reviewCount = num(record.review_count) ?? 0;
   const inventory = num(record.inventory) ?? 0;
   const tags = Array.isArray(record.tags) ? record.tags.filter(Boolean).map((tag: any) => String(tag)) : [];
-  const features = Array.isArray(record.features)
-    ? record.features.filter(Boolean).map((feature: any) => String(feature))
-    : [description];
+  const bulletRows = Array.isArray(record.amazon_product_bullets)
+    ? [...record.amazon_product_bullets].sort((a: any, b: any) => Number(a.bullet_number) - Number(b.bullet_number))
+    : [];
+  const features = bulletRows.map((row: any) => str(row.bullet_point)).filter(Boolean);
 
-  const specs = [
-    { label: "Processor", value: str(record.processor) },
-    { label: "Memory (RAM)", value: str(record.ram) },
-    { label: "Storage", value: [str(record.storage_capacity), str(record.storage_type)].filter(Boolean).join(" ") },
-    { label: "Screen size", value: str(record.screen_size) },
-    { label: "Graphics", value: str(record.graphics) },
-    { label: "Operating system", value: str(record.operating_system) },
-    { label: "Battery life", value: str(record.battery_life) },
-    { label: "Weight", value: str(record.weight) },
-    { label: "Color", value: str(record.color) },
-    { label: "Brand", value: brand },
-    { label: "ASIN", value: str(record.asin) },
-  ].filter((spec) => spec.value !== "");
-
-  const highlights = Array.isArray(record.highlights)
-    ? record.highlights
-        .map((item: any) => ({ label: str(item?.label), value: str(item?.value) }))
-        .filter((item: { label: string; value: string }) => item.label && item.value)
+  const attributeRows = Array.isArray(record.amazon_product_attributes)
+    ? record.amazon_product_attributes
+    : [];
+  const specs = attributeRows
+    .map((item: any) => ({ label: str(item?.attribute), value: str(item?.value) }))
+    .filter((spec: { label: string; value: string }) => spec.label && spec.value);
+  const highlights = attributeRows
+    .map((item: any) => ({ label: str(item?.attribute), value: str(item?.value) }))
+    .filter((item: { label: string; value: string }) => item.label && item.value);
+  const variations = Array.isArray(record.amazon_product_variations)
+    ? [...record.amazon_product_variations]
+        .sort((a: any, b: any) => Number(a.variation_number) - Number(b.variation_number))
+        .map((row: any) => str(row.variation))
+        .filter(Boolean)
+    : [];
+  const priceHistory = Array.isArray(record.amazon_product_price_history)
+    ? record.amazon_product_price_history.map((row: any) => ({ recordedAt: str(row.recorded_at), price: num(row.price) }))
+    : [];
+  const scrapeLog = Array.isArray(record.amazon_product_scrape_log)
+    ? record.amazon_product_scrape_log.map((row: any) => ({
+        loggedAt: str(row.logged_at),
+        field: str(row.field),
+        status: str(row.status),
+        message: str(row.message),
+      }))
     : [];
 
   return {
@@ -251,6 +283,13 @@ function normaliseProduct(record: any, variantGroups: ProductVariantGroup[] = []
     brand,
     category,
     subcategory,
+    categoryPath,
+    store: optStr(record.store),
+    availability: optStr(record.availability),
+    affiliateLink: optStr(record.affiliate_link),
+    variations,
+    priceHistory,
+    scrapeLog,
     description,
     price,
     compareAtPrice: num(record.compare_at_price),
@@ -305,6 +344,7 @@ function unavailableAffiliateProduct(slug: string, asin: string): Product {
     brand: sanitizeBrand(name.split(" ")[0]),
     category: deriveCategoryGroup(name, specificCategory),
     subcategory: specificCategory,
+    categoryPath: [deriveCategoryGroup(name, specificCategory), specificCategory],
     description: "Product information is still being collected. Please check back soon for availability, pricing, and specifications.",
     price: 0,
     currency: "USD",
@@ -317,6 +357,9 @@ function unavailableAffiliateProduct(slug: string, asin: string): Product {
     features: [],
     specs: [{ label: "ASIN", value: asin }],
     highlights: [],
+    variations: [],
+    priceHistory: [],
+    scrapeLog: [],
     variantGroups: [],
   };
 }
@@ -361,7 +404,12 @@ export async function fetchProductCatalog(searchTerm?: string): Promise<Product[
   }
 
   try {
-    let request = supabase.from("amazon_products").select("*").limit(CATALOG_FETCH_LIMIT);
+    let request = supabase
+      .from("amazon_products")
+      .select(PRODUCT_SELECT)
+      .not("affiliate_link", "is", null)
+      .neq("affiliate_link", "")
+      .limit(CATALOG_FETCH_LIMIT);
 
     if (query) {
       const escapedQuery = query.replace(/'/g, "''");
@@ -399,15 +447,22 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     if (identifier && /^[A-Za-z0-9_-]+$/.test(identifier)) {
       const { data, error } = await supabase
         .from("amazon_products")
-        .select("*")
+        .select(PRODUCT_SELECT)
         .eq("asin", identifier)
+        .not("affiliate_link", "is", null)
+        .neq("affiliate_link", "")
         .limit(1);
       if (!error && Array.isArray(data) && data[0]) matchRow = data[0];
     }
 
     // Preserve support for previously shared title-only links.
     if (!matchRow) {
-      const { data, error } = await supabase.from("amazon_products").select("*").limit(CATALOG_FETCH_LIMIT);
+      const { data, error } = await supabase
+        .from("amazon_products")
+        .select(PRODUCT_SELECT)
+        .not("affiliate_link", "is", null)
+        .neq("affiliate_link", "")
+        .limit(CATALOG_FETCH_LIMIT);
       if (error) return null;
       rows = Array.isArray(data) ? data : [];
       const canonical = cleanSlug(trimmed);
@@ -425,17 +480,12 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
       });
     }
 
-    if (!matchRow) {
-      // Some affiliate links have not reached the database yet (for example,
-      // when source-site enrichment is blocked). A valid ASIN URL should still
-      // be a usable product page instead of a dead link.
-      return identifier && /^[A-Z0-9]{10}$/i.test(identifier) ? unavailableAffiliateProduct(trimmed, identifier.toUpperCase()) : null;
-    }
+    if (!matchRow) return null;
 
     const groupId = str(matchRow.variant_group_id);
     let siblingRows = [matchRow];
     if (groupId) {
-      const { data, error } = await supabase.from("amazon_products").select("*").eq("variant_group_id", groupId);
+      const { data, error } = await supabase.from("amazon_products").select(PRODUCT_SELECT).eq("variant_group_id", groupId);
       if (!error && Array.isArray(data)) siblingRows = data;
     }
     const variantGroups = buildVariantGroups(siblingRows, matchRow);
