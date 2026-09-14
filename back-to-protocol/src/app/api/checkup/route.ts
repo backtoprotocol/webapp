@@ -4,6 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 type CheckupRequest = {
   customerName?: string;
   customerEmail?: string;
+  customerPhone?: string;
+  customerCompany?: string;
   subject?: string;
   description?: string;
   service?: "Tech Support" | "Website" | "Business IT" | "Protocol+";
@@ -39,6 +41,8 @@ export async function POST(request: Request) {
       request_subject: subject,
       request_description: description,
       request_service: body.service || "Tech Support",
+      customer_phone: body.customerPhone?.trim() || "",
+      customer_company: body.customerCompany?.trim() || "",
     });
 
     if (error) {
