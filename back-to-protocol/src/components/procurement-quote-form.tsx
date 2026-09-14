@@ -16,10 +16,20 @@ const processorOptions = ["Not sure / recommend one", "Entry level (everyday tas
 const storageOptions = ["Not sure / recommend one", "256 GB", "512 GB", "1 TB", "2 TB+", "Server / NAS storage"];
 const ramOptions = ["Not sure / recommend one", "8 GB", "16 GB", "32 GB", "64 GB+"];
 const licenseOptions = ["Not sure / recommend one", "Per user / seat", "Per device", "Site or business-wide license", "Free or open source preferred"];
+const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
+
+function formatPhone(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (!digits.length) return "";
+  if (digits.length < 4) return `(${digits}`;
+  if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
 
 type Form = {
   name: string;
   email: string;
+  phone: string;
   businessName: string;
   address: string;
   users: string;
@@ -43,6 +53,7 @@ type Form = {
 const initialForm: Form = {
   name: "",
   email: "",
+  phone: "",
   businessName: "",
   address: "",
   users: "",
@@ -82,6 +93,7 @@ export function ProcurementQuoteForm({ kind }: Props) {
     const description = [
       `Business or household name: ${form.businessName || "Not provided"}`,
       `Address: ${form.address || "Not provided"}`,
+      `Phone: ${form.phone || "Not provided"}`,
       `Number of users: ${form.users || "Not provided"}`,
       `${hardware ? "Equipment types" : "Software categories"}: ${form.categories.length ? form.categories.join(", ") : "Not provided"}`,
       hardware ? `Number of devices: ${form.quantity || "Not provided"}` : `Number of licenses or seats: ${form.quantity || "Not provided"}`,
@@ -124,6 +136,7 @@ export function ProcurementQuoteForm({ kind }: Props) {
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <label className="text-sm font-semibold">Your name<input required value={form.name} onChange={(event) => update("name", event.target.value)} className={inputClass} placeholder="Your name" /></label>
           <label className="text-sm font-semibold">Email<input required type="email" value={form.email} onChange={(event) => update("email", event.target.value)} className={inputClass} placeholder="you@example.com" /></label>
+          <label className="text-sm font-semibold">Phone number<input required type="tel" inputMode="tel" value={form.phone} onChange={(event) => update("phone", formatPhone(event.target.value))} pattern="\(\d{3}\) \d{3}-\d{4}" title="Format: (999) 999-9999" maxLength={14} className={inputClass} placeholder="(999) 999-9999" /></label>
           <label className="text-sm font-semibold">Business or household name<input value={form.businessName} onChange={(event) => update("businessName", event.target.value)} className={inputClass} placeholder="Your business name" /></label>
           <label className="text-sm font-semibold">Address<input value={form.address} onChange={(event) => update("address", event.target.value)} className={inputClass} placeholder="Street, city, state, zip" /></label>
           <label className="text-sm font-semibold sm:col-span-2">Number of users<input value={form.users} onChange={(event) => update("users", event.target.value)} className={inputClass} placeholder="Example: 8 employees" /></label>
@@ -170,7 +183,7 @@ export function ProcurementQuoteForm({ kind }: Props) {
       {error ? <p className="mt-6 border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{error}</p> : null}
       <div className="mt-9 flex flex-col-reverse gap-3 border-t border-[#17211b]/15 pt-6 sm:flex-row sm:justify-between">
         {step > 1 ? <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#17211b]/25 px-5 font-semibold"><ArrowLeft className="h-4 w-4" /> Back</button> : <span />}
-        {step < 4 ? <button type="button" onClick={() => setStep((current) => current + 1)} className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#17211b] px-5 font-semibold text-white">Continue <ArrowRight className="h-4 w-4" /></button> : <button type="button" onClick={submit} disabled={saving || !form.name.trim() || !form.email.trim()} className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#17211b] px-5 font-semibold text-white disabled:opacity-40">{saving ? "Sending quote request..." : "Request my quote"} {!saving ? <ArrowRight className="h-4 w-4" /> : null}</button>}
+        {step < 4 ? <button type="button" onClick={() => setStep((current) => current + 1)} className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#17211b] px-5 font-semibold text-white">Continue <ArrowRight className="h-4 w-4" /></button> : <button type="button" onClick={submit} disabled={saving || !form.name.trim() || !form.email.trim() || !phonePattern.test(form.phone)} className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#17211b] px-5 font-semibold text-white disabled:opacity-40">{saving ? "Sending quote request..." : "Request my quote"} {!saving ? <ArrowRight className="h-4 w-4" /> : null}</button>}
       </div>
     </div>
   </section>;
