@@ -8,6 +8,7 @@ type Assessment = {
   type: CheckupType;
   name: string;
   email: string;
+  businessName: string;
   deviceCount: string;
   devices: string[];
   wifi: string;
@@ -40,6 +41,7 @@ const initialAssessment: Assessment = {
   type: "personal",
   name: "",
   email: "",
+  businessName: "",
   deviceCount: "1-2",
   devices: [],
   wifi: "Not sure",
@@ -127,6 +129,7 @@ export function TechnologyCheckupForm() {
       body: JSON.stringify({
         customerName: assessment.name,
         customerEmail: assessment.email,
+        customerCompany: assessment.type === "business" ? assessment.businessName : "",
         subject: `Free ${generated.title}`,
         description,
       }),
@@ -181,6 +184,7 @@ function StepOne({ assessment, update }: { assessment: Assessment; update: <K ex
     <div className="mt-7 grid gap-5 sm:grid-cols-2">
       <Field label="Your name"><input value={assessment.name} onChange={(event) => update("name", event.target.value)} required placeholder="Your name" className={inputClass} /></Field>
       <Field label="Email for your report"><input type="email" value={assessment.email} onChange={(event) => update("email", event.target.value)} required placeholder="you@example.com" className={inputClass} /></Field>
+      {assessment.type === "business" ? <Field label="Business name"><input value={assessment.businessName} onChange={(event) => update("businessName", event.target.value)} placeholder="Your business name" className={inputClass} /></Field> : null}
     </div>
   </div>;
 }

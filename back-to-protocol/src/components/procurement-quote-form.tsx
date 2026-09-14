@@ -110,7 +110,7 @@ export function ProcurementQuoteForm({ kind }: Props) {
       `Additional details: ${form.details || "Not provided"}`,
     ].filter(Boolean).join("\n");
     try {
-      const response = await fetch("/api/checkup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ customerName: form.name, customerEmail: form.email, customerPhone: form.phone, customerCompany: form.businessName, subject: title, description, service: "Business IT" }) });
+      const response = await fetch("/api/checkup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ customerName: form.name, customerEmail: form.email, customerPhone: form.phone, customerCompany: form.businessName, customerAddress: form.address, subject: title, description, service: "Business IT" }) });
       const result = response.ok ? await response.json() : null;
       if (!response.ok) throw new Error(result?.error || "Unable to save your quote request.");
       setTicketNumber(result.ticketNumber || "");

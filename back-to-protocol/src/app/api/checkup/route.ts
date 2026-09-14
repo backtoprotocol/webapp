@@ -6,6 +6,7 @@ type CheckupRequest = {
   customerEmail?: string;
   customerPhone?: string;
   customerCompany?: string;
+  customerAddress?: string;
   subject?: string;
   description?: string;
   service?: "Tech Support" | "Website" | "Business IT" | "Protocol+";
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
       request_service: body.service || "Tech Support",
       customer_phone: body.customerPhone?.trim() || "",
       customer_company: body.customerCompany?.trim() || "",
+      customer_address: body.customerAddress?.trim() || "",
     });
 
     if (error) {
