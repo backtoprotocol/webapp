@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BadgeCheck,
   BriefcaseBusiness,
-  Check,
   CircleDot,
   Clock3,
   Code2,
@@ -14,38 +13,40 @@ import {
   MonitorCog,
   Network,
   ShieldCheck,
-  Sparkles,
-  Store,
   Wifi,
 } from "lucide-react";
+import { ProtocolPlusTeaser } from "@/components/protocol-plus-teaser";
 
 const services = [
+  {
+    icon: BriefcaseBusiness,
+    label: "Business IT",
+    title: "An IT department that fits your business.",
+    description: "Domains, email, Microsoft 365, Google Workspace, networks, and ongoing support.",
+    price: "Starting at $149/month",
+    href: "/services#business-it",
+    color: "bg-[#9dd9b7] text-[#17211b]",
+    badge: "Most Requested",
+  },
   {
     icon: Code2,
     label: "Websites",
     title: "Build a site that earns its keep.",
-    description: "Custom business websites, redesigns, e-commerce, hosting setup, and ongoing care.",
-    price: "Projects from $999",
+    description: "Custom business websites, ongoing care, and the technical setup around them.",
+    price: "Starting at $999",
     href: "/services#websites",
     color: "bg-[#dff3e7] text-[#165c3a]",
+    badge: null as string | null,
   },
   {
     icon: LifeBuoy,
     label: "Tech help",
     title: "Get unstuck without the runaround.",
     description: "Remote troubleshooting for computers, Wi-Fi, printers, software, accounts, and devices.",
-    price: "Help from $75/hour",
+    price: "$99/hour",
     href: "/support",
     color: "bg-[#ffead8] text-[#98400c]",
-  },
-  {
-    icon: BriefcaseBusiness,
-    label: "Business IT",
-    title: "An IT department that fits your business.",
-    description: "Domains, email, Microsoft 365, Google Workspace, networks, security, and automation.",
-    price: "Plans from $149/month",
-    href: "/services#business-it",
-    color: "bg-[#e3eaf8] text-[#254d87]",
+    badge: null as string | null,
   },
 ];
 
@@ -62,6 +63,29 @@ const steps = [
   ["01", "Tell us what's wrong", "Submit a short request. Photos and error messages help, but they are not required."],
   ["02", "We diagnose it", "We decide whether remote help, an appointment, or a project quote is the right path."],
   ["03", "We get it handled", "You get a clear plan, transparent price, and one person accountable for the result."],
+];
+
+const trustPoints = [
+  {
+    icon: Headphones,
+    title: "One person, start to finish",
+    description: "No call center and no ticket queue between departments — you work directly with the person doing the work.",
+  },
+  {
+    icon: BadgeCheck,
+    title: "Clear pricing before we start",
+    description: "You hear the likely cost and approach before billable work begins, so there are no surprise invoices.",
+  },
+  {
+    icon: Clock3,
+    title: "Remote-first, not remote-only",
+    description: "Most issues are solved without an appointment. We schedule on-site visits only when the problem truly needs it.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Plain-language answers",
+    description: "We explain what is wrong and what we are doing about it, without the jargon or the upsell pressure.",
+  },
 ];
 
 export const metadata = {
@@ -87,8 +111,8 @@ export default function Home() {
               Back to Protocol helps people and small businesses build, fix, and manage their technology. One expert, a clear answer, and no confusing handoffs.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/support" className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#17211b] px-6 py-3 font-semibold text-white transition hover:bg-[#294033]">
-                Get tech help <ArrowRight className="h-4 w-4" />
+              <Link href="/technology-checkup/assessment" className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#17211b] px-6 py-3 font-semibold text-white transition hover:bg-[#294033]">
+                Get your free checkup <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="/services#websites" className="inline-flex min-h-12 items-center justify-center border border-[#17211b]/25 bg-white px-6 py-3 font-semibold transition hover:border-[#17211b]">
                 Build a website
@@ -105,8 +129,8 @@ export default function Home() {
             <div className="border border-[#17211b]/15 bg-[#17211b] p-5 text-white shadow-[16px_16px_0_#f3a45b] sm:p-7">
               <div className="flex items-center justify-between border-b border-white/15 pb-5">
                 <div>
-                  <p className="text-xs font-bold uppercase text-[#9dd9b7]">Open a support request</p>
-                  <p className="mt-1 text-xl font-semibold">What needs attention?</p>
+                  <p className="text-xs font-bold uppercase text-[#9dd9b7]">Free technology checkup</p>
+                  <p className="mt-1 text-xl font-semibold">See what to fix first.</p>
                 </div>
                 <LifeBuoy className="h-8 w-8 text-[#9dd9b7]" />
               </div>
@@ -117,8 +141,8 @@ export default function Home() {
                   </Link>
                 ))}
               </div>
-              <Link href="/support" className="mt-5 flex min-h-12 items-center justify-between bg-[#9dd9b7] px-4 font-semibold text-[#17211b] transition hover:bg-[#b7e8ca]">
-                Something else <ArrowRight className="h-4 w-4" />
+              <Link href="/technology-checkup/assessment" className="mt-5 flex min-h-12 items-center justify-between bg-[#9dd9b7] px-4 font-semibold text-[#17211b] transition hover:bg-[#b7e8ca]">
+                Get my free report <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -132,12 +156,15 @@ export default function Home() {
           <p className="mt-4 text-lg leading-8 text-[#5a685f]">Choose the path that sounds closest. We will sort out the technical details.</p>
         </div>
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
-          {services.map(({ icon: Icon, label, title, description, price, href, color }) => (
-            <Link key={label} href={href} className="group flex min-h-[360px] flex-col border border-[#17211b]/15 bg-white p-7 transition hover:-translate-y-1 hover:shadow-[10px_10px_0_rgba(31,122,77,0.18)] sm:p-8">
+          {services.map(({ icon: Icon, label, title, description, price, href, color, badge }) => (
+            <Link key={label} href={href} className={`group relative flex min-h-[360px] flex-col border p-7 transition hover:-translate-y-1 sm:p-8 ${badge ? "border-[#17211b] bg-[#17211b] text-white shadow-[10px_10px_0_#f3a45b] hover:shadow-[14px_14px_0_#f3a45b]" : "border-[#17211b]/15 bg-white hover:shadow-[10px_10px_0_rgba(31,122,77,0.18)]"}`}>
+              {badge ? (
+                <span className="absolute -top-3 left-7 whitespace-nowrap rounded-full bg-[#f3a45b] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wide text-[#17211b] shadow-[0_6px_16px_-6px_rgba(0,0,0,0.5)]">{badge}</span>
+              ) : null}
               <div className={`flex h-12 w-12 items-center justify-center ${color}`}><Icon className="h-6 w-6" /></div>
-              <p className="mt-7 text-xs font-bold uppercase text-[#607067]">{label}</p>
+              <p className={`mt-7 text-xs font-bold uppercase ${badge ? "text-white/60" : "text-[#607067]"}`}>{label}</p>
               <h3 className="mt-3 text-2xl font-semibold leading-tight">{title}</h3>
-              <p className="mt-4 leading-7 text-[#5a685f]">{description}</p>
+              <p className={`mt-4 leading-7 ${badge ? "text-white/70" : "text-[#5a685f]"}`}>{description}</p>
               <div className="mt-auto flex items-end justify-between gap-4 pt-8">
                 <span className="text-sm font-semibold">{price}</span>
                 <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
@@ -157,24 +184,7 @@ export default function Home() {
               Compare Protocol+ plans <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="border border-[#17211b]/15 bg-[#f6f7f2] p-7">
-              <p className="text-sm font-bold text-[#1f7a4d]">PROTOCOL+</p>
-              <p className="mt-3 text-4xl font-semibold">$19.99<span className="text-base font-normal text-[#607067]">/mo</span></p>
-              <p className="mt-2 text-sm text-[#607067]">For households and light support.</p>
-              <ul className="mt-6 space-y-3 text-sm">
-                {["Priority request queue", "30 minutes remote support/month", "Member pricing on larger work", "Cancel anytime"].map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1f7a4d]" />{item}</li>)}
-              </ul>
-            </div>
-            <div className="border border-[#17211b] bg-[#17211b] p-7 text-white">
-              <div className="flex items-center justify-between"><p className="text-sm font-bold text-[#9dd9b7]">PROTOCOL+ PRO</p><Sparkles className="h-5 w-5 text-[#f3a45b]" /></div>
-              <p className="mt-3 text-4xl font-semibold">$49.99<span className="text-base font-normal text-white/60">/mo</span></p>
-              <p className="mt-2 text-sm text-white/65">For more hands-on support.</p>
-              <ul className="mt-6 space-y-3 text-sm">
-                {["Everything in Protocol+", "2 hours remote support/month", "Website and network assistance", "20% off additional services"].map((item) => <li key={item} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#9dd9b7]" />{item}</li>)}
-              </ul>
-            </div>
-          </div>
+          <ProtocolPlusTeaser />
         </div>
       </section>
 
@@ -196,6 +206,24 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="border-y border-[#17211b]/10 bg-white">
+        <div className="mx-auto max-w-[1480px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase text-[#1f7a4d]">Why people choose us</p>
+            <h2 className="mt-3 font-serif text-4xl leading-tight sm:text-5xl">Technology help without the runaround.</h2>
+          </div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {trustPoints.map(({ icon: Icon, title, description }) => (
+              <div key={title} className="border border-[#17211b]/15 bg-[#f6f7f2] p-6">
+                <Icon className="h-6 w-6 text-[#1f7a4d]" />
+                <h3 className="mt-5 font-semibold leading-tight">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#5a685f]">{description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="bg-[#f3a45b] text-[#17211b]">
         <div className="mx-auto grid max-w-[1480px] items-center gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_auto] lg:px-12 lg:py-20">
           <div>
@@ -204,7 +232,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
             <Link href="/support" className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#17211b] px-6 font-semibold text-white">Request help <ArrowRight className="h-4 w-4" /></Link>
-            <Link href="/search" className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#17211b]/40 bg-white/50 px-6 font-semibold"><Store className="h-4 w-4" /> Recommended tech</Link>
+            <Link href="/services#business-it" className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#17211b]/40 bg-white/50 px-6 font-semibold"><BriefcaseBusiness className="h-4 w-4" /> Get a Business IT quote</Link>
           </div>
         </div>
       </section>

@@ -2,22 +2,21 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Menu, Search, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { LogoMark } from "@/components/logo-mark";
 
 const mainNavItems = [
   { href: "/services", label: "Services" },
+  { href: "/hardware", label: "Hardware" },
+  { href: "/software", label: "Software" },
   { href: "/protocol-plus", label: "Protocol+" },
-  { href: "/search", label: "Recommended Tech" },
   { href: "/about", label: "About" },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [query, setQuery] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -44,18 +43,6 @@ export function SiteHeader() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const trimmed = query.trim();
-
-    if (!trimmed) {
-      router.push("/search");
-      return;
-    }
-
-    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
-  };
 
   const ease = "ease-[cubic-bezier(0.22,1,0.36,1)]";
 
@@ -87,31 +74,9 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden flex-1 justify-center xl:flex xl:max-w-sm">
-          <form onSubmit={handleSearch} className="relative w-full max-w-[960px]">
-            <input
-              aria-label="Search recommended technology"
-              placeholder="Search recommended tech"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              className={`w-full rounded-xl border border-white/15 bg-white px-5 pr-14 text-base text-slate-900 placeholder:text-slate-500 shadow-inner outline-none ring-0 transition-all duration-500 ${ease} ${
-                isScrolled ? "h-10" : "h-12"
-              }`}
-            />
-            <button
-              type="submit"
-              aria-label="Search"
-              className="absolute right-3.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-slate-500 transition hover:text-slate-900"
-            >
-              <Search className="h-5 w-5" />
-            </button>
-          </form>
-        </div>
-
         <div className="hidden items-center gap-3 text-sm text-white lg:flex">
-          <Link href="/sign-in" className="whitespace-nowrap font-medium text-white/75 hover:text-white">Client login</Link>
-          <Link href="/support" className="inline-flex min-h-10 items-center gap-2 bg-[#9dd9b7] px-4 font-semibold text-[#17211b] transition hover:bg-[#b7e8ca]">
-            Get help <ArrowRight className="h-4 w-4" />
+          <Link href="/technology-checkup/assessment" className="inline-flex min-h-10 items-center gap-2 bg-[#9dd9b7] px-4 font-semibold text-[#17211b] transition hover:bg-[#b7e8ca]">
+            Free checkup <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
@@ -134,8 +99,8 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <Link href="/support" onClick={() => setIsMenuOpen(false)} className="mt-3 flex min-h-11 items-center justify-between bg-[#9dd9b7] px-4 font-semibold text-[#17211b]">
-              Get help <ArrowRight className="h-4 w-4" />
+            <Link href="/technology-checkup/assessment" onClick={() => setIsMenuOpen(false)} className="mt-3 flex min-h-11 items-center justify-between bg-[#9dd9b7] px-4 font-semibold text-[#17211b]">
+              Free technology checkup <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

@@ -10,6 +10,7 @@ export function SupportRequestForm({ initialIssue = "" }: { initialIssue?: strin
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [issue, setIssue] = useState(initialIssue);
+  const [checkupType, setCheckupType] = useState("Personal technology");
   const [details, setDetails] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
@@ -18,10 +19,12 @@ export function SupportRequestForm({ initialIssue = "" }: { initialIssue?: strin
     event.preventDefault();
     setSubmitting(true);
     const subject = `Support request: ${issue || "Technology help"}`;
+    const requestDescription = issue === "Technology Checkup" ? `${details}\n\nCheckup type: ${checkupType}` : details;
     const body = [
       `Name: ${name}`,
       `Reply email: ${email}`,
       `Request type: ${issue || "Other"}`,
+      ...(issue === "Technology Checkup" ? [`Checkup type: ${checkupType}`] : []),
       "",
       "What is happening:",
       details,
@@ -33,7 +36,7 @@ export function SupportRequestForm({ initialIssue = "" }: { initialIssue?: strin
         customer_name: name,
         customer_email: email,
         request_subject: subject,
-        request_description: details,
+        request_description: requestDescription,
         request_service: service,
       });
 
@@ -71,9 +74,18 @@ export function SupportRequestForm({ initialIssue = "" }: { initialIssue?: strin
       <label className="mt-5 block text-sm font-semibold">What do you need help with?
         <select value={issue} onChange={(event) => setIssue(event.target.value)} className="mt-2 min-h-12 w-full border border-[#17211b]/20 bg-[#f8f9f5] px-4 outline-none focus:border-[#1f7a4d]">
           <option value="">Choose one</option>
-          {["Computer is slow", "Wi-Fi keeps dropping", "Printer or device problem", "New device setup", "Website", "Business IT", "Security & backups", "Something else"].map((option) => <option key={option}>{option}</option>)}
+          {["Hardware Quote", "Software Quote", "Technology Checkup", "Hardware Match & Setup", "Software Setup & Security", "Computer is slow", "Wi-Fi keeps dropping", "Printer or device problem", "New device setup", "Website", "Business IT", "Security & backups", "Something else"].map((option) => <option key={option}>{option}</option>)}
         </select>
       </label>
+      {issue === "Technology Checkup" ? (
+        <label className="mt-5 block text-sm font-semibold">What should we review?
+          <select value={checkupType} onChange={(event) => setCheckupType(event.target.value)} className="mt-2 min-h-12 w-full border border-[#17211b]/20 bg-[#f8f9f5] px-4 outline-none focus:border-[#1f7a4d]">
+            <option>Personal technology</option>
+            <option>Small-business technology</option>
+            <option>Both personal and business technology</option>
+          </select>
+        </label>
+      ) : null}
       <label className="mt-5 block text-sm font-semibold">Tell us what is happening
         <textarea required rows={6} value={details} onChange={(event) => setDetails(event.target.value)} placeholder="What were you trying to do? What happened instead? Include any error message you see." className="mt-2 w-full resize-y border border-[#17211b]/20 bg-[#f8f9f5] px-4 py-3 outline-none focus:border-[#1f7a4d]" />
       </label>

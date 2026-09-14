@@ -1,4 +1,5 @@
-import { Clock3, Laptop, MapPin, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Clock3, Laptop, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import { SupportRequestForm } from "@/components/support-request-form";
 
 export const metadata = {
@@ -33,6 +34,19 @@ export default async function SupportPage({ searchParams }: { searchParams?: Pro
         <div>
           <SupportRequestForm initialIssue={initialIssue} />
           <p className="mt-7 text-sm leading-6 text-[#607067]">For emergencies involving immediate danger, fire, suspected electrical damage, or active financial fraud, contact the appropriate emergency service, utility, bank, or device manufacturer first.</p>
+
+          <div className="mt-8 flex flex-col gap-4 border border-[#17211b]/15 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-[#1f7a4d]" />
+              <div>
+                <p className="font-semibold">Frequent tech problems? Protocol+ members pay $89/hour, not $99.</p>
+                <p className="mt-1 text-sm leading-6 text-[#607067]">Plans start at $19.99/month and include monthly remote support minutes plus priority scheduling.</p>
+              </div>
+            </div>
+            <Link href="/protocol-plus" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 border border-[#17211b] px-5 py-2.5 font-semibold transition hover:bg-[#17211b] hover:text-white">
+              See Protocol+ plans <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
     </main>

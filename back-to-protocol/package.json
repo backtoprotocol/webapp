@@ -18,6 +18,8 @@
     "@portabletext/react": "^7.0.1",
     "@sanity/image-url": "^2.1.1",
     "@supabase/supabase-js": "^2.112.3",
+    "browserslist": "^4.28.9",
+    "caniuse-lite": "^1.0.30001810",
     "firebase": "^11.10.0",
     "lucide-react": "^1.45.0",
     "next": "16.2.11",

@@ -1,105 +1,99 @@
+import Link from "next/link";
+import { ArrowRight, BadgeCheck, Clock3, Headphones } from "lucide-react";
 import { FadeInSection } from "@/components/fade-in-section";
 
 const companyValues = [
   {
-    title: "When work runs late",
-    copy: "When the day gets away from you, we guide you to one practical step that still moves your health forward.",
+    title: "When something breaks",
+    copy: "We guide you to a clear next step instead of a wall of troubleshooting forums and guesses.",
   },
   {
-    title: "When routine slips",
-    copy: "After missed workouts, poor sleep, or inconsistent meals, we make restarting feel possible without guilt or overwhelm.",
+    title: "When a project stalls",
+    copy: "If a website or system launch has stalled out, we pick it back up and get it shipped.",
   },
   {
-    title: "When stress is high",
-    copy: "When motivation is low and mental load is heavy, we keep guidance simple enough to use in the real moment.",
+    title: "When it feels too technical",
+    copy: "We translate technical decisions into plain language so you can make the call with confidence.",
   },
 ];
 
 const companyPillars = [
   {
-    title: "Editorial",
-    copy: "We publish practical health reporting that translates research and expert ideas into everyday language.",
+    title: "Websites",
+    copy: "We design, build, and maintain business websites that are fast, clear, and easy to update.",
   },
   {
-    title: "Product",
-    copy: "We build tools and experiences that let people apply the work instead of just reading about it.",
+    title: "Tech support",
+    copy: "We fix the everyday problems with computers, Wi-Fi, printers, accounts, and devices.",
   },
   {
-    title: "Community",
-    copy: "We design for people who want support, structure, and a shared language for getting healthier.",
+    title: "Business IT",
+    copy: "We manage the systems small businesses depend on: email, domains, networks, and security.",
   },
 ];
 
 const operatingPrinciples = [
-  "If someone is exhausted, give them one clear next step.",
-  "If routine breaks, make restarting feel simple.",
-  "If life is busy, keep actions short and repeatable.",
-  "If stress spikes, lead with calm and clarity.",
+  "If something is broken, give a clear next step, not more jargon.",
+  "If a request is urgent, respond fast and set expectations early.",
+  "If a fix is quick, keep the price and process simple.",
+  "If a project is bigger, scope it clearly before work begins.",
 ];
-
-const companyTags = ["Clear", "Calm", "Practical"];
 
 export default function AboutPage() {
   return (
-    <main className="bg-white text-slate-950">
-      <section className="border-b border-white/15 bg-gradient-to-br from-slate-950 via-cyan-950 to-emerald-950 text-white">
-        <div className="mx-auto min-h-[100svh] max-w-5xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <div className="flex flex-col gap-10 px-2 py-2 sm:px-4 sm:py-4 lg:px-6 lg:py-6 xl:px-8">
-            <FadeInSection className="space-y-6">
-              <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.45em] text-cyan-100/75">
-                <span className="h-2 w-2 rounded-full bg-cyan-200" />
-                About the company
-              </div>
-              <h1 className="max-w-[12ch] text-5xl font-semibold leading-[0.9] tracking-[-0.08em] text-white sm:text-6xl lg:text-7xl xl:text-[5.2rem]">
-                Back to Protocol brings people back to what works.
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-cyan-50/80 sm:text-xl">
-                Some days you are exhausted, behind on sleep, skipping meals, and trying to keep up with everything.
-                We build for those situations. We bring people back to habits that work in real life, especially
-                when schedules are full and routines feel hard to maintain.
-              </p>
-            </FadeInSection>
-
-            <FadeInSection delayMs={120} className="grid gap-4 sm:grid-cols-3">
-              {[
-                { value: "Everyday", label: "real-life situations we design for" },
-                { value: "3", label: "focus areas: editorial, product, community" },
-                { value: "1", label: "core theme: get back to what works" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-[1.5rem] border border-white/15 bg-white/10 p-6 text-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] backdrop-blur-md"
-                >
-                  <p className="text-4xl font-semibold tracking-[-0.06em] text-white">{item.value}</p>
-                  <p className="mt-2 text-sm leading-6 text-cyan-50/72">{item.label}</p>
-                </div>
-              ))}
-            </FadeInSection>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-black/10 bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-7xl">
-          <FadeInSection className="max-w-3xl space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-slate-500">What drives us</p>
-            <h2 className="text-3xl font-semibold tracking-[-0.05em] text-slate-950 sm:text-4xl">
-              What works should be easier to find and easier to follow.
-            </h2>
-            <p className="text-base leading-8 text-slate-600 sm:text-lg">
-              We are thinking about real situations: getting home late and still wanting to eat better, waking up tired
-              for the third day in a row, trying to recover after travel, or losing routine after a hard week. Our
-              goal is to make the path back feel clear, calm, and possible.
+    <main className="bg-[#f6f7f2] text-[#17211b]">
+      <section className="relative overflow-hidden border-b border-[#17211b]/10">
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,#f6f7f2_0%,#f6f7f2_56%,#dff3e7_56%,#dff3e7_100%)] max-lg:hidden" />
+        <div className="relative mx-auto max-w-[1480px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+          <FadeInSection className="max-w-3xl space-y-6">
+            <div className="inline-flex items-center gap-2 border border-[#17211b]/15 bg-white px-3 py-2 text-xs font-bold uppercase text-[#355244]">
+              About the company
+            </div>
+            <h1 className="max-w-3xl font-serif text-5xl leading-[0.98] sm:text-6xl lg:text-[72px]">
+              Your technology person, without the full-time IT department.
+            </h1>
+            <p className="max-w-2xl text-lg leading-8 text-[#4c5c52] sm:text-xl">
+              Back to Protocol started as a way to help people and small businesses stop wrestling with technology
+              alone. We build websites, fix everyday tech problems, and manage the systems that keep small
+              businesses running, one clear answer at a time.
             </p>
           </FadeInSection>
 
-          <div className="mt-10 grid gap-4 lg:grid-cols-3">
+          <FadeInSection delayMs={120} className="mt-12 grid gap-4 sm:grid-cols-3">
+            {[
+              { value: "Remote-first", label: "support for households and small teams" },
+              { value: "3", label: "core services: websites, tech support, business IT" },
+              { value: "1", label: "person accountable for the result" },
+            ].map((item) => (
+              <div key={item.label} className="border border-[#17211b]/15 bg-white p-6">
+                <p className="text-3xl font-semibold text-[#17211b]">{item.value}</p>
+                <p className="mt-2 text-sm leading-6 text-[#5a685f]">{item.label}</p>
+              </div>
+            ))}
+          </FadeInSection>
+        </div>
+      </section>
+
+      <section className="border-b border-[#17211b]/10 bg-white px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+        <div className="mx-auto max-w-[1480px]">
+          <FadeInSection className="max-w-2xl space-y-4">
+            <p className="text-xs font-bold uppercase text-[#1f7a4d]">What drives us</p>
+            <h2 className="font-serif text-4xl leading-tight sm:text-5xl">
+              Technology help should be clear, not another chore.
+            </h2>
+            <p className="text-lg leading-8 text-[#5a685f]">
+              Most people do not want to become their own IT department. We handle the setup, the fixes, and the
+              maintenance so technology stays out of the way and lets you get back to work.
+            </p>
+          </FadeInSection>
+
+          <div className="mt-12 grid gap-5 lg:grid-cols-3">
             {companyValues.map((value, index) => (
               <FadeInSection key={value.title} delayMs={index * 90}>
-                <article className="h-full rounded-[1.5rem] border border-slate-200 bg-slate-50 p-6 shadow-[0_18px_60px_-48px_rgba(15,23,42,0.4)]">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-slate-400">0{index + 1}</p>
-                  <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-slate-950">{value.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">{value.copy}</p>
+                <article className="h-full border border-[#17211b]/15 bg-[#f6f7f2] p-7">
+                  <p className="text-xs font-bold text-[#1f7a4d]">0{index + 1}</p>
+                  <h3 className="mt-4 text-2xl font-semibold leading-tight">{value.title}</h3>
+                  <p className="mt-4 leading-7 text-[#5a685f]">{value.copy}</p>
                 </article>
               </FadeInSection>
             ))}
@@ -107,33 +101,44 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="border-b border-white/15 bg-gradient-to-br from-slate-950 via-cyan-950 to-emerald-950 px-4 py-16 text-white sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+      <section className="border-b border-[#17211b]/10 bg-[#17211b] px-5 py-16 text-white sm:px-8 lg:px-12 lg:py-24">
+        <div className="mx-auto grid max-w-[1480px] gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <FadeInSection className="space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-100/75">How we work</p>
-            <h2 className="text-3xl font-semibold tracking-[-0.05em] text-white sm:text-4xl">
-              We bring people back to what works, step by step.
+            <p className="text-xs font-bold uppercase text-[#9dd9b7]">How we work</p>
+            <h2 className="font-serif text-4xl leading-tight sm:text-5xl">
+              Websites, support, and business IT in one place.
             </h2>
-            <p className="max-w-xl text-base leading-8 text-cyan-50/78 sm:text-lg">
-              We translate health information into guidance people can use on busy mornings, stressful afternoons, and
-              low-energy evenings. Our approach is simple: clarify the next action, reduce friction, and let people
-              restart quickly when life knocks them off routine.
+            <p className="max-w-xl text-lg leading-8 text-white/70">
+              Whether you need a new website built, a stubborn computer fixed, or an ongoing IT partner for your
+              business, we bring the same approach: figure out what is actually wrong, explain the options plainly,
+              and get it handled.
             </p>
+            <div className="flex flex-wrap gap-x-6 gap-y-3 pt-2 text-sm text-white/70">
+              <span className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-[#9dd9b7]" /> Clear pricing</span>
+              <span className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-[#9dd9b7]" /> Remote help first</span>
+              <span className="flex items-center gap-2"><Headphones className="h-4 w-4 text-[#9dd9b7]" /> One person who knows your setup</span>
+            </div>
           </FadeInSection>
 
-          <div className="grid gap-4">
+          <div className="grid gap-5 sm:grid-cols-3">
+            {companyPillars.map((pillar, index) => (
+              <FadeInSection key={pillar.title} delayMs={index * 100}>
+                <article className="h-full border border-white/15 bg-white/[0.06] p-6">
+                  <h3 className="text-xl font-semibold">{pillar.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-white/70">{pillar.copy}</p>
+                </article>
+              </FadeInSection>
+            ))}
+          </div>
+
+          <div className="lg:col-span-2 lg:grid lg:grid-cols-2 lg:gap-4">
             {operatingPrinciples.map((item, index) => (
-              <FadeInSection key={item} delayMs={index * 100}>
-                <article className="grid gap-4 rounded-[1.4rem] border border-white/15 bg-white/95 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.35)] sm:grid-cols-[5rem_1fr] sm:items-start sm:p-6">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">
+              <FadeInSection key={item} delayMs={index * 100} className="mt-4 lg:mt-0">
+                <article className="flex items-start gap-4 border border-white/15 bg-white/[0.04] p-5">
+                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center bg-[#9dd9b7] text-sm font-semibold text-[#17211b]">
                     0{index + 1}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">{item}</h3>
-                    <p className="mt-2 text-sm leading-7 text-slate-600">
-                      Each decision is designed to let people reset quickly and continue with confidence.
-                    </p>
-                  </div>
+                  </span>
+                  <p className="text-sm leading-7 text-white/80">{item}</p>
                 </article>
               </FadeInSection>
             ))}
@@ -141,35 +146,22 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-7xl">
-          <FadeInSection className="grid gap-8 rounded-[2rem] border border-white/15 bg-gradient-to-br from-slate-950 via-cyan-950 to-emerald-950 p-8 text-white shadow-[0_30px_90px_-45px_rgba(15,23,42,0.5)] lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:p-10">
-            <div className="space-y-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-white/70">The company in one line</p>
-              <h2 className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
-                Back to Protocol brings people back to what works.
-              </h2>
-              <p className="max-w-2xl text-base leading-8 text-white/80 sm:text-lg">
-                We exist for the moments when people feel off track: after travel, during stressful seasons, or when
-                healthy routines have slipped. Everything we create is designed to let people reset, recover, and move
-                forward with habits that hold up in real life.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                ["Mission", "Make healthy routines repeatable"],
-                ["Tone", "Calm, direct, and practical"],
-                ["Focus", "Clear guidance over clutter"],
-                ["Outcome", "Better habits that last"],
-              ].map(([title, subtitle]) => (
-                <div key={title} className="rounded-[1.1rem] border border-white/15 bg-white/10 px-4 py-4 backdrop-blur-sm">
-                  <p className="text-sm font-semibold text-white">{title}</p>
-                  <p className="mt-1 text-xs leading-5 text-white/75">{subtitle}</p>
-                </div>
-              ))}
-            </div>
-          </FadeInSection>
+      <section className="bg-[#f3a45b] text-[#17211b]">
+        <div className="mx-auto grid max-w-[1480px] items-center gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_auto] lg:px-12 lg:py-20">
+          <div>
+            <p className="text-xs font-bold uppercase">Ready when you are</p>
+            <h2 className="mt-3 max-w-4xl font-serif text-4xl leading-tight sm:text-5xl">
+              Tell us what is not working. We will figure out the rest.
+            </h2>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <Link href="/support" className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#17211b] px-6 font-semibold text-white">
+              Request help <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link href="/services#websites" className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#17211b]/40 bg-white/50 px-6 font-semibold">
+              Build a website
+            </Link>
+          </div>
         </div>
       </section>
     </main>
