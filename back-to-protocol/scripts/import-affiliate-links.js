@@ -101,6 +101,7 @@ async function run() {
 
     byAsin.set(asin, {
       asin,
+      affiliate_link: link,
       detail_page_url: resolvedLink,
       marketplace: extractMarketplace(resolvedLink),
     });
