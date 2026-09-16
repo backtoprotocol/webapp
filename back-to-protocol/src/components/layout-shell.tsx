@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { LogoMark } from "@/components/logo-mark";
 
@@ -49,10 +48,12 @@ const footerLinks = [
   {
     title: "SERVICES",
     links: [
+      { label: "Free technology checkup", href: "/technology-checkup/assessment" },
+      { label: "Hardware", href: "/hardware" },
+      { label: "Software", href: "/software" },
+      { label: "Business IT", href: "/services#business-it" },
       { label: "Websites", href: "/services#websites" },
       { label: "Tech support", href: "/support" },
-      { label: "Business IT", href: "/services#business-it" },
-      { label: "Recommended tech", href: "/search" },
     ],
   },
   {
@@ -60,7 +61,6 @@ const footerLinks = [
     links: [
       { label: "Protocol+ membership", href: "/protocol-plus" },
       { label: "About", href: "/about" },
-      { label: "Client login", href: "/sign-in" },
       { label: "Request help", href: "/support" },
     ],
   },
@@ -75,13 +75,6 @@ const socialLinks = [
 ];
 
 export function LayoutShell({ children }: Readonly<{ children: React.ReactNode }>) {
-  const pathname = usePathname();
-  const isStandalonePage = pathname.startsWith("/sign-in") || pathname.startsWith("/account");
-
-  if (isStandalonePage) {
-    return <>{children}</>;
-  }
-
   return (
     <>
       <SiteHeader />

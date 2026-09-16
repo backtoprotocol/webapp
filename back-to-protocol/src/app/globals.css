@@ -148,6 +148,29 @@ html {
   animation-delay: 460ms;
 }
 
+@keyframes assessment-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes assessment-sweep {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateX(-24px) rotate(-18deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(24px) rotate(-18deg);
+  }
+}
+
 @keyframes skeleton-shimmer {
   0% {
     background-position: -600px 0;
