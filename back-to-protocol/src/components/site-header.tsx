@@ -1,109 +1,146 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
-import { LogoMark } from "@/components/logo-mark";
+import { APP_STORE_URL } from "@/lib/site-links";
 
 const mainNavItems = [
-  { href: "/services", label: "Services" },
-  { href: "/hardware", label: "Hardware" },
-  { href: "/software", label: "Software" },
-  { href: "/protocol-plus", label: "Protocol+" },
+  { href: "/solutions", label: "Solutions" },
+  { href: "/products", label: "Products" },
+  { href: "/ai", label: "AI" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/resources", label: "Resources" },
   { href: "/about", label: "About" },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const evaluateScroll = () => {
-      ticking = false;
-      // wide hysteresis gap (well past the ~70px the header shrinks by) stops the collapse from re-triggering itself
-      setIsScrolled((current) => {
-        if (current) {
-          return window.scrollY > 20;
-        }
-        return window.scrollY > 96;
-      });
-    };
-
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(evaluateScroll);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const ease = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+  const homeAnchor = (href: string) =>
+    pathname === "/" && href.startsWith("/#") ? href.slice(1) : href;
+  const contactHref = "/support";
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full text-white transition-all duration-500 ${ease} [overflow-anchor:none] ${
-        isScrolled
-          ? "border-b border-white/15 bg-[#0b1220]/85 shadow-[0_12px_30px_rgba(2,6,23,0.45)] backdrop-blur-xl"
-          : "border-b border-white/10 bg-[#0b1220] shadow-[0_4px_16px_rgba(11,22,55,0.18)]"
-      }`}
-    >
-      <div
-        className={`mx-auto flex max-w-[1480px] items-center gap-4 px-4 transition-all duration-500 ${ease} sm:px-6 lg:px-8 ${
-          isScrolled ? "py-2" : "py-3"
-        }`}
-      >
-        <Link href="/" aria-label="Back to Protocol home" className="flex shrink-0 items-center gap-3">
-          <LogoMark
-            className={`origin-left transition-all duration-500 ${ease} ${isScrolled ? "h-7 w-7 sm:h-8 sm:w-8" : "h-9 w-9 sm:h-10 sm:w-10"}`}
-          />
-          <span className="hidden font-semibold text-white sm:inline">Back to Protocol</span>
-        </Link>
-
-        <nav className="hidden flex-1 items-center justify-center gap-7 lg:flex">
-          {mainNavItems.map((item) => (
-            <Link key={item.href} href={item.href} className={`text-sm font-medium transition hover:text-[#9dd9b7] ${pathname === item.href ? "text-[#9dd9b7]" : "text-white/80"}`}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 text-sm text-white lg:flex">
-          <Link href="/technology-checkup/assessment" className="inline-flex min-h-10 items-center gap-2 bg-[#9dd9b7] px-4 font-semibold text-[#17211b] transition hover:bg-[#b7e8ca]">
-            Free checkup <ArrowRight className="h-4 w-4" />
+    <header className="sticky top-0 z-50 border-b border-[#e5ebf3] bg-white/95 text-[#28364b] shadow-[0_4px_18px_-16px_rgba(27,58,87,0.5)] backdrop-blur-xl">
+      <div className="mx-auto flex min-h-[64px] max-w-[1240px] items-center justify-between gap-5 px-4 sm:px-8 lg:px-10">
+        <div className="flex min-w-0 items-center gap-8">
+          <Link
+            href="/"
+            aria-label="Treehouse by Back to Protocol home"
+            className="flex shrink-0 items-center gap-2.5"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white">
+              <Image
+                src="/treehouse-logo.png"
+                alt=""
+                width={36}
+                height={36}
+                loading="eager"
+                unoptimized
+                className="h-9 w-9 object-contain"
+              />
+            </span>
+            <span className="leading-tight">
+              <span className="block text-[15px] font-bold tracking-[-0.03em]">
+                Treehouse
+              </span>
+              <span className="mt-0.5 block text-[10px] font-medium text-[#8994a4]">
+                by Back to Protocol
+              </span>
+            </span>
           </Link>
-        </div>
 
-        <button
-          type="button"
-          aria-expanded={isMenuOpen}
-          aria-label="Toggle menu"
-          onClick={() => setIsMenuOpen((open) => !open)}
-          className="inline-flex rounded-lg border border-white/20 p-2 text-white lg:hidden"
-        >
-          {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </div>
-
-      {isMenuOpen ? (
-        <div className="border-t border-white/10 bg-[#0b1220] px-4 py-4 text-sm text-white lg:hidden">
-          <div className="space-y-1">
+          <nav
+            aria-label="Main navigation"
+            className="hidden items-center gap-6 lg:flex"
+          >
             {mainNavItems.map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setIsMenuOpen(false)} className="block border-b border-white/10 px-2 py-3 font-medium">
+              <Link
+                key={item.label}
+                href={homeAnchor(item.href)}
+                className="whitespace-nowrap text-[13px] font-medium text-[#5b687a] transition hover:text-[#1977cf]"
+              >
                 {item.label}
               </Link>
             ))}
-            <Link href="/technology-checkup/assessment" onClick={() => setIsMenuOpen(false)} className="mt-3 flex min-h-11 items-center justify-between bg-[#9dd9b7] px-4 font-semibold text-[#17211b]">
-              Free technology checkup <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          </nav>
         </div>
+
+        <div className="flex items-center gap-3">
+          <a
+            href={contactHref}
+            className="hidden min-h-10 items-center justify-center rounded-full border border-[#d6e0ed] bg-white px-5 text-xs font-semibold text-[#1769c2] transition hover:border-[#94b6df] hover:bg-[#f8fbff] sm:inline-flex"
+          >
+            Contact us
+          </a>
+          <a
+            href={APP_STORE_URL}
+            className="hidden min-h-10 items-center justify-center rounded-full bg-[#1a73e8] px-5 text-xs font-semibold text-white transition hover:bg-[#1765cc] sm:inline-flex"
+          >
+            Get started
+          </a>
+          <button
+            type="button"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setIsMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e1e8f1] text-[#41516a] transition hover:bg-[#f1f6fc] lg:hidden"
+          >
+            {isMenuOpen ? (
+              <X aria-hidden="true" className="h-5 w-5" />
+            ) : (
+              <Menu aria-hidden="true" className="h-5 w-5" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-r from-[#49bce8] to-[#0870ed] px-4 py-2 text-center text-xs text-white sm:px-6">
+        <span>Your essentials, together.</span>{" "}
+        <a
+          href={APP_STORE_URL}
+          className="ml-1 inline-flex items-center gap-1 font-semibold underline decoration-white/60 underline-offset-2 transition hover:decoration-white"
+        >
+          Explore Treehouse
+          <ArrowRight aria-hidden="true" className="h-3 w-3" />
+        </a>
+      </div>
+
+      {isMenuOpen ? (
+        <nav
+          id="mobile-navigation"
+          aria-label="Mobile navigation"
+          className="border-t border-[#edf1f7] bg-white px-4 pb-5 pt-2 shadow-lg lg:hidden"
+        >
+          {mainNavItems.map((item) => (
+            <Link
+              key={item.label}
+              href={homeAnchor(item.href)}
+              onClick={() => setIsMenuOpen(false)}
+              className="block border-b border-[#edf1f7] px-2 py-3.5 text-sm font-medium text-[#526178] transition hover:text-[#1977cf]"
+            >
+              {item.label}
+            </Link>
+          ))}
+          <a
+            href={contactHref}
+            onClick={() => setIsMenuOpen(false)}
+            className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[#d6e0ed] bg-white px-5 text-sm font-semibold text-[#1769c2] transition hover:bg-[#f8fbff]"
+          >
+            Contact us
+          </a>
+          <a
+            href={APP_STORE_URL}
+            onClick={() => setIsMenuOpen(false)}
+            className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[#1a73e8] px-5 text-sm font-semibold text-white transition hover:bg-[#1765cc]"
+          >
+            Get started
+          </a>
+        </nav>
       ) : null}
     </header>
   );

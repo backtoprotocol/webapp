@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Treehouse Dev Server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"back-to-protocol",
+				"run",
+				"dev",
+				"--",
+				"--port",
+				"3030"
+			],
+			"isBackground": true
+		}
+	]
+}
