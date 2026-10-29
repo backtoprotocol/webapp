@@ -70,7 +70,7 @@ export default function ServicesPage() {
         <div className="pointer-events-none absolute -right-24 -top-32 h-96 w-96 rounded-full bg-[#d7ebff] blur-3xl" />
         <div className="relative mx-auto max-w-[1240px] px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
           <p className="text-sm font-semibold text-[#1769c2]">
-            Everyday organization, made simpler
+            Everyday details, organized
           </p>
           <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
             A place for life’s important details.
@@ -78,7 +78,7 @@ export default function ServicesPage() {
           <p className="mt-7 max-w-2xl text-lg leading-8 text-[#5b687a] sm:text-xl">
             Important details tend to end up everywhere. Treehouse brings
             documents, cards, insurance information, notes, and dates into one
-            thoughtful collection that’s easier to organize and return to.
+            organized collection that’s easier to search and revisit.
           </p>
           <a
             href={APP_STORE_URL}
@@ -92,7 +92,7 @@ export default function ServicesPage() {
       <section className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
         <div className="max-w-2xl">
           <p className="text-sm font-semibold text-[#1769c2]">
-            Less searching. More peace of mind.
+            Find saved details when you need them.
           </p>
           <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.035em] sm:text-4xl">
             A home for the details you reach for.

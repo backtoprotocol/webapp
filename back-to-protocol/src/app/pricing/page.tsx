@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 import { APP_STORE_URL } from "@/lib/site-links";
 
 export const metadata: Metadata = {
-  title: "Treehouse Pricing | Free to download and use",
+  title: { absolute: "Free Forever | Treehouse" },
   description:
     "Treehouse is free to download and use, with no paid tiers, subscriptions, or in-app purchases.",
   alternates: { canonical: "/pricing" },

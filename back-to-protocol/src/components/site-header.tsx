@@ -6,6 +6,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { APP_STORE_URL } from "@/lib/site-links";
+import { HomeBrandLink } from "@/components/home-brand-link";
 
 const mainNavItems = [
   { href: "/solutions", label: "Solutions" },
@@ -25,10 +26,9 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e5ebf3] bg-white/95 text-[#28364b] shadow-[0_4px_18px_-16px_rgba(27,58,87,0.5)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-[64px] max-w-[1240px] items-center justify-between gap-5 px-4 sm:px-8 lg:px-10">
+      <div className="relative mx-auto flex min-h-[64px] max-w-[1240px] items-center justify-between gap-5 px-4 sm:px-8 lg:px-10">
         <div className="flex min-w-0 items-center gap-8">
-          <Link
-            href="/"
+          <HomeBrandLink
             aria-label="Treehouse by Back to Protocol home"
             className="flex shrink-0 items-center gap-2.5"
           >
@@ -51,11 +51,11 @@ export function SiteHeader() {
                 by Back to Protocol
               </span>
             </span>
-          </Link>
+          </HomeBrandLink>
 
           <nav
             aria-label="Main navigation"
-            className="hidden items-center gap-6 lg:flex"
+            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-6 lg:flex"
           >
             {mainNavItems.map((item) => (
               <Link

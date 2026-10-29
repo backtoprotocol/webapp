@@ -20,4 +20,5 @@ npm run start
 ```
 
 Cloudflare preview and deployment use `npm run preview` and `npm run deploy`.
-The Sanity Studio is maintained separately in the repository's `studio` folder.
+The support form opens a prefilled message in the visitor’s email app; it does
+not submit or store requests on the website.

@@ -89,6 +89,18 @@ export default function CookiesPage() {
                 provided, it will describe the choices available for that
                 service.
               </p>
+              <p>
+                On this website, Cloudflare Web Analytics measures page visits
+                and performance. Its browser beacon is not loaded unless you
+                choose “Allow optional analytics” in our privacy choices.
+                Choosing “Use essential only” keeps the analytics beacon off.
+                If you opt in, the beacon sends page-view and performance
+                measurements to Cloudflare. See{" "}
+                <a href="https://www.cloudflare.com/privacypolicy/">
+                  Cloudflare’s Privacy Policy
+                </a>{" "}
+                for information about its handling of data.
+              </p>
             </>
           ),
         },
@@ -128,10 +140,16 @@ export default function CookiesPage() {
           content: (
             <>
               <p>
-                Where required, we will request consent before using
-                non-essential cookies or similar technologies. If a site
-                provides a consent or preference tool, you can use it to review
-                or change the choices available there.
+                You can choose “Use essential only” or “Allow optional
+                analytics” when the privacy choices notice appears. The
+                choice is stored in a first-party cookie in this browser for
+                up to 180 days. You can reopen Privacy choices at any time
+                using the link in the footer. If you withdraw an analytics
+                choice, the page reloads to stop further beacon activity.
+                Analytics remain off when your browser sends a Global Privacy
+                Control signal. Essential hosting and security processing is
+                separate and may still occur regardless of your analytics
+                choice.
               </p>
               <p>
                 Most browsers let you review, block, or delete cookies through

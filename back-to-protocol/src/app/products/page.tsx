@@ -72,11 +72,11 @@ export default function ProductsPage() {
             Meet the Treehouse app
           </p>
           <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
-            A simpler way to keep life organized.
+            Keep the details you rely on together.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5b687a]">
             Treehouse brings documents, cards, insurance details, notes, and
-            important dates into one thoughtful place—so the things you rely on
+            important dates into one organized collection—so the things you rely on
             are easier to organize and find again.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

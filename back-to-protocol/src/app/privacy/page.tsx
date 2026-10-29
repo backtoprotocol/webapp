@@ -73,10 +73,10 @@ export default function PrivacyPage() {
                   information you include in messages, forms, or other
                   communications, including your name, reply email, selected
                   topic, and message content. Our Treehouse support form asks
-                  for these details so we can respond to your request. A
-                  request may be processed through the form service configured
-                  for the site or through your email application, depending on
-                  availability.
+                  for these details and prepares an email in your email
+                  application. The website does not submit or store the form
+                  fields. If you choose to send the email, your email provider
+                  and ours may process and retain it under their own practices.
                 </li>
                 <li>
                   <strong>Device, usage, and diagnostic information:</strong>{" "}
@@ -85,7 +85,10 @@ export default function PrivacyPage() {
                   device and browser characteristics, operating system,
                   timestamps, service events, and error or diagnostic data.
                   The information available depends on the product and its
-                  configuration.
+                  configuration. If you opt in to Cloudflare Web Analytics on
+                  this website, its beacon sends page-view and performance
+                  measurements to Cloudflare. Your choice does not disable
+                  technical processing needed to deliver and secure the site.
                 </li>
                 <li>
                   <strong>Information from platforms you choose:</strong>{" "}
@@ -406,14 +409,33 @@ export default function PrivacyPage() {
           id: "cookies",
           title: "Cookies and similar technologies",
           content: (
-            <p>
-              Our websites and products may use cookies or similar technologies
-              for functions such as operating pages, remembering settings,
-              security, or understanding service performance, depending on
-              configuration. You can manage browser cookies through your
-              browser settings; disabling them may affect some functions. See
-              our <a href="/cookies">Cookie Policy</a> for more information.
-            </p>
+            <>
+              <p>
+                On this website, optional Cloudflare Web Analytics measures
+                page visits and performance only after you select “Allow
+                optional analytics.” The analytics beacon is not loaded if
+                you choose “Use essential only.” Your selection is kept in a
+                first-party browser cookie for up to 180 days and can be
+                changed at any time using the Privacy choices link in the
+                website footer. We honor a browser’s Global Privacy Control
+                signal by keeping optional analytics off.
+              </p>
+              <p>
+                If you opt in, page-view and performance measurements are
+                sent to Cloudflare. Review{" "}
+                <a href="https://www.cloudflare.com/privacypolicy/">
+                  Cloudflare’s Privacy Policy
+                </a>{" "}
+                for information about its handling of data. Your analytics
+                choice does not prevent necessary hosting, security, and
+                network processing when you visit the site.
+              </p>
+              <p>
+                Necessary technical data may still be processed to deliver,
+                secure, and operate the website. See our{" "}
+                <a href="/cookies">Cookie Policy</a> for more information.
+              </p>
+            </>
           ),
         },
         {

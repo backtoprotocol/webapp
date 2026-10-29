@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SiteHeader } from "@/components/site-header";
+import { HomeBrandLink } from "@/components/home-brand-link";
+import {
+  PrivacyChoices,
+  PrivacyChoicesLink,
+} from "@/components/privacy-choices";
 
 const footerLinks = [
   {
@@ -34,11 +39,12 @@ export function LayoutShell({
     <>
       <SiteHeader />
       {children}
+      <PrivacyChoices />
       <footer className="border-t border-[#e5eaf1] bg-white">
         <div className="mx-auto max-w-[1240px] px-5 py-12 sm:px-8 sm:py-14 lg:px-10">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.7fr_0.9fr] lg:gap-16">
             <div>
-              <Link href="/" className="inline-flex items-center gap-3">
+              <HomeBrandLink className="inline-flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white">
                   <Image
                     src="/treehouse-logo.png"
@@ -58,7 +64,7 @@ export function LayoutShell({
                     by Back to Protocol
                   </span>
                 </span>
-              </Link>
+              </HomeBrandLink>
               <p className="mt-5 max-w-sm text-sm font-semibold leading-6 text-[#526178]">
                 Your essentials, together.
               </p>
@@ -103,6 +109,9 @@ export function LayoutShell({
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <PrivacyChoicesLink />
+                </li>
               </ul>
             </nav>
           </div>

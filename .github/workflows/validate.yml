@@ -1,0 +1,45 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: back-to-protocol/package-lock.json
+
+      - name: Install dependencies
+        working-directory: back-to-protocol
+        run: npm ci
+
+      - name: Check dependency security
+        working-directory: back-to-protocol
+        run: npm audit
+
+      - name: Lint
+        working-directory: back-to-protocol
+        run: npm run lint
+
+      - name: Type-check
+        working-directory: back-to-protocol
+        run: npm run typecheck
+
+      - name: Build
+        working-directory: back-to-protocol
+        run: npm run build

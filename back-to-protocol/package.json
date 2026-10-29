@@ -4,26 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "lint": "eslint src",
     "build": "next build",
     "start": "next start",
+    "typecheck": "tsc --noEmit",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "products:export": "node scripts/export-products-to-excel.js",
-    "products:import": "node scripts/import-products-from-excel.js",
-    "products:import-links": "node scripts/import-affiliate-links.js",
-    "products:enrich-links": "node scripts/enrich-products-from-links.js"
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
-    "@opennextjs/cloudflare": "^1.20.2",
-    "@portabletext/react": "^7.0.1",
-    "@sanity/image-url": "^2.1.1",
-    "@supabase/supabase-js": "^2.112.3",
+    "@opennextjs/cloudflare": "^1.20.14",
     "browserslist": "^4.28.9",
     "caniuse-lite": "^1.0.30001810",
-    "firebase": "^11.10.0",
     "lucide-react": "^1.45.0",
-    "next": "16.2.11",
-    "next-sanity": "^13.2.1",
+    "next": "16.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
@@ -32,12 +25,15 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "esbuild": "0.28.2",
     "eslint": "^9",
-    "eslint-config-next": "16.2.11",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^4.131.1",
-    "xlsx": "^0.18.5"
+    "wrangler": "^4.131.1"
+  },
+  "overrides": {
+    "@node-minify/core": {
+      "glob": "10.5.0"
+    }
   }
 }

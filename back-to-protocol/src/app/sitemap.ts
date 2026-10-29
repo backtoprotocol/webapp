@@ -16,11 +16,8 @@ const publicRoutes = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-
   return publicRoutes.map((route) => ({
     url: `https://backtoprotocol.com${route}`,
-    lastModified,
     changeFrequency: route === "" ? "weekly" : "monthly",
     priority:
       route === ""

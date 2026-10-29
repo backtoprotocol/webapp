@@ -12,15 +12,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://backtoprotocol.com"),
   title: {
     default: "Treehouse | Your essentials, together.",
-    template: "%s | Treehouse by Back to Protocol",
+    template: "%s | Back to Protocol",
   },
   description:
-    "Your essentials, together. Treehouse brings important documents, cards, accounts, and everyday details into one thoughtful place.",
+    "Your essentials, together. Treehouse brings important documents, cards, accounts, and everyday details into one organized collection.",
   openGraph: {
     siteName: "Treehouse by Back to Protocol",
     title: "Treehouse | Your essentials, together.",
     description:
-      "Your essentials, together. Bring documents, insurance, cards, notes, and important dates together in Treehouse.",
+      "Your essentials, together. Organize documents, insurance, cards, notes, and important dates in Treehouse.",
     type: "website",
   },
   robots: {

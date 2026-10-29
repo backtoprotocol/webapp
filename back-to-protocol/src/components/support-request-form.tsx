@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Mail } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { ArrowRight, Mail } from "lucide-react";
 
 const SUPPORT_EMAIL =
   process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@backtoprotocol.com";
@@ -12,13 +11,10 @@ export function SupportRequestForm() {
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState("");
   const [details, setDetails] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [ticketNumber, setTicketNumber] = useState("");
   const [emailFallback, setEmailFallback] = useState(false);
 
-  const openRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+  const openRequest = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitting(true);
 
     const subject = `Treehouse support: ${topic}`;
     const description = [
@@ -33,51 +29,9 @@ export function SupportRequestForm() {
       ...description.split("\n"),
     ].join("\n");
 
-    if (supabase) {
-      try {
-        const { data, error } = await supabase.rpc("submit_support_request", {
-          customer_name: name,
-          customer_email: email,
-          request_subject: subject,
-          request_description: description,
-          request_service: "Treehouse",
-        });
-
-        if (error) {
-          console.error("Unable to submit Treehouse support request.", error);
-        } else if (typeof data === "string") {
-          setTicketNumber(data);
-          setSubmitting(false);
-          return;
-        }
-      } catch (error) {
-        console.error("Unable to submit Treehouse support request.", error);
-      }
-    }
-
-    setSubmitting(false);
     setEmailFallback(true);
     window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
   };
-
-  if (ticketNumber) {
-    return (
-      <div
-        role="status"
-        className="rounded-2xl border border-[#d7e8f8] bg-[#f7fbff] p-7 sm:p-8"
-      >
-        <CheckCircle2 aria-hidden="true" className="h-9 w-9 text-[#1977cf]" />
-        <h2 className="mt-4 text-2xl font-semibold tracking-[-0.03em]">
-          Message received.
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-[#69778b]">
-          Your request number is{" "}
-          <strong className="text-[#28364b]">{ticketNumber}</strong>. We’ll
-          follow up at {email}.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <form
@@ -88,7 +42,7 @@ export function SupportRequestForm() {
         Send us a message
       </h2>
       <p className="mt-2 text-sm leading-6 text-[#69778b]">
-        We’ll use your email to reply to your Treehouse question.
+        Your email app will open with a message you can review and send.
       </p>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -97,6 +51,7 @@ export function SupportRequestForm() {
           <input
             required
             autoComplete="name"
+            maxLength={120}
             value={name}
             onChange={(event) => setName(event.target.value)}
             className="mt-2 min-h-12 w-full rounded-lg border border-[#d7e0eb] bg-white px-4 font-normal outline-none transition focus:border-[#3d8fe8] focus:ring-3 focus:ring-[#d9ecff]"
@@ -108,6 +63,7 @@ export function SupportRequestForm() {
             required
             type="email"
             autoComplete="email"
+            maxLength={254}
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="mt-2 min-h-12 w-full rounded-lg border border-[#d7e0eb] bg-white px-4 font-normal outline-none transition focus:border-[#3d8fe8] focus:ring-3 focus:ring-[#d9ecff]"
@@ -137,6 +93,7 @@ export function SupportRequestForm() {
         How can we help?
         <textarea
           required
+          maxLength={2000}
           rows={6}
           value={details}
           onChange={(event) => setDetails(event.target.value)}
@@ -147,10 +104,9 @@ export function SupportRequestForm() {
 
       <button
         type="submit"
-        disabled={submitting}
-        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1a73e8] px-5 font-semibold text-white transition hover:bg-[#1765cc] disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1a73e8] px-5 font-semibold text-white transition hover:bg-[#1765cc] sm:w-auto"
       >
-        {submitting ? "Sending..." : "Send message"}
+        Open email to send
         <ArrowRight aria-hidden="true" className="h-4 w-4" />
       </button>
 

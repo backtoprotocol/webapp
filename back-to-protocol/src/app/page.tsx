@@ -22,7 +22,7 @@ const faqs = [
   {
     question: "What is Treehouse?",
     answer:
-      "Treehouse is an app from Back to Protocol that brings important documents, cards, accounts, insurance information, and notes together in one thoughtfully organized place.",
+      "Treehouse is an app from Back to Protocol that brings important documents, cards, accounts, insurance information, and notes together in one organized collection.",
   },
   {
     question: "How does Treehouse protect my information?",
@@ -132,7 +132,7 @@ function ProductPreview() {
           </span>
           <div>
             <p className="text-xs font-semibold text-[#3d5683]">
-              A little more peace of mind
+              Important dates, all together
             </p>
             <p className="mt-0.5 text-[11px] text-[#7787a2]">
               Keep track of important dates
@@ -165,7 +165,7 @@ function ProductPreview() {
 export const metadata = {
   title: "Treehouse | Your essentials, together.",
   description:
-    "Your essentials, together. Treehouse brings important documents, cards, accounts, and everyday details into one thoughtful place.",
+    "Your essentials, together. Treehouse brings important documents, cards, accounts, and everyday details into one organized collection.",
 };
 
 export default function Home() {
@@ -185,7 +185,7 @@ export default function Home() {
             </h1>
             <p className="mx-auto mt-6 max-w-[450px] text-base leading-7 text-[#687487] sm:text-lg sm:leading-8 lg:mx-0">
               Treehouse is made by Back to Protocol to bring documents,
-              insurance, cards, and notes together in one thoughtful place.
+              insurance, cards, and notes together in one organized app.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
               <a
@@ -213,35 +213,35 @@ export default function Home() {
 
       <nav
         aria-label="On this page"
-        className="relative z-10 mx-auto -mt-5 flex w-full max-w-[calc(100%-2rem)] snap-x snap-mandatory flex-nowrap items-center justify-start gap-0.5 overflow-x-auto rounded-full border border-[#e5eaf1] bg-white/95 p-1.5 px-2.5 shadow-[0_12px_34px_-22px_rgba(32,54,78,0.45)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-fit sm:flex-wrap sm:justify-center sm:gap-2 sm:overflow-visible sm:snap-none sm:px-3"
+        className="relative z-10 mx-auto -mt-5 flex w-fit max-w-[calc(100%-2rem)] flex-wrap items-center justify-center gap-1 rounded-full border border-[#e5eaf1] bg-white/95 p-1.5 shadow-[0_12px_34px_-22px_rgba(32,54,78,0.45)] sm:gap-2 sm:px-3"
       >
         <Link
           href="/solutions"
-          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Solutions
         </Link>
         <Link
           href="/products"
-          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Products
         </Link>
         <Link
           href="#ai"
-          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           AI
         </Link>
         <Link
           href="#pricing"
-          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Pricing
         </Link>
         <Link
           href="/resources"
-          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Resources
         </Link>
