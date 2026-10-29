@@ -70,7 +70,7 @@ export default function PricingPage() {
               <Sparkles aria-hidden="true" className="h-4 w-4 text-[#1977cf]" />
               Straightforward pricing
             </p>
-            <h1 className="mt-6 max-w-2xl text-5xl font-semibold leading-[1.04] tracking-[-0.06em] text-[#202b3b] sm:text-6xl lg:text-7xl">
+            <h1 className="mt-6 max-w-2xl text-4xl font-semibold leading-[1.04] tracking-[-0.06em] text-[#202b3b] sm:text-6xl lg:text-7xl">
               A little more organized.
               <span className="mt-2 block text-[#1977cf]">A lot less expensive.</span>
             </h1>
@@ -114,9 +114,7 @@ export default function PricingPage() {
                 $0
               </span>
               <span className="pb-1 text-sm font-medium text-[#748094]">
-                forever? No.
-                <br />
-                Today? Absolutely.
+                forever
               </span>
             </p>
             <p className="mt-4 text-sm leading-6 text-[#69778b]">
@@ -258,7 +256,7 @@ export default function PricingPage() {
             No calculator needed
           </p>
           <h2 className="max-w-2xl text-3xl font-semibold tracking-[-0.045em] text-[#243247] sm:text-4xl">
-            Your essentials, together. Your bill, nowhere.
+            Free forever. Your bill, nowhere.
           </h2>
           <p className="max-w-xl text-base leading-7 text-[#748094]">
             Treehouse is free to download and use. Take a look at what it can

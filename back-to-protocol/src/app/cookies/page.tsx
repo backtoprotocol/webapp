@@ -1,64 +1,181 @@
 import { LegalPageShell } from "@/components/legal-page-shell";
 
 export const metadata = {
-  title: "Cookie Policy | Treehouse by Back to Protocol",
+  title: { absolute: "Cookie Policy | Back to Protocol" },
   description:
-    "How cookies and similar technologies may be used on the Treehouse website.",
+    "Learn how Back to Protocol uses cookies and similar technologies across our websites and web-based products.",
 };
 
 export default function CookiesPage() {
   return (
     <LegalPageShell
-      eyebrow="Treehouse · Privacy"
+      eyebrow="Back to Protocol · Privacy"
       title="Cookie policy"
-      description="This policy explains how cookies and similar browser technologies may be used when you visit the Treehouse website."
-      lastUpdated="October 28, 2026"
+      description="This policy explains how Back to Protocol may use cookies and similar technologies on our websites and web-based products, and how you can manage them."
+      lastUpdated="October 29, 2026"
       sections={[
         {
-          id: "what-cookies-are",
-          title: "What cookies are",
+          id: "scope",
+          title: "Scope and relationship to our Privacy Policy",
           content: (
             <p>
-              Cookies are small files stored by your browser. Similar
-              technologies can store or read limited information on your device
-              to support website functions and security.
+              This Cookie Policy applies to Back to Protocol websites and
+              web-based products that link to it. It supplements our{" "}
+              <a href="/privacy">Privacy Policy</a>, which describes more
+              generally how we handle personal information across our company,
+              apps, and software. A mobile or desktop app may use technologies
+              that are controlled by its operating system or providers and may
+              have additional product-specific disclosures.
             </p>
           ),
         },
         {
-          id: "how-we-use-them",
-          title: "How the website may use them",
+          id: "what-they-are",
+          title: "What cookies and similar technologies are",
+          content: (
+            <>
+              <p>
+                Cookies are small files that a website may place in your
+                browser. Similar technologies include local storage, pixels,
+                tags, SDKs, and other methods that store or access information
+                on a device or help recognize a browser or device on later
+                requests.
+              </p>
+              <p>
+                A cookie may be set for a single visit (“session” cookies) or
+                remain until it expires or you delete it (“persistent”
+                cookies). First-party cookies are set by the site you visit;
+                third-party technologies are provided by another organization.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "purposes",
+          title: "Why these technologies may be used",
+          content: (
+            <>
+              <p>
+                Depending on the website, product, and configuration, we or
+                service providers may use these technologies for purposes such
+                as:
+              </p>
+              <ul className="list-disc space-y-2 pl-6">
+                <li>
+                  <strong>Essential operation and security:</strong> to deliver
+                  pages or requested functions, route requests, help prevent
+                  abuse, and protect the service.
+                </li>
+                <li>
+                  <strong>Preferences:</strong> to remember choices or settings
+                  you make, where the website provides those features.
+                </li>
+                <li>
+                  <strong>Performance and diagnostics:</strong> to understand
+                  reliability, diagnose errors, and measure how a service is
+                  functioning, where such tools are enabled.
+                </li>
+                <li>
+                  <strong>Optional measurement or promotion:</strong> if a
+                  product uses optional analytics or advertising technologies,
+                  they may help measure visits or campaigns, subject to
+                  applicable law and any required consent or choice.
+                </li>
+              </ul>
+              <p>
+                The specific technologies and purposes can vary. We do not
+                claim that every category is used on every Back to Protocol
+                website or product. Where a consent banner or settings tool is
+                provided, it will describe the choices available for that
+                service.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "information",
+          title: "Information that may be collected",
           content: (
             <p>
-              The Treehouse website may use cookies or similar technologies
-              where needed to deliver pages, maintain security, remember
-              settings, or understand basic website performance. The specific
-              technologies in use can change as the website is maintained.
+              Information handled through cookies or similar technologies may
+              include a cookie or device identifier, browser or device type,
+              settings, pages or features requested, timestamps, and technical
+              or diagnostic data. Depending on the technology and context,
+              some of this information may be considered personal information
+              under applicable law. See the{" "}
+              <a href="/privacy">Privacy Policy</a> for information about how
+              personal information is handled.
             </p>
           ),
         },
         {
-          id: "your-choices",
-          title: "Your choices",
+          id: "third-parties",
+          title: "Third-party technologies",
           content: (
             <p>
-              Most browsers let you review, block, or delete cookies through
-              their settings. If you block a cookie that a website function
-              depends on, that function may not work as expected. Browser
-              controls do not necessarily remove information already held by a
-              website or service provider.
+              Some website functions may be provided by third parties, such as
+              hosting, security, embedded content, or other services. If those
+              providers use cookies or similar technologies, their collection
+              and use of information is subject to their own privacy notices
+              and settings. We do not control technologies on third-party
+              websites or services.
             </p>
           ),
         },
         {
-          id: "updates-contact",
-          title: "Updates and contact",
+          id: "choices",
+          title: "Your choices and browser controls",
+          content: (
+            <>
+              <p>
+                Where required, we will request consent before using
+                non-essential cookies or similar technologies. If a site
+                provides a consent or preference tool, you can use it to review
+                or change the choices available there.
+              </p>
+              <p>
+                Most browsers let you review, block, or delete cookies through
+                browser settings. You can also configure some devices to limit
+                tracking. Blocking or deleting cookies may affect sign-in,
+                preferences, security, or other site functions. Browser
+                controls do not necessarily remove information already held by
+                a service provider.
+              </p>
+              <p>
+                Some browsers send “Do Not Track” signals. There is no
+                consistent industry standard for responding to all such
+                signals; where applicable law requires recognition of a
+                browser-based opt-out signal, we will honor it for the
+                processing covered by that law.
+              </p>
+            </>
+          ),
+        },
+        {
+          id: "retention",
+          title: "Retention",
           content: (
             <p>
-              We may update this policy when website technologies or practices
-              change. The date above indicates the latest revision. Questions
-              about cookies or privacy can be sent to{" "}
-              <a href="mailto:support@backtoprotocol.com?subject=Treehouse%20cookie%20question">
+              Cookie lifetimes vary by purpose and provider. Session cookies
+              generally expire when you close your browser; persistent cookies
+              remain until their stated expiration or until you delete them.
+              The browser or device controls described above can help you
+              remove stored cookies. Other records held by a service provider
+              may be subject to that provider’s retention practices and our
+              applicable agreements.
+            </p>
+          ),
+        },
+        {
+          id: "changes-contact",
+          title: "Changes and contact",
+          content: (
+            <p>
+              We may update this policy as our websites, products, or
+              technology practices change. We will post updates here and
+              revise the date above. Questions about this policy can be sent
+              to{" "}
+              <a href="mailto:support@backtoprotocol.com?subject=Back%20to%20Protocol%20cookie%20question">
                 support@backtoprotocol.com
               </a>
               .

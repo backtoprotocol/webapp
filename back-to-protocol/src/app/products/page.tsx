@@ -71,7 +71,7 @@ export default function ProductsPage() {
           <p className="text-sm font-semibold text-[#1769c2]">
             Meet the Treehouse app
           </p>
-          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
             A simpler way to keep life organized.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5b687a]">

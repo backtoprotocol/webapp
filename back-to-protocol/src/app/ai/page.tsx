@@ -29,7 +29,7 @@ export default function AiPage() {
           <p className="text-sm font-semibold text-[#1769c2]">
             On-device text recognition
           </p>
-          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
             A little help organizing what matters.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5b687a]">

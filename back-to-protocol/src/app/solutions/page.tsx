@@ -72,7 +72,7 @@ export default function ServicesPage() {
           <p className="text-sm font-semibold text-[#1769c2]">
             Everyday organization, made simpler
           </p>
-          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
             A place for life’s important details.
           </h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-[#5b687a] sm:text-xl">
@@ -127,7 +127,7 @@ export default function ServicesPage() {
         <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 py-14 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-16">
           <div className="max-w-2xl">
             <p className="text-sm font-semibold text-[#1769c2]">
-              A calmer way to stay organized
+              Keep the details that matter together
             </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-[-0.035em]">
               Start with the details that matter to you.

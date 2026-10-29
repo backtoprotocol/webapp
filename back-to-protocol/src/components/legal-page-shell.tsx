@@ -63,12 +63,12 @@ export function LegalPageShell({ eyebrow, title, description, lastUpdated, secti
       <section className="bg-[#102b50] text-white">
         <div className="mx-auto grid max-w-[1120px] items-center gap-8 px-5 py-12 sm:px-8 lg:grid-cols-[1fr_auto] lg:px-10 lg:py-14">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#8fc9ff]">Questions about Treehouse?</p>
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#8fc9ff]">Questions about this policy?</p>
             <h2 className="mt-3 max-w-2xl text-2xl font-semibold leading-tight tracking-[-0.035em] sm:text-3xl">
               Contact our team about this policy.
             </h2>
           </div>
-          <Link href="mailto:support@backtoprotocol.com?subject=Treehouse%20policy%20question" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#1a73e8] px-6 text-sm font-semibold text-white transition hover:bg-[#3186ee] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+          <Link href="mailto:support@backtoprotocol.com?subject=Back%20to%20Protocol%20policy%20question" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#1a73e8] px-6 text-sm font-semibold text-white transition hover:bg-[#3186ee] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
             Contact us <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

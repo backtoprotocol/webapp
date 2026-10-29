@@ -45,7 +45,7 @@ function ProductPreview() {
   return (
     <div
       aria-label="Illustration of the Treehouse app"
-      className="relative mx-auto w-full max-w-[500px] px-3 pb-10 pt-5 sm:px-7 lg:h-[350px]"
+      className="relative mx-auto w-full max-w-[500px] px-3 pb-10 pt-5 sm:px-7 sm:pb-10 lg:h-[350px]"
     >
       <div className="absolute inset-x-10 top-8 bottom-12 rounded-[3rem] bg-[radial-gradient(ellipse_at_center,_rgba(112,178,255,0.34),_rgba(231,239,255,0.20)_63%,_transparent_72%)] blur-2xl" />
 
@@ -145,17 +145,17 @@ function ProductPreview() {
         </div>
       </div>
 
-      <div className="absolute -bottom-1 -left-1 flex items-center gap-2.5 rounded-2xl border border-[#e5ebf3] bg-white px-4 py-3 shadow-[0_16px_40px_-24px_rgba(29,78,160,0.45)] sm:left-0">
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#edf4ff] text-[#4779ca]">
-          <ScanLine aria-hidden="true" className="h-4 w-4" />
+      <div className="absolute bottom-0 left-0 z-10 flex items-center gap-1.5 rounded-2xl border border-[#e5ebf3] bg-white px-3 py-2 shadow-[0_16px_40px_-24px_rgba(29,78,160,0.45)] sm:-bottom-1 sm:left-0 sm:gap-2.5 sm:px-4 sm:py-3">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#edf4ff] text-[#4779ca] sm:h-9 sm:w-9">
+          <ScanLine aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         </span>
-        <span className="text-xs font-semibold text-[#435268]">
+        <span className="text-[10px] font-semibold text-[#435268] sm:text-xs">
           Scan a document
         </span>
-        <Check aria-hidden="true" className="h-4 w-4 text-[#4c7fe0]" />
+        <Check aria-hidden="true" className="h-3.5 w-3.5 text-[#4c7fe0] sm:h-4 sm:w-4" />
       </div>
-      <div className="absolute -right-1 bottom-8 hidden items-center gap-2 rounded-full border border-[#e5ebf3] bg-white/95 px-3 py-2 text-[11px] font-medium text-[#536987] shadow-lg sm:flex">
-        <ShieldCheck aria-hidden="true" className="h-4 w-4 text-[#4b7ed3]" />
+      <div className="absolute -right-0.5 bottom-9 z-10 flex items-center gap-1.5 rounded-full border border-[#e5ebf3] bg-white/95 px-2.5 py-1.5 text-[10px] font-medium text-[#536987] shadow-lg sm:-right-1 sm:bottom-8 sm:gap-2 sm:px-3 sm:py-2 sm:text-[11px]">
+        <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5 text-[#4b7ed3] sm:h-4 sm:w-4" />
         Made for your privacy
       </div>
     </div>
@@ -179,7 +179,7 @@ export default function Home() {
               <span className="h-2 w-2 rounded-full bg-gradient-to-r from-[#49bce8] to-[#0874ed]" />
               Treehouse by Back to Protocol
             </div>
-            <h1 className="mt-6 text-[clamp(2.8rem,5vw,4.2rem)] font-semibold leading-[0.99] tracking-[-0.065em] text-[#202b3b]">
+            <h1 className="mt-6 text-[clamp(2.5rem,5vw,4.2rem)] font-semibold leading-[0.99] tracking-[-0.065em] text-[#202b3b]">
               Your essentials,
               <br className="hidden sm:block" /> together.
             </h1>
@@ -213,35 +213,35 @@ export default function Home() {
 
       <nav
         aria-label="On this page"
-        className="relative z-10 mx-auto -mt-5 flex w-fit max-w-[calc(100%-2rem)] flex-wrap items-center justify-center gap-1 rounded-full border border-[#e5eaf1] bg-white/95 p-1.5 shadow-[0_12px_34px_-22px_rgba(32,54,78,0.45)] sm:gap-2 sm:px-3"
+        className="relative z-10 mx-auto -mt-5 flex w-full max-w-[calc(100%-2rem)] snap-x snap-mandatory flex-nowrap items-center justify-start gap-0.5 overflow-x-auto rounded-full border border-[#e5eaf1] bg-white/95 p-1.5 px-2.5 shadow-[0_12px_34px_-22px_rgba(32,54,78,0.45)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-fit sm:flex-wrap sm:justify-center sm:gap-2 sm:overflow-visible sm:snap-none sm:px-3"
       >
         <Link
           href="/solutions"
-          className="rounded-full px-3 py-2 text-xs font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Solutions
         </Link>
         <Link
           href="/products"
-          className="rounded-full px-3 py-2 text-xs font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Products
         </Link>
         <Link
           href="#ai"
-          className="rounded-full px-3 py-2 text-xs font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           AI
         </Link>
         <Link
           href="#pricing"
-          className="rounded-full px-3 py-2 text-xs font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Pricing
         </Link>
         <Link
           href="/resources"
-          className="rounded-full px-3 py-2 text-xs font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
+          className="shrink-0 snap-start whitespace-nowrap rounded-full px-2 py-2 text-[11px] font-medium text-[#4e5e72] transition hover:bg-[#eff5ff] hover:text-[#2867bb] sm:px-4 sm:text-sm"
         >
           Resources
         </Link>
@@ -397,7 +397,7 @@ export default function Home() {
               Simple, just like it should be
             </p>
             <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-0.045em] text-[#243247] sm:text-4xl lg:text-5xl">
-              A calmer place for your essentials. Free to use.
+              Your essentials, together. Free to use.
             </h2>
             <p className="mt-5 text-base leading-7 text-[#748094] sm:text-lg">
               Treehouse is free to download and use, with no paid tiers,

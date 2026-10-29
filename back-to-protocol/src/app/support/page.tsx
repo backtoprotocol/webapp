@@ -40,7 +40,7 @@ export default function SupportPage() {
           <p className="text-sm font-semibold text-[#1769c2]">
             Treehouse support
           </p>
-          <h1 className="mt-4 max-w-3xl text-5xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-6xl">
             How can we help?
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5b687a]">
